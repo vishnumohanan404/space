@@ -1,4 +1,4 @@
-import React, { useContext,useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   BoldLink,
   BoxContainer,
@@ -8,13 +8,15 @@ import {
   Input,
   MutedLink,
   SubmitButton,
-  FormError
+  FormError,
+  LoadingWrapper,
 } from "../common";
+import MoonLoader from "react-spinners/MoonLoader";
 import { Marginer } from "../../components/Marginer";
-import { AccountContext } from "../../context/AuthContext";
+import { AccountContext, AuthContext } from "../../context/AuthContext";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import axios from "axios";
+import { loginCall } from "../../services/authService";
 
 const validationSchema = yup.object({
   email: yup.string().email().required(),
@@ -23,21 +25,24 @@ const validationSchema = yup.object({
 
 export function LoginForm(props) {
   const { switchToSignup } = useContext(AccountContext);
+  const { user, isFetching, authError, dispatch } = useContext(AuthContext);
+
   const [error, setError] = useState(null);
 
   const onSubmit = async (values) => {
-    setError(null)
-    const response = await axios
-      .post("http://localhost:5000/api/login", values,{withCredentials: true})
-      .catch((err) => {
-        if (err && err.response) {
-          console.log(err.response.data)
-          setError(err.response.data);
-        }
-      });
-
+    setError(null);
+    // const response = await axios
+    //   .post("http://localhost:5000/api/login", values,{withCredentials: true})
+    //   .catch((err) => {
+    //     if (err && err.response) {
+    //       console.log(err.response.data)
+    //       setError(err.response.data);
+    //     }
+    //   });
+    loginCall(values, dispatch);
+    const response = null;
     if (response) {
-      console.log(response,"response")
+      console.log(response, "response");
       alert("welcome");
     }
   };
@@ -51,7 +56,7 @@ export function LoginForm(props) {
 
   return (
     <BoxContainer>
-      {error&&<FormError>{error ? error : ""}</FormError>}
+      <FormError>{error ? error : ""}</FormError>
       <FormContainer onSubmit={formik.handleSubmit}>
         <FieldContainer>
           <Input
@@ -90,7 +95,13 @@ export function LoginForm(props) {
         <MutedLink href="#">Forgot your password</MutedLink>
         <Marginer direction="vertical" margin="1.6em" />
         <SubmitButton type="submit" disabled={!formik.isValid}>
-          Login
+          {isFetching ? (
+            <LoadingWrapper>
+              <MoonLoader loading color="#fff" size={20} />
+            </LoadingWrapper>
+          ) : (
+            "Login"
+          )}
         </SubmitButton>
       </FormContainer>
       <Marginer direction="vertical" margin={10} />

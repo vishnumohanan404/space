@@ -6,21 +6,22 @@ import { useClickOutside } from "react-click-outside-hook";
 import MoonLoader from "react-spinners/MoonLoader";
 import useDebounce from "../../hooks/debounceHook";
 import axios from "axios";
-import TvShow from "../TvShow";
+import SearchResult from "../SearchResult";
 
 const SearchBarContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  width: 34em;
-  height: 3.8em;
+  width: 30em;
+  height: 2.8em;
+  margin: 0.5em;
   background-color: #fff;
-  border-radius: 6px;
-  box-shadow: 0px 2px 12px 3px rgba(0, 0, 0, 0.14);
+  border-radius: 30px;
+  box-shadow: 0px 2px 12px 3px rgba(34, 34, 34, 0.103);
 `;
 
 const SearchInputContainer = styled.div`
   width: 100%;
-  min-height: 4em;
+  min-height: 3em;
   display: flex;
   align-items: center;
   position: relative;
@@ -109,7 +110,7 @@ const containerVariants = {
     height: "20em",
   },
   collapsed: {
-    height: "3.8em",
+    height: "2.8em",
   },
 };
 
@@ -132,9 +133,8 @@ export default function SearchBar() {
 
   const changeHandler = (e) => {
     e.preventDefault();
-    if (e.target.value.trim() === "")
-        setNoTvShows(false)
-     setSearchQuery(e.target.value);
+    if (e.target.value.trim() === "") setNoTvShows(false);
+    setSearchQuery(e.target.value);
   };
 
   const expandContainer = () => {
@@ -155,15 +155,15 @@ export default function SearchBar() {
   }, [isClickedOutside]);
 
   const prepareSearchQuery = (query) => {
+    const friendSearchUrl = `http://localhost:5000/api/search?q=${query}`;
     const url = `http://api.tvmaze.com/search/shows?q=${query}`;
-    return encodeURI(url);
+    return encodeURI(friendSearchUrl);
   };
 
   const searchFriends = async () => {
-    console.log("hello");
     if (!searchQuery || searchQuery.trim() === "") return;
     setLoading(true);
-    setNoTvShows(false)
+    setNoTvShows(false);
     const URL = prepareSearchQuery(searchQuery);
     const response = await axios.get(URL).catch((err) => {
       console.log("Error:", err);
@@ -228,19 +228,22 @@ export default function SearchBar() {
           )}
           {!isLoading && noTvShows && (
             <LoadingWrapper>
-              <WarningMessage>No tv shows found</WarningMessage>
+              <WarningMessage>No friends found</WarningMessage>
             </LoadingWrapper>
           )}
           {!isLoading && !isEmpty && (
             <>
-              {tvShows.map(({ show }) => (
-                <TvShow
-                  key={show.id}
-                  thumbnailSrc={show.image && show.image.medium}
-                  name={show.name}
-                  rating={show.rating && show.rating.average}
-                />
-              ))}
+              {tvShows.map((show) => {
+                  console.log("Show: ",show)
+                return (
+                  <SearchResult
+                    key={show?._id}
+                    thumbnailSrc={show?.avatar && show?.avatar}
+                    name={show?.fullName}
+                    rating={show?.rating && show?.rating.average}
+                  />
+                );
+              })}
             </>
           )}
         </SearchContent>

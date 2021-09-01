@@ -6,8 +6,8 @@ import { AccountContext } from "../../context/AuthContext.jsx";
 import { SignupForm } from "../../layouts/SignupForm";
 
 const BoxContainer = styled.div`
-  width: 280px;
-  min-height: 550px;
+  width: 300px;
+  min-height: 602px;
   display: flex;
   flex-direction: column;
   border-radius: 19px;
@@ -78,6 +78,7 @@ const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 1.8em;
+  margin-top: 0;
 `;
 
 const backdropVariants = {
@@ -89,7 +90,7 @@ const backdropVariants = {
   },
   collapsed: {
     width: "160%",
-    height: "550px",
+    height: "560px",
     borderRadius: "50%",
     transform: "rotate(60deg)",
   },

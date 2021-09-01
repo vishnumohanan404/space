@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const TvShowContainer = styled.div`
+const FriendComponent = styled.div`
   width: 100%;
   height: 6em;
   display: flex;
@@ -29,20 +29,20 @@ const Name = styled.h3`
   display: flex;
 `;
 
-const Rating = styled.span`
-  color: #a1a1a1;
-  font-size: 16px;
-  display: flex;
-  flex: 0.2;
-`;
+// const Rating = styled.span`
+//   color: #a1a1a1;
+//   font-size: 16px;
+//   display: flex;
+//   flex: 0.2;
+// `;
 
-export default function TvShow(props) {
-    const {thumbnailSrc, name, rating} = props
-  return <TvShowContainer>
+export default function SearchResult(props) {
+    const {thumbnailSrc, name} = props
+  return <FriendComponent>
       <Thumbnail>
           <img src={thumbnailSrc}></img>
       </Thumbnail>
       <Name>{name}</Name>
-      <Rating>{rating || "N/A"}</Rating>
-  </TvShowContainer>;
+      {/* <Rating>{rating || "N/A"}</Rating> */}
+  </FriendComponent>;
 }

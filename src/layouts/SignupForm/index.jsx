@@ -57,12 +57,12 @@ export function SignupForm(props) {
           console.log(err.response.data.message, "response");
           setError(err.response.data.message);
           console.log("Error:", err);
-          setSuccess(null)
+          setSuccess(null);
         }
       });
 
     if (response && response.data) {
-      setError(null)
+      setError(null);
       setSuccess(response.data.message);
       formik.resetForm();
     }
@@ -84,7 +84,7 @@ export function SignupForm(props) {
 
   return (
     <BoxContainer>
-      {!error && <FormSuccess>{success ? success : ""}</FormSuccess>}
+      {/* {!error && <FormSuccess>{success ? success : ""}</FormSuccess>} */}
       {!success && <FormError>{error ? error : ""}</FormError>}
       <FormContainer onSubmit={formik.handleSubmit}>
         <FieldContainer>
@@ -147,8 +147,10 @@ export function SignupForm(props) {
               : ""}
           </FieldError>
         </FieldContainer>
-        <Marginer direction="vertical" margin="1em" />
-        <SubmitButton type="submit" disabled={!formik.isValid}>Signup</SubmitButton>
+        {/* <Marginer direction="vertical" margin="1em" /> */}
+        <SubmitButton type="submit" disabled={!formik.isValid}>
+          Signup
+        </SubmitButton>
       </FormContainer>
       <Marginer direction="vertical" margin={5} />
       <MutedLink href="#">

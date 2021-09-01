@@ -20,6 +20,7 @@ export const MutedLink = styled.a`
   color: rgba(200, 200, 200, 0.8);
   font-weight: 500;
   text-decoration: none;
+  text-align: center;
 `;
 
 export const BoldLink = styled.a`
@@ -40,6 +41,7 @@ export const Input = styled.input`
   border-bottom: 1.4px solid transparent;
   transition: all 200ms ease-in-out;
   font-size: 12px;
+  font-family: "Poppins", sans-serif;
 
   &::placeholder {
     color: rgba(200, 200, 200, 1);
@@ -61,7 +63,7 @@ export const SubmitButton = styled.button`
   color: #fff;
   font-size: 15px;
   font-weight: 600;
-  font-family: "Poppins",sans-serif;
+  font-family: "Poppins", sans-serif;
   border: none;
   border-radius: 100px 100px 100px 100px;
   cursor: pointer;
@@ -77,7 +79,7 @@ export const SubmitButton = styled.button`
     rgba(51, 51, 231, 1) 100%
   );
 
-  &:focus{
+  &:focus {
     filter: brightness(1.03);
   }
 
@@ -85,36 +87,77 @@ export const SubmitButton = styled.button`
     filter: brightness(1.03);
   }
 
-  &:display{
+  &:display {
     filter: contrast(0.7);
   }
 `;
 
-
 export const FieldContainer = styled.div`
- width: 100%;
- display: flex;
- flex-direction: column;
-`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
 
 export const FieldError = styled.span`
   color: #b32e32;
   font-size: 11px;
   min-height: 18px;
-`
+`;
 
 export const FormSuccess = styled.span`
   color: #28a828;
-  font-size:12px;
+  font-size: 12px;
   min-height: 20px;
-`
+`;
 
 export const FormError = styled.span`
   color: #b32e32;
-  font-size:12px;
+  font-size: 12px;
   min-height: 20px;
+  align-self: flex-start;
+`;
+
+export const UserNameText = styled.p`
+  padding-left: 5px;
+  font-weight: 500;
+  color: #626262;
+  font-family: "Noto sans", sans-serif;
+`;
+
+export const CircularContainer = styled.a`
+  height: 36px;
+  width: 36px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: flex;
+  margin-right: 10px;
+  align-items: center;
+  justify-content: center;
+  transition: filter 300ms;
+
+  &:hover {
+    filter: brightness(1.2);
+  }
+`;
+
+export const LoadingWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const HeadingStyle = styled.h4`
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0;
+`;
+
+export const NoValueHeader = styled.h4`
+  font-weight: 400;
+  font-size: 14px;
+  margin: 0;
+  color: #a1a1a1;
+  justify-content: center;
 `
-
-
-
-
