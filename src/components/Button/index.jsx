@@ -15,7 +15,7 @@ const ButtonClass = styled.button`
 `;
 
 function Button(props) {
-  return <ButtonClass>{props.content}</ButtonClass>;
+  return <ButtonClass>{props}</ButtonClass>;
 }
 
 export default Button;

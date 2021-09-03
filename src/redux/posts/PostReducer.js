@@ -2,10 +2,14 @@ import {
   FETCH_POSTS_REQUEST,
   FETCH_POSTS_SUCCESS,
   FETCH_POSTS_ERROR,
+  ADD_POST_REQUEST,
+  ADD_POST_SUCCESS,
+  ADD_POST_FAILURE,
 } from "./PostTypes";
 
 const initialState = {
   isLoading: false,
+  addPostLoading: false,
   posts: [],
   error: null,
 };
@@ -13,25 +17,39 @@ const initialState = {
 const PostReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_POSTS_REQUEST:
-        console.log("Request")
       return {
         ...state,
         isLoading: true,
       };
     case FETCH_POSTS_SUCCESS:
-      console.log("hello")
-
       return {
         ...state,
         isLoading: false,
         error: false,
-        posts:action.payload
+        posts: action.payload,
       };
     case FETCH_POSTS_ERROR:
       return {
         ...state,
         isLoading: false,
         error: true,
+      };
+    case ADD_POST_REQUEST:
+      return {
+        ...state,
+        addPostLoading: true,
+      };
+    case ADD_POST_SUCCESS:
+      return {
+        ...state,
+        addPostLoading:false,
+        posts:[action.payload, ...state.posts]
+      };
+    case ADD_POST_FAILURE:
+      return {
+        ...state,
+        addPostLoading:false,
+        error:action.payload
       };
     default:
       return state;

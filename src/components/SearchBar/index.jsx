@@ -156,7 +156,6 @@ export default function SearchBar() {
 
   const prepareSearchQuery = (query) => {
     const friendSearchUrl = `http://localhost:5000/api/search?q=${query}`;
-    const url = `http://api.tvmaze.com/search/shows?q=${query}`;
     return encodeURI(friendSearchUrl);
   };
 
@@ -169,7 +168,6 @@ export default function SearchBar() {
       console.log("Error:", err);
     });
     if (response) {
-      console.log("Response:", response);
       if (response.data && response.data.length === 0) setNoTvShows(true);
       setTvShows(response.data);
     }
@@ -178,8 +176,6 @@ export default function SearchBar() {
 
   useDebounce(searchQuery, 500, searchFriends);
 
-  console.log("Values:", searchQuery);
-  console.log(tvShows, "tvshows");
   return (
     <SearchBarContainer
       animate={isExpanded ? "expanded" : "collapsed"}
@@ -234,7 +230,7 @@ export default function SearchBar() {
           {!isLoading && !isEmpty && (
             <>
               {tvShows.map((show) => {
-                  console.log("Show: ",show)
+                console.log("Show: ", show);
                 return (
                   <SearchResult
                     key={show?._id}

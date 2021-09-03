@@ -2,9 +2,7 @@ import styled from "styled-components";
 import { AccountBox } from "./pages/Auth";
 import Home from "./pages/Home";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
-import { Provider } from "react-redux";
 import { Navbar } from "./layouts/Navbar";
-import SearchBar from "./components/SearchBar";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 

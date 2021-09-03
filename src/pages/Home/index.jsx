@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 import Heading from "../../components/Heading";
@@ -10,11 +10,14 @@ import { DeviceSize } from "../../components/responsive";
 import Conversations from "../../layouts/Conversations";
 
 const HomeContainer = styled.div`
-  height: 100%;
   width: 100%;
   display: flex;
   background-color: #ddf3fa;
   justify-content: space-around;
+  /* overflow-y: auto; */
+  /* height: inherit; */
+  /* height: 100%; */
+  min-height: 100vh;
 `;
 
 const MainContent = styled.div`
@@ -42,16 +45,16 @@ const RightSideBar = styled.div`
   border-radius: 6px;
 `;
 
-const SidebarDividion = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
+// const SidebarDividion = styled.div`
+//   display: flex;
+//   flex-wrap: wrap;
+// `;
 
 function Home() {
   const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
-  const isTablet = useMediaQuery({ maxWidth: DeviceSize.tablet });
-  const isLaptop = useMediaQuery({ maxWidth: DeviceSize.laptop });
-  const isDesktop = useMediaQuery({ maxWidth: DeviceSize.desktop });
+  // const isTablet = useMediaQuery({ maxWidth: DeviceSize.tablet });
+  // const isLaptop = useMediaQuery({ maxWidth: DeviceSize.laptop });
+  // const isDesktop = useMediaQuery({ maxWidth: DeviceSize.desktop });
 
   return (
     <HomeContainer>

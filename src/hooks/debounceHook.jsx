@@ -1,4 +1,5 @@
-import React,{useEffect, useState} from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import {useEffect, useState} from "react";
 
 export default function useDebounce(value, timeout, callback) {
   const [timer, setTimer] = useState(null);
@@ -13,3 +14,4 @@ export default function useDebounce(value, timeout, callback) {
     }
   }, [value])
 }
+

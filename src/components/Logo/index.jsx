@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import logo from '../../assets/svg/login.svg'
+import logo from '../../assets/logo.png'
 
 const LogoWrapper = styled.div`
     display: flex;
@@ -8,8 +8,8 @@ const LogoWrapper = styled.div`
 `
 
 const LogoImg = styled.div`
-    width: 29px;
-    height: 29px;
+    width: 38px;
+    height: 38px;
 
     img{
         width: 100%;
@@ -18,12 +18,12 @@ const LogoImg = styled.div`
 `
 
 const LogoText = styled.h2`
-    font-size: 16px;
+    font-size: 22px;
     margin: 0;
     margin-left: 4px;
     font-weight:600;
     color: #222;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Nunito', sans-serif;
 `;
 
 export default function Logo(props) {

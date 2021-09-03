@@ -86,9 +86,9 @@ const postIcons = { width: "18px", marginRight: "10px" };
 function Post({ postData, fetchPosts, isLoading = postData?.isLoading }) {
   const formatter = buildFormatter(frenchStrings);
   const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
+  console.log(postData,"post data")
   useEffect(() => {
     fetchPosts();
-    console.log("Posts: ", postData);
   }, []);
 
   return (
@@ -97,7 +97,7 @@ function Post({ postData, fetchPosts, isLoading = postData?.isLoading }) {
         postData &&
         postData.posts &&
         postData.posts.map((post) => (
-          <PostContainer>
+          <PostContainer key={post._id}>
             <PostRow>
               <UserProfileContainer>
                 <Avatar
@@ -105,7 +105,7 @@ function Post({ postData, fetchPosts, isLoading = postData?.isLoading }) {
                   marginTop={"15px"}
                 />
                 <div>
-                  <UserNameText>Vishnu Mohan</UserNameText>
+                  <UserNameText>{post.authorName}</UserNameText>
                   <span>
                     <TimeAgo date={post.createdAt} formatter={formatter} />
                   </span>
@@ -118,11 +118,11 @@ function Post({ postData, fetchPosts, isLoading = postData?.isLoading }) {
               <PostActivityIcon>
                 <div>
                   <IoThumbsUp style={postIcons} />
-                  {post.likes.length}
+                  {post.likes?.length}
                 </div>
                 <div>
                   <IoChatboxEllipsesOutline style={postIcons} />
-                  {post.comments.length}
+                  {post.comments?.length}
                 </div>
               </PostActivityIcon>
             </PostRow>

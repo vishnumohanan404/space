@@ -84,7 +84,7 @@ export function SignupForm(props) {
 
   return (
     <BoxContainer>
-      {/* {!error && <FormSuccess>{success ? success : ""}</FormSuccess>} */}
+      {!error && <FormSuccess>{success ? success : ""}</FormSuccess>}
       {!success && <FormError>{error ? error : ""}</FormError>}
       <FormContainer onSubmit={formik.handleSubmit}>
         <FieldContainer>

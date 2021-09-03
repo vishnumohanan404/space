@@ -40,7 +40,7 @@ export default function SearchResult(props) {
     const {thumbnailSrc, name} = props
   return <FriendComponent>
       <Thumbnail>
-          <img src={thumbnailSrc}></img>
+          <img src={thumbnailSrc} alt="searchResultThumb"></img>
       </Thumbnail>
       <Name>{name}</Name>
       {/* <Rating>{rating || "N/A"}</Rating> */}

@@ -11,7 +11,7 @@ import {
   FormError,
   LoadingWrapper,
 } from "../common";
-import MoonLoader from "react-spinners/MoonLoader";
+import ClipLoader from "react-spinners/ClipLoader";
 import { Marginer } from "../../components/Marginer";
 import { AccountContext, AuthContext } from "../../context/AuthContext";
 import { useFormik } from "formik";
@@ -97,7 +97,7 @@ export function LoginForm(props) {
         <SubmitButton type="submit" disabled={!formik.isValid}>
           {isFetching ? (
             <LoadingWrapper>
-              <MoonLoader loading color="#fff" size={20} />
+              <ClipLoader loading color="#fff" size={20} />
             </LoadingWrapper>
           ) : (
             "Login"

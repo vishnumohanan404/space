@@ -6,7 +6,7 @@ import { DeviceSize } from "../../components/responsive";
 import SearchBar from "../../components/SearchBar";
 import { Accessibility } from "./accessibility";
 import { MobileNavLinks } from "./mobileNavLinks";
-import { NavLinks } from "./NavLinks";
+// import { NavLinks } from "./NavLinks";
 
 const NavBarContainer = styled.nav`
   width: 100%;

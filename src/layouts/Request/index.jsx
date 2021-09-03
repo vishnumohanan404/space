@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { IoCheckmarkOutline, IoCloseOutline } from "react-icons/io5";
-import { NoValueHeader } from "../common";
+// import { NoValueHeader } from "../common";
 
 const RequestContainer = styled.div`
   display: flex;
