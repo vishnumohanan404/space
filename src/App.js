@@ -3,8 +3,10 @@ import { AccountBox } from "./pages/Auth";
 import Home from "./pages/Home";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { Navbar } from "./layouts/Navbar";
-import { useContext } from "react";
-import { AuthContext } from "./context/AuthContext";
+import { useEffect } from "react";
+import Profile from "./pages/Profile";
+import { socketConnect, socketDisconnect } from "./redux/socket/SocketActions";
+import { connect, useDispatch, useSelector } from "react-redux";
 
 const LoginContainer = styled.div`
   width: 100%;
@@ -15,16 +17,23 @@ const LoginContainer = styled.div`
   justify-content: center;
 `;
 
-// const SearchContainer = styled.div`
-//   width: 100%;
-//   height: 100%;
-//   display: flex;
-//   justify-content: center;
-//   margin-top: 8em;
-// `;
+function App({ userData, user = userData.user }) {
+  // const { user } = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const {socket} = useSelector((state) => state.socket);
+  useEffect(() => {
+    localStorage.setItem("user", JSON.stringify(user));
+  }, [user]);
 
-function App() {
-  const { user } = useContext(AuthContext);
+  useEffect(() => {
+    if (user) {
+      dispatch(socketConnect());
+    }
+    return () => {
+      dispatch(socketDisconnect(socket));
+    };
+  }, [user]);
+
   return (
     <BrowserRouter>
       <Switch>
@@ -38,12 +47,21 @@ function App() {
             </LoginContainer>
           )}
         </Route>
-        {/* home */}
-        <Route path="/">
+        <Route exact path="/">
           {user ? (
             <>
               <Navbar />
               <Home />
+            </>
+          ) : (
+            <Redirect to="/login" />
+          )}
+        </Route>
+        <Route exact path="/profile/:id">
+          {user ? (
+            <>
+              <Navbar />
+              <Profile />
             </>
           ) : (
             <Redirect to="/login" />
@@ -54,4 +72,10 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    userData: state.user,
+  };
+};
+
+export default connect(mapStateToProps)(App);

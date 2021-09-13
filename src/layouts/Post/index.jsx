@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { UserNameText } from "../common";
 import Avatar from "../../components/Avatar";
-import { IoThumbsUp, IoChatboxEllipsesOutline } from "react-icons/io5";
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { useMediaQuery } from "react-responsive";
 import { DeviceSize } from "../../components/responsive";
 import Request from "../Request";
@@ -12,6 +12,12 @@ import Skeleton from "react-loading-skeleton";
 import TimeAgo from "react-timeago";
 import frenchStrings from "react-timeago/lib/language-strings/en";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
+import PostCarousel from "../../components/PostCarousel";
+import { Marginer } from "../../components/Marginer";
+import PostLikes from "../../components/PostActions/PostLikes";
+// import PostComments from "../../components/PostActions/PostComments";
+import CommentComponent from "../../components/CommentComponent";
+// import Comments from "../../components/Comments";
 
 const PostContainer = styled.div`
   width: 100%;
@@ -63,33 +69,60 @@ const PostText = styled.p`
   }
 `;
 
-const PostImg = styled.img`
-  width: 100%;
-  border-radius: 4px;
-  margin-bottom: 5px;
+const PostActivityIcon = styled.div`
+  display: flex;
+  &:first-child {
+    margin-right: 20px;
+  }
 `;
 
-const PostActivityIcon = styled.div`
-  div i {
-    width: 18px;
-    margin-right: 10px;
-  }
-  div {
-    display: inline-flex;
-    align-items: center;
-    margin-right: 30px;
+const PostActionButtons = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    background-color: #afafafa2;
   }
 `;
+
+// const CommentsContainer = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   width: 100%;
+// `;
 
 const postIcons = { width: "18px", marginRight: "10px" };
 
-function Post({ postData, fetchPosts, isLoading = postData?.isLoading }) {
+function Post({
+  postData,
+  fetchPosts,
+  isLoading = postData?.isLoading,
+  progress,
+}) {
+  const [toggleComment, setToggleComment] = useState([]);
   const formatter = buildFormatter(frenchStrings);
   const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
-  console.log(postData,"post data")
+
   useEffect(() => {
     fetchPosts();
   }, []);
+
+  const handleToggle = (id) => {
+    const toggleList = toggleComment.includes(id);
+    if (toggleList) {
+      setToggleComment(
+        toggleComment.filter((_id) => {
+          return _id !== id;
+        })
+      );
+    } else {
+      setToggleComment([...toggleComment, id]);
+    }
+  };
 
   return (
     <>
@@ -113,19 +146,23 @@ function Post({ postData, fetchPosts, isLoading = postData?.isLoading }) {
               </UserProfileContainer>
             </PostRow>
             <PostText>{post.postContent}</PostText>
-            {post.medias && <PostImg src={post.medias} alt="post"></PostImg>}
-            <PostRow>
-              <PostActivityIcon>
-                <div>
-                  <IoThumbsUp style={postIcons} />
-                  {post.likes?.length}
-                </div>
-                <div>
-                  <IoChatboxEllipsesOutline style={postIcons} />
-                  {post.comments?.length}
-                </div>
-              </PostActivityIcon>
-            </PostRow>
+            {post.medias && (
+              <PostCarousel mediaKeys={post.medias}></PostCarousel>
+            )}
+            <Marginer direction="vertical" margin={10} />
+            <PostActivityIcon>
+              <PostLikes post={post} />
+              <PostActionButtons onClick={() => handleToggle(post._id)}>
+                <IoChatboxEllipsesOutline style={postIcons} />
+                {post.comments?.length}
+              </PostActionButtons>
+            </PostActivityIcon>
+            <Marginer direction="horizontal" marginTop={"15px"} />
+            {toggleComment.includes(post._id) && (
+              <PostRow>
+                <CommentComponent />
+              </PostRow>
+            )}
           </PostContainer>
         ))
       ) : (
@@ -159,6 +196,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchPosts: () => dispatch(fetchPosts()),
+    // fetchProfile: ()=>dispatch()
   };
 };
 

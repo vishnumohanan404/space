@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import logo from '../../assets/logo.png'
 
@@ -28,6 +29,7 @@ const LogoText = styled.h2`
 
 export default function Logo(props) {
     return (
+        <Link to="/" style={{ textDecoration: 'none' }}> 
        <LogoWrapper>
            <LogoImg>
                <img src={logo} alt="space" />
@@ -36,5 +38,6 @@ export default function Logo(props) {
                SPACE
            </LogoText>
        </LogoWrapper>
+        </Link>
     )
 }

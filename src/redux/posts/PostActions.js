@@ -2,12 +2,13 @@ import {
   FETCH_POSTS_SUCCESS,
   FETCH_POSTS_ERROR,
   FETCH_POSTS_REQUEST,
-  UPLOAD_MEDIA_REQUEST,
-  UPLOAD_MEDIA_SUCCESS,
-  UPLOAD_MEDIA_FAILURE,
+  ON_PROGRESS,
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
   ADD_POST_FAILURE,
+  LIKE_POST_REQUEST,
+  LIKE_POST_SUCCESS,
+  LIKE_POST_FAILURE,
 } from "./PostTypes";
 import { api } from "../../api.config";
 import axios from "axios";
@@ -32,6 +33,8 @@ export const fetchPostsFailure = (errors) => {
   };
 };
 
+
+
 export const addPostRequest = () => {
   return {
     type: ADD_POST_REQUEST,
@@ -52,27 +55,48 @@ export const addPostFailure = (errors) => {
   };
 };
 
-export const uploadMediaRequest = () => {
+export const likePostRequest = () => {
   return {
-    type: UPLOAD_MEDIA_REQUEST,
+    type: LIKE_POST_REQUEST,
   };
 };
 
-export const uploadMediaSuccess = (res) => {
+export const likePostSuccess = (result) => {
   return {
-    type: UPLOAD_MEDIA_SUCCESS,
-    payload: res,
+    type: LIKE_POST_SUCCESS,
+    payload: result,
   };
 };
-
-export const uploadMediaFailure = (error) => {
+export const likePostFailure = (error) => {
   return {
-    type: UPLOAD_MEDIA_FAILURE,
+    type: LIKE_POST_FAILURE,
     payload: error,
   };
 };
 
+export const onProgress = (progress) => {
+  return {
+    type: ON_PROGRESS,
+    payload: progress,
+  };
+};
+
 export const fetchPosts = () => {
+  return (dispatch) => {
+    dispatch(fetchPostsRequest());
+    api
+      .get("/feeds/")
+      .then((res) => {
+        dispatch(fetchPostsSuccess(res.data));
+      })
+      .catch((err) => {
+        console.log(err.message);
+        dispatch(fetchPostsFailure(err.message));
+      });
+  };
+};
+
+export const fetchUserPosts = () => {
   return (dispatch) => {
     dispatch(fetchPostsRequest());
     api
@@ -98,31 +122,33 @@ export const addPost = (data) => {
         },
         onUploadProgress: function (progressEvent) {
           // Do whatever you want with the native progress event
-          console.log("Progress: ",progressEvent)
+          // progress in %
+          let progress = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          dispatch(onProgress(progress));
         },
       })
       .then((result) => {
-        console.log(result, "result in axios");
-        // dispatch(addPostSuccess(result.data));
+        dispatch(addPostSuccess(result.data));
       })
       .catch((err) => {
-        console.log("Error:",err.message);
+        console.log("Error:", err.message);
         dispatch(addPostFailure(err.message));
       });
   };
 };
 
-export const uploadMedia = () => {
+export const likePost = (id) => {
   return (dispatch) => {
-    dispatch(uploadMediaRequest());
+    dispatch(likePostRequest());
     api
-      .get("/upload")
-      .then((res) => {
-        dispatch(uploadMediaSuccess(res.data));
+      .put(`/post/${id}/like`)
+      .then((response) => {
+        dispatch(likePostSuccess(response.data));
       })
       .catch((err) => {
-        console.log(err.message);
-        dispatch(uploadMediaFailure(err.message));
+        dispatch(likePostFailure(err.message));
       });
   };
 };

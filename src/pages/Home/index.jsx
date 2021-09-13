@@ -1,13 +1,65 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 import Heading from "../../components/Heading";
 import Request from "../../layouts/Request";
-// import { PostContextProvider } from "../../context/PostContext/PostContext";
 import Post from "../../layouts/Post";
 import WritePost from "../../layouts/WritePost";
 import { DeviceSize } from "../../components/responsive";
 import Conversations from "../../layouts/Conversations";
+import { connect } from "react-redux";
+
+
+
+function Home({ userData,socket }) {
+  const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
+  console.log(socket,"socket")
+
+  const handleSocket = ()=>{
+    socket.io.emit("join_room")
+  }
+
+  console.log(userData, "userData");
+  return (
+    <HomeContainer>
+      {!isMobile && (
+        <LeftSideBar>
+          <Heading title={"Nearby"} color={"#626262"} />
+        </LeftSideBar>
+      )}
+      <MainContent>
+        <WritePost />
+        <Post />
+      </MainContent>
+      {!isMobile && (
+        <RightSideBar>
+          <Heading title={"Requests"} color={"#626262"} handle={handleSocket}/>
+          <Request
+            requests={
+              userData.friendRequests[userData.friendRequests.length - 1]
+            }
+          />
+          <Heading
+            title={"Conversations"}
+            color={"#626262"}
+            href={"#"}
+            hrefContent={"Active"}
+          />
+          <Conversations />
+        </RightSideBar>
+      )}
+    </HomeContainer>
+  );
+}
+
+const mapStateToProps = (state) => {
+  return {
+    userData: state.user.user,
+    socket: state.socket
+  };
+};
+
+export default connect(mapStateToProps)(Home);
 
 const HomeContainer = styled.div`
   width: 100%;
@@ -50,38 +102,8 @@ const RightSideBar = styled.div`
 //   flex-wrap: wrap;
 // `;
 
-function Home() {
-  const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
-  // const isTablet = useMediaQuery({ maxWidth: DeviceSize.tablet });
-  // const isLaptop = useMediaQuery({ maxWidth: DeviceSize.laptop });
-  // const isDesktop = useMediaQuery({ maxWidth: DeviceSize.desktop });
 
-  return (
-    <HomeContainer>
-      {!isMobile && (
-        <LeftSideBar>
-          <Heading title={"Nearby"} color={"#626262"} />
-        </LeftSideBar>
-      )}
-      <MainContent>
-          <WritePost />
-          <Post />
-      </MainContent>
-      {!isMobile && (
-        <RightSideBar>
-          <Heading title={"Requests"} color={"#626262"} />
-          <Request />
-          <Heading
-            title={"Conversations"}
-            color={"#626262"}
-            href={"#"}
-            hrefContent={"Active"}
-          />
-          <Conversations />
-        </RightSideBar>
-      )}
-    </HomeContainer>
-  );
-}
-
-export default Home;
+// screen size
+// const isTablet = useMediaQuery({ maxWidth: DeviceSize.tablet });
+// const isLaptop = useMediaQuery({ maxWidth: DeviceSize.laptop });
+// const isDesktop = useMediaQuery({ maxWidth: DeviceSize.desktop });

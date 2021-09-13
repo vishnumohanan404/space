@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
   BoldLink,
   BoxContainer,
@@ -13,33 +13,30 @@ import {
 } from "../common";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Marginer } from "../../components/Marginer";
-import { AccountContext, AuthContext } from "../../context/AuthContext";
+import { AccountContext } from "../../context/AccountBox";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { loginCall } from "../../services/authService";
+// import { loginCall } from "../../services/authService";
+import  {loginCall}  from "../../redux";
+import { connect } from "react-redux";
 
 const validationSchema = yup.object({
   email: yup.string().email().required(),
   password: yup.string().required(),
 });
 
-export function LoginForm(props) {
+function LoginForm({
+  userData,
+  loginCall,
+  user = userData?.user,
+  error = userData.error,
+  isFetching = userData.isFetching,
+}) {
   const { switchToSignup } = useContext(AccountContext);
-  const { user, isFetching, authError, dispatch } = useContext(AuthContext);
-
-  const [error, setError] = useState(null);
+  // const { user, isFetching, error, dispatch } = useContext(AuthContext);
 
   const onSubmit = async (values) => {
-    setError(null);
-    // const response = await axios
-    //   .post("http://localhost:5000/api/login", values,{withCredentials: true})
-    //   .catch((err) => {
-    //     if (err && err.response) {
-    //       console.log(err.response.data)
-    //       setError(err.response.data);
-    //     }
-    //   });
-    loginCall(values, dispatch);
+    loginCall(values);
     const response = null;
     if (response) {
       console.log(response, "response");
@@ -56,7 +53,7 @@ export function LoginForm(props) {
 
   return (
     <BoxContainer>
-      <FormError>{error ? error : ""}</FormError>
+      <FormError>{error ? "Unauthorized" : ""}</FormError>
       <FormContainer onSubmit={formik.handleSubmit}>
         <FieldContainer>
           <Input
@@ -114,3 +111,17 @@ export function LoginForm(props) {
     </BoxContainer>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    userData: state.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loginCall: (userCredentials) => dispatch(loginCall(userCredentials)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { IoCheckmarkOutline, IoCloseOutline } from "react-icons/io5";
+import { useEffect } from "react";
 // import { NoValueHeader } from "../common";
 
 const RequestContainer = styled.div`
@@ -28,13 +29,13 @@ const RequestContainer = styled.div`
 `;
 
 
-const NoValueContainer = styled.div`
-  display: flex;
-  margin: 10px 0;
-  border-radius: 10px;
-  min-height: 30px;
-  justify-content: center;
-`;
+// const NoValueContainer = styled.div`
+//   display: flex;
+//   margin: 10px 0;
+//   border-radius: 10px;
+//   min-height: 30px;
+//   justify-content: center;
+// `;
 
 const UserCard = styled.div`
   align-items: center;
@@ -60,9 +61,14 @@ const CircularContainer = styled.a`
     filter: brightness(1.2);
   }
 `;
-function Request() {
+function Request({requests}) {
+  console.log(requests)
+  useEffect(()=>{
+
+  },[])
+
   return (
-    <RequestContainer>
+     <RequestContainer>
       <img
         src="https://avatars.dicebear.com/api/human/vidshnu.svg"
         alt="thumbnail"
@@ -80,9 +86,6 @@ function Request() {
         </CircularContainer>
       </RightSide>
     </RequestContainer>
-  //   <NoValueContainer>
-  //   <NoValueHeader>No new requests</NoValueHeader>
-  // </NoValueContainer>
   );
 }
 

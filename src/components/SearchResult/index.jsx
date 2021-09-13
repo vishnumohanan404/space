@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const FriendComponent = styled.div`
@@ -29,20 +30,18 @@ const Name = styled.h3`
   display: flex;
 `;
 
-// const Rating = styled.span`
-//   color: #a1a1a1;
-//   font-size: 16px;
-//   display: flex;
-//   flex: 0.2;
-// `;
+
 
 export default function SearchResult(props) {
-    const {thumbnailSrc, name} = props
-  return <FriendComponent>
-      <Thumbnail>
+  const { thumbnailSrc, name, id, collapseContainer } = props;
+  return (
+    <Link to={`/profile/${id}`} onClick={collapseContainer} style={{textDecoration:"none"}}>
+      <FriendComponent>
+        <Thumbnail>
           <img src={thumbnailSrc} alt="searchResultThumb"></img>
-      </Thumbnail>
-      <Name>{name}</Name>
-      {/* <Rating>{rating || "N/A"}</Rating> */}
-  </FriendComponent>;
+        </Thumbnail>
+        <Name>{name}</Name>
+      </FriendComponent>
+    </Link>
+  );
 }

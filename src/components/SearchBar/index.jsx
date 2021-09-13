@@ -165,7 +165,6 @@ export default function SearchBar() {
     setNoTvShows(false);
     const URL = prepareSearchQuery(searchQuery);
     const response = await axios.get(URL).catch((err) => {
-      console.log("Error:", err);
     });
     if (response) {
       if (response.data && response.data.length === 0) setNoTvShows(true);
@@ -234,9 +233,11 @@ export default function SearchBar() {
                 return (
                   <SearchResult
                     key={show?._id}
+                    id={show?._id}
                     thumbnailSrc={show?.avatar && show?.avatar}
                     name={show?.fullName}
                     rating={show?.rating && show?.rating.average}
+                    collapseContainer={collapseContainer}
                   />
                 );
               })}

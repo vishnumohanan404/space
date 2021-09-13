@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Logo from "../../components/Logo";
 import { DeviceSize } from "../../components/responsive";
 import SearchBar from "../../components/SearchBar";
-import { Accessibility } from "./accessibility";
+import  Accessibility  from "./accessibility";
 import { MobileNavLinks } from "./mobileNavLinks";
 // import { NavLinks } from "./NavLinks";
 

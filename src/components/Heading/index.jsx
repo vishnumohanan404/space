@@ -1,6 +1,25 @@
 import React from "react";
 import styled from "styled-components";
 import { HeadingStyle } from "../../layouts/common";
+import { connect } from "react-redux";
+
+function Heading({ title, color, hrefContent, socket }) {
+  return (
+    <HeadingContainer style={{ color: color }} onClick={()=>socket.emit("join_room","1")}>
+      <HeadingStyle>{title}</HeadingStyle>
+      <Anchor> {hrefContent}</Anchor>
+    </HeadingContainer>
+  );
+}
+
+const mapStateToProps = (state) => {
+  return {
+    socket: state.socket
+  };
+};
+
+export default connect(mapStateToProps)(Heading);
+
 
 const HeadingContainer = styled.div`
   display: flex;
@@ -17,14 +36,3 @@ const Anchor = styled.a`
   padding: 0 5px;
   border-radius: 30px;
 `;
-
-function Heading({ title, color, href, hrefContent }) {
-  return (
-    <HeadingContainer style={{ color: color }}>
-      <HeadingStyle>{title}</HeadingStyle>
-      <Anchor> {hrefContent}</Anchor>
-    </HeadingContainer>
-  );
-}
-
-export default Heading;

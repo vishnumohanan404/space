@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 
-const AvatarContainer = styled.a`
+const AvatarContainer = styled.div`
   color: RoyalBlue;
   font-weight: normal;
   text-decoration: none;
@@ -30,7 +30,7 @@ const AvatarContainer = styled.a`
   }
 `;
 
-function Avatar({href,src,marginTop}) {
+function Avatar({src,marginTop}) {
   const style= {"marginTop":marginTop}
     return (
         <AvatarContainer style={style}>
