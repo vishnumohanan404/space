@@ -8,6 +8,6 @@ export const api = axios.create({
   },
   onUploadProgress: function (progressEvent) {
     // Do whatever you want with the native progress event
-    console.log("Progress: ",progressEvent)
+    // console.log("Progress: ",progressEvent)
   },
 });

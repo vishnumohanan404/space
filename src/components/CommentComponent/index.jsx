@@ -1,24 +1,52 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import "emoji-mart/css/emoji-mart.css";
+import { Picker } from "emoji-mart";
 import {
-  IoEllipsisHorizontal,
+  // IoEllipsisHorizontal,
   IoHappyOutline,
 } from "react-icons/io5";
 import styled from "styled-components";
+import CommentsInput from "../CommentsInput";
+import CommentList from "../CommentList";
+import { useSelector } from "react-redux";
 // import Avatar from "../Avatar";
 
-function CommentComponent({}) {
-  const [commentInput, setCommentInput] = useState("");
-  const handleChange = (e) => {
-    setCommentInput(e.target.value);
-  };
+function CommentComponent({ post }) {
+  const { user } = useSelector((state) => state.user);
+  const [next, setNext] = useState(1);
+  const [showComments, setShowComments] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [emojiPickerState, SetEmojiPicker] = useState(false);
+  const [comment, setComment] = useState("");
 
-  const submitComment = (e) => {
-    if(e.key==="Enter"){
-      e.preventDefault()
-      console.log(e.key)
-    }
-  };
+  useEffect(() => {
+    setComments(post.comments);
+    setShowComments(
+      post.comments.slice(
+        next > post.comments.length ? 0 : post.comments.length - next,
+        post.comments.length
+      )
+    );
+  }, [post.comments, next]);
+
+  function triggerPicker(event) {
+    event.preventDefault();
+    SetEmojiPicker(!emojiPickerState);
+  }
+  let emojiPicker;
+  if (emojiPickerState) {
+    emojiPicker = (
+      <Picker
+        skin={3}
+        perLine={6}
+        sheetSize={32}
+        showPreview={false}
+        showSkinTones={false}
+        onSelect={(emoji) => setComment(comment + emoji.native)}
+        style={{ position: 'absolute', top: '20px', right: '20px' }}
+      />
+    );
+  }
   return (
     <FooterComments>
       {/* <CommentsFilter>
@@ -26,75 +54,60 @@ function CommentComponent({}) {
       </CommentsFilter> */}
       <CommentsBox>
         <BoxProfile>
-          <ProfilePic src="https://avatars.dicebear.com/api/human/vidshnu.svg" />
+          <ProfilePic src={user.avatar} />
         </BoxProfile>
         <BoxBar>
-          <form style={{width:"100%"}}>
-            <BarInput
-              type="text"
-              placeholder="Write a comment"
-              onChange={handleChange}
-              onKeyPress={submitComment}
-            />
-          </form>
+          <CommentsInput
+            post={post}
+            comment={comment}
+            setComment={setComment}
+          />
         </BoxBar>
         <BarEmojis>
-          <EmojisInsert>
+          <EmojisInsert onClick={triggerPicker}>
             <IoHappyOutline />
           </EmojisInsert>
+          <EmojiPicker>{emojiPicker}</EmojiPicker>
         </BarEmojis>
       </CommentsBox>
-      <CommentsFriendComment>
-        <FriendCommentPic src="https://avatars.dicebear.com/api/human/vidshnu.svg" />
-        <FriendCommentComment>
-          <CommentAuthor>Vishnu Mohan</CommentAuthor>
-          <CommentContent>
-            It sure feels different to see you on a different color T-shirt, but
-            still, technology advances everytime and we are glad that you're a
-            part of it.
-          </CommentContent>
-          {/* <CommentReaction></CommentReaction> */}
-          <CommentLinks>
-            <span>
-              <LinksLikes>Like</LinksLikes> &#183;
-            </span>
-            <span>
-              <LinksReply>Reply</LinksReply> &#183;
-            </span>
-            <span>
-              <LinksDate>16w</LinksDate>
-            </span>
-          </CommentLinks>
-        </FriendCommentComment>
-        <FriendCommentOptions>
-          <IoEllipsisHorizontal />
-        </FriendCommentOptions>
-      </CommentsFriendComment>
-      <CommentsMoreComments>
-        <MoreComments>
-          <a href="#more">View more comments</a>
-        </MoreComments>
-        <MoreCommentsCount>100</MoreCommentsCount>
-      </CommentsMoreComments>
+      {showComments.map((comment, index) => (
+        <CommentList comment={comment} key={index} />
+      ))}
+      {comments.length - next > 0 ? (
+        <CommentsMoreComments>
+          <MoreComments>
+            <div onClick={(e) => setNext(next + 5)}>View more comments</div>
+          </MoreComments>
+          <MoreCommentsCount>{post.comments.length - next}</MoreCommentsCount>
+        </CommentsMoreComments>
+      ) : (
+        <CommentsMoreComments>
+          <MoreComments>
+            <div onClick={(e) => setNext(1)}>Hide comments</div>
+          </MoreComments>
+        </CommentsMoreComments>
+      )}
     </FooterComments>
   );
 }
 
 export default CommentComponent;
 
+const EmojiPicker = styled.div`
+  position: relative;
+  top:0;
+  z-index: 1000;
+`;
+
 const FooterComments = styled.div`
-  margin: 0 0 60px;
+  margin: 0 0 00px;
   padding: 8px 12px;
   font-size: 15px;
   font-weight: 600;
   text-align: right;
   color: #65676b;
+  width: 100%;
 `;
-// const CommentsFilter = styled.div`
-//   display: inline-block;
-//   margin-bottom: 8px;
-//   cursor: pointer;
-// `;
 
 const CommentsBox = styled.div`
   display: flex;
@@ -134,25 +147,6 @@ const BoxBar = styled.div`
   flex: 1;
 `;
 
-const BarInput = styled.input`
-  width: 100%;
-  background: #f0f2f5;
-  border: none;
-  padding: 12px;
-  font-size: 15px;
-  color: rgba(5, 5, 5, 0.8);
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-  outline: none;
-  flex: 1;
-  &::placeholder {
-    opacity: 0.8;
-  }
-  &:focus::-webkit-input-placeholder {
-    opacity: 0.6;
-  }
-`;
-
 const BarEmojis = styled.div`
   display: flex;
   align-items: center;
@@ -171,114 +165,21 @@ const EmojisInsert = styled.span`
   cursor: pointer;
 `;
 
-const CommentsFriendComment = styled.div`
-  display: flex;
-  text-align: start;
-`;
-
-const FriendCommentPic = styled.img`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  margin-right: 10px;
-  cursor: pointer;
-  transition: filter 0.2s ease;
-  &:hover {
-    filter: brightness(0.95);
-  }
-`;
-
-const FriendCommentComment = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  margin-right: 5px;
-  padding: 8px 12px;
-  background: #f0f2f5;
-  border-radius: 15px;
-`;
-
-const CommentAuthor = styled.a`
-  align-self: flex-start;
-  color: #050505;
-  font-size: 13.5px;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const CommentContent = styled.span`
-  font-size: 15px;
-  font-weight: 400;
-  color: #050505;
-`;
-
-// const CommentReaction = styled.div`
-//   display: flex;
-//   align-items: center;
-//   position: absolute;
-//   bottom: -15px;
-//   right: 0;
-//   padding: 0.20px 5px;
-//   background: #fff;
-//   box-shadow: 0 0.10px 0.20px rgba(0, 0, 0, 0.2);
-//   border-radius: 10px;
-//   cursor: pointer;
-// `;
-
-const CommentLinks = styled.div`
-  position: absolute;
-  bottom: -20px;
-  color: #65676b;
-  font-size: 12px;
-  font-weight: 400;
-`;
-const LinksLikes = styled.a`
-  font-weight: 700;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const LinksReply = styled.a`
-  font-weight: 700;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const LinksDate = styled.a`
-  font-weight: 700;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const FriendCommentOptions = styled.div`
-  align-self: center;
-  padding: 8px;
-  border-radius: 50%;
-  line-height: 8px;
-  cursor: pointer;
-  &:hover {
-    background: #f0f2f5;
-  }
-`;
-
 const CommentsMoreComments = styled.div`
   display: flex;
   justify-content: space-between;
-  position: relative;
+  /* position: relative;*/
   bottom: -50px;
 `;
 
 const MoreComments = styled.span`
-  a {
+  div {
     text-decoration: none;
     color: inherit;
   }
   &:hover {
     text-decoration: underline;
+    cursor: pointer;
   }
 `;
 

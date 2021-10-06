@@ -9,7 +9,9 @@ const store = createStore(
   compose(
     applyMiddleware(...middlewares),
     window.__REDUX_DEVTOOLS_EXTENSION__
-        ? window.__REDUX_DEVTOOLS_EXTENSION__()
+        ? window.__REDUX_DEVTOOLS_EXTENSION__({
+          latency: 0
+        })
         : f => f
   )
 );

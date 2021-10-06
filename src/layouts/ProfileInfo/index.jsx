@@ -1,17 +1,22 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useClickOutside } from "react-click-outside-hook";
 import {
   IoBriefcaseOutline,
   IoHomeOutline,
-  IoLocateOutline,
+  IoLocationOutline,
   IoSchoolOutline,
 } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Modal from "../Modal";
 
 function ProfileInfo({ user }) {
+  const [toggle, setToggle] = useState(false);
+  const [modal, setModal] = useState();
   const [photos, setPhotos] = useState([]);
+  
   useEffect(() => {
     let photos = [];
     user.userPosts?.forEach((post) => {
@@ -25,8 +30,37 @@ function ProfileInfo({ user }) {
     photos = photos.slice(0, 9);
     setPhotos(photos);
   }, [user]);
+
+  // Modal
+  const openModal = (src) => {
+    setModal(src);
+    setToggle(true);
+  };
+
+  const closeContainer = () => {
+    setToggle(false);
+  };
+
+  const [parentRef, isClickedOutside] = useClickOutside();
+  useEffect(() => {
+    closeContainer();
+  }, [isClickedOutside]);
+
   return (
     <>
+      <Modal
+        isOpen={toggle}
+        setOpen={setToggle}
+        closeContainer={closeContainer}
+        parentRef={parentRef}
+        isClickedOutside={isClickedOutside}
+      >
+        <img
+          src={`http://localhost:5000/api/images/${modal}`}
+          alt=""
+          height="500px"
+        />
+      </Modal>
       <InfoCol>
         <ProfileIntro>
           <h3>About Me</h3>
@@ -34,14 +68,14 @@ function ProfileInfo({ user }) {
           <hr />
           <ul>
             <li>
-              <IoBriefcaseOutline style={introIconStyles} /> Director at 99media
+              <IoBriefcaseOutline style={introIconStyles} /> Javascript Dev
             </li>
             <li>
-              <IoSchoolOutline style={introIconStyles} /> Went to Christ,
+              <IoSchoolOutline style={introIconStyles} /> Went to Acharya,
               Bangalore
             </li>
             <li>
-              <IoLocateOutline style={introIconStyles} />
+              <IoLocationOutline style={introIconStyles} />
               Lives in Bangalore
             </li>
             <li>
@@ -50,42 +84,45 @@ function ProfileInfo({ user }) {
             </li>
           </ul>
         </ProfileIntro>
-        {photos.length > 0 && (
-            <ProfileIntro>
-              <TitleBox>
-                <h3>Photos</h3>
-                <a href="#dummy">All Photos</a>
-              </TitleBox>
-              <PhotoBox>
-                {photos &&
-                  photos.map((src) => {
-                    console.log(src, src);
-                    return (  
-                      <div key={src}>
-                        <img
-                          src={`http://localhost:5000/api/images/${src}`}
-                          alt=""
-                        />
-                      </div>
-                    );
-                  })}
-              </PhotoBox>
-            </ProfileIntro>
+        {photos && photos.length > 0 && (
+          <ProfileIntro>
+            <TitleBox>
+              <h3>Photos</h3>
+              <a href="#dummy">All Photos</a>
+            </TitleBox>
+            <PhotoBox>
+              {photos &&
+                photos.map((src) => {
+                  return (
+                    <div key={src} onClick={() => openModal(src)}>
+                      <img
+                        src={`http://localhost:5000/api/images/${src}`}
+                        alt=""
+                      />
+                    </div>
+                  );
+                })}
+            </PhotoBox>
+          </ProfileIntro>
         )}
         <ProfileIntro>
           <TitleBox>
             <h3>Friends</h3>
             <a href="#dummy">All Friends</a>
           </TitleBox>
-          <p>{user.friends && user.friends.length} friends</p>
+          {user.friends?.length > 0 ? (
+            <p>{user.friends.length} friends</p>
+          ) : (
+            <p>No friends</p>
+          )}
           <FriendsBox>
             {user.friends &&
               user.friends.map((friend) => {
                 return (
-                  <Link to={`/profile/${friend._id}`} key={friend._id}>
+                  <Link to={`/profile/${friend._id}`} key={friend._id} style={{textDecoration:"none", color:"black"}}>
                     <div>
                       <img src={friend.avatar} alt="" />
-                      <p>{friend.fullName}</p>
+                      <p style={{fontSize:"12px"}}>{friend.fullName}</p>
                     </div>
                   </Link>
                 );

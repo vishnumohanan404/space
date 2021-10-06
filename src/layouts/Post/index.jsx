@@ -6,8 +6,8 @@ import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { useMediaQuery } from "react-responsive";
 import { DeviceSize } from "../../components/responsive";
 import Request from "../Request";
-import { fetchPosts } from "../../redux";
-import { connect } from "react-redux";
+import { fetchPosts, likePostSuccess } from "../../redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
 import TimeAgo from "react-timeago";
 import frenchStrings from "react-timeago/lib/language-strings/en";
@@ -17,8 +17,143 @@ import { Marginer } from "../../components/Marginer";
 import PostLikes from "../../components/PostActions/PostLikes";
 // import PostComments from "../../components/PostActions/PostComments";
 import CommentComponent from "../../components/CommentComponent";
+import { Link } from "react-router-dom";
 // import Comments from "../../components/Comments";
 
+// const CommentsContainer = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   width: 100%;
+// `;
+
+const postIcons = { width: "18px", marginRight: "10px" };
+
+function Post({
+  postData,
+  fetchPosts,
+  isLoading = postData?.isLoading,
+  progress,
+}) {
+  const [toggleComment, setToggleComment] = useState([]);
+  const formatter = buildFormatter(frenchStrings);
+  const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
+  const socket = useSelector((state) => state.socket);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("LIKE_TO_CLIENT", (newPost) => {
+        console.log(`newPost in like to client`, newPost);
+        dispatch(likePostSuccess(newPost));
+      });
+    }
+    return () => socket && socket.off("LIKE_TO_CLIENT");
+  }, [socket, dispatch]);
+
+  const handleToggle = (id) => {
+    const toggleList = toggleComment.includes(id);
+    if (toggleList) {
+      setToggleComment(
+        toggleComment.filter((_id) => {
+          return _id !== id;
+        })
+      );
+    } else {
+      setToggleComment([...toggleComment, id]);
+    }
+  };
+
+  return (
+    <>
+      {!isLoading ? (
+        postData &&
+        postData.posts &&
+        postData.posts.map((post) => (
+          <PostContainer key={post._id}>
+            <PostRow>
+              <UserProfileContainer>
+                <Avatar src={post.avatar} marginTop={"15px"} />
+                <div>
+                  <Link
+                    to={`profile/${post.userId}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <UserNameText>{post.authorName}</UserNameText>
+                  </Link>
+                  <span>
+                    <TimeAgo date={post.createdAt} formatter={formatter} />
+                  </span>
+                </div>
+              </UserProfileContainer>
+            </PostRow>
+            <PostText>{post.postContent}</PostText>
+            {post.medias && (
+              <PostCarousel mediaKeys={post.medias}></PostCarousel>
+            )}
+            <Marginer direction="vertical" margin={10} />
+            <ReactionsRow>
+              <h6 style={{ padding: "0 25px", cursor: "pointer" }}>
+                {post.likes.length} likes
+              </h6>
+              <h6 style={{ padding: "0 25px", cursor: "pointer" }}>
+                {post.comments.length} comments
+              </h6>
+            </ReactionsRow>
+            <PostActivityIcon>
+              <PostLikes post={post} />
+              <PostActionButtons onClick={() => handleToggle(post._id)}>
+                <IoChatboxEllipsesOutline style={postIcons} />
+                {post.comments?.length}
+              </PostActionButtons>
+            </PostActivityIcon>
+            <Marginer direction="horizontal" marginTop={"15px"} />
+            {toggleComment.includes(post._id) && (
+              <PostRow>
+                <CommentComponent post={post} />
+              </PostRow>
+            )}
+          </PostContainer>
+        ))
+      ) : (
+        <>
+          <PostContainer>
+            <Skeleton count={5} />
+          </PostContainer>
+          <PostContainer>
+            <Skeleton count={5} />
+          </PostContainer>
+          <PostContainer>
+            <Skeleton count={5} />
+          </PostContainer>
+        </>
+      )}
+      {isMobile && (
+        <PostContainer>
+          <Request />
+        </PostContainer>
+      )}
+    </>
+  );
+}
+
+// const mapStateToProps = (state) => {
+//   return {
+//     postData: state.posts,
+//   };
+// };
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchPosts: () => dispatch(fetchPosts()),
+    // fetchProfile: ()=>dispatch()
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Post);
 const PostContainer = styled.div`
   width: 100%;
   background: #fff;
@@ -34,6 +169,17 @@ const PostRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const ReactionsRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 10px;
+  h6 {
+    margin: 0;
+    padding: 0;
+  }
 `;
 
 const UserProfileContainer = styled.div`
@@ -88,116 +234,3 @@ const PostActionButtons = styled.div`
     background-color: #afafafa2;
   }
 `;
-
-// const CommentsContainer = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   width: 100%;
-// `;
-
-const postIcons = { width: "18px", marginRight: "10px" };
-
-function Post({
-  postData,
-  fetchPosts,
-  isLoading = postData?.isLoading,
-  progress,
-}) {
-  const [toggleComment, setToggleComment] = useState([]);
-  const formatter = buildFormatter(frenchStrings);
-  const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const handleToggle = (id) => {
-    const toggleList = toggleComment.includes(id);
-    if (toggleList) {
-      setToggleComment(
-        toggleComment.filter((_id) => {
-          return _id !== id;
-        })
-      );
-    } else {
-      setToggleComment([...toggleComment, id]);
-    }
-  };
-
-  return (
-    <>
-      {!isLoading ? (
-        postData &&
-        postData.posts &&
-        postData.posts.map((post) => (
-          <PostContainer key={post._id}>
-            <PostRow>
-              <UserProfileContainer>
-                <Avatar
-                  src={"https://avatars.dicebear.com/api/human/vidshnu.svg"}
-                  marginTop={"15px"}
-                />
-                <div>
-                  <UserNameText>{post.authorName}</UserNameText>
-                  <span>
-                    <TimeAgo date={post.createdAt} formatter={formatter} />
-                  </span>
-                </div>
-              </UserProfileContainer>
-            </PostRow>
-            <PostText>{post.postContent}</PostText>
-            {post.medias && (
-              <PostCarousel mediaKeys={post.medias}></PostCarousel>
-            )}
-            <Marginer direction="vertical" margin={10} />
-            <PostActivityIcon>
-              <PostLikes post={post} />
-              <PostActionButtons onClick={() => handleToggle(post._id)}>
-                <IoChatboxEllipsesOutline style={postIcons} />
-                {post.comments?.length}
-              </PostActionButtons>
-            </PostActivityIcon>
-            <Marginer direction="horizontal" marginTop={"15px"} />
-            {toggleComment.includes(post._id) && (
-              <PostRow>
-                <CommentComponent />
-              </PostRow>
-            )}
-          </PostContainer>
-        ))
-      ) : (
-        <>
-          <PostContainer>
-            <Skeleton count={5} />
-          </PostContainer>
-          <PostContainer>
-            <Skeleton count={5} />
-          </PostContainer>
-          <PostContainer>
-            <Skeleton count={5} />
-          </PostContainer>
-        </>
-      )}
-      {isMobile && (
-        <PostContainer>
-          <Request />
-        </PostContainer>
-      )}
-    </>
-  );
-}
-
-const mapStateToProps = (state) => {
-  return {
-    postData: state.posts,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchPosts: () => dispatch(fetchPosts()),
-    // fetchProfile: ()=>dispatch()
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Post);

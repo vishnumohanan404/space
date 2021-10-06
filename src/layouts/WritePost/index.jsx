@@ -46,6 +46,7 @@ function WritePost({
   user = userData.user,
   isLoading = postData?.addPostLoading,
   progress = postData?.progress,
+  margin
 }) {
   const [status, setStatus] = useState({ postContent: "" });
   const [imagePreview, setImagePreview] = useState([]);
@@ -183,7 +184,7 @@ function WritePost({
         <ReactPlayer url={videoPlayer} controls={true} />
       </Modal>
 
-      <WritePostContainer>
+      <WritePostContainer style={margin}>
         <PostForm onSubmit={handleSubmit}>
           <UserProfileContainer>
             <Avatar src={user.avatar} />
@@ -211,11 +212,11 @@ function WritePost({
               </label>
               <label href="#2">
                 <IoCameraOutline style={IconStyle} />
-                Add Video
+                Capture Images
               </label>
               <label href="#1">
                 <IoHappyOutline style={IconStyle} />
-                Capture Images
+                Feelings
               </label>
               <Button>
                 {isLoading ? (
@@ -299,10 +300,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-
-
 export default connect(mapStateToProps, mapDispatchToProps)(WritePost);
-
 
 const WritePostContainer = styled.div`
   width: 100%;
@@ -310,7 +308,7 @@ const WritePostContainer = styled.div`
   border-radius: 6px;
   padding: 20px;
   padding-top: 10px;
-  margin-top: 1.5%;
+  /* margin-top: 1.5%; */
   color: #626262;
   box-shadow: 0px 2px 12px 3px rgba(34, 34, 34, 0.103);
 `;

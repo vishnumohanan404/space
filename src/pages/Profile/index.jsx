@@ -6,55 +6,123 @@ import ProfileInfo from "../../layouts/ProfileInfo";
 import ProfileDetails from "../../layouts/ProfileDetails";
 import { useParams } from "react-router-dom";
 import { IoPencil } from "react-icons/io5";
-import { connect } from "react-redux";
-import { getProfile } from "../../redux/user/UserAction";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { getProfile, updateProfile } from "../../redux/user/UserAction";
+// import { LoadingWrapper } from "../../layouts/common";
+import { MoonLoader } from "react-spinners";
+import Tabs from "../../layouts/Tabs";
+import Friends from "../../components/Friends";
+import About from "../../components/About";
+import Photos from "../../components/Photos";
+import Settings from "../../layouts/Settings";
+import Chat from "../../layouts/Chat";
+import { getUserChatFriends,setOpenChat } from "../../redux/chat/chatActions";
 
 function Profile({
-  profiles,
-  userProfiles = profiles.userProfile,
+  profile,
+  userProfile = profile.userProfile,
+  isLoading = profile.isLoading,
   getProfileData,
   currentUser,
 }) {
   const { id } = useParams();
+  const socket = useSelector((state) => state.socket);
+  const profileData = useSelector((state) => state.profile);
+  const { tab } = useSelector((state) => state.profile);
+  const dispatch = useDispatch();
+  const { openChat,openBubble } = useSelector((state) => state.conversations);
+
+  if (userProfile) userProfile.posts = userProfile.userPosts;
   useEffect(() => {
     getProfileData(id, currentUser.user._id);
+    return()=>{
+      dispatch(setOpenChat(false))
+    }
   }, [id]);
-  console.log(`userProfiles._id === currentUser._id`, userProfiles._id , currentUser._id)
+  useEffect(() => {
+    dispatch(getUserChatFriends());
+  }, [id]);
+  useEffect(() => {
+    if (socket)
+      socket.on("REJECT_REQUEST_TO_CLIENT", (updatedProfile) => {
+        console.log(`REJECT_REQUEST_TO_CLIENT`, updatedProfile);
+        dispatch(updateProfile(updatedProfile));
+      });
+  }, [socket]);
+
+  // console.log(`profileData`, profileData)
+
   return (
     <ProfileContainer>
-      {
+      {!isLoading ? (
         <>
-          <Cover>
-            <CoverImg src="https://images.unsplash.com/photo-1504805572947-34fad45aed93?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"></CoverImg>
-            <Overlay>
-              <IoPencil />
-            </Overlay>
-          </Cover>
+          {
+            <Cover>
+              <CoverImg src="https://images.unsplash.com/photo-1504805572947-34fad45aed93?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"></CoverImg>
+              <Overlay>
+                <IoPencil />
+              </Overlay>
+            </Cover>
+          }
+          <ProfileDetailsContainer>
+            <ProfileDetails
+              user={userProfile}
+              // currentUser={currentUser}
+              // id={id}
+              profiles={profile}
+              request={profile.request}
+            />
+          </ProfileDetailsContainer>
+          <Tabs />
+          <ProfileInfoContainer>
+            <ProfileInfo user={userProfile} />
+            {tab === 0 && (
+              <PostCol>
+                {userProfile._id === currentUser.user._id && <WritePost />}
+                {profileData.posts && (
+                  <Post user={userProfile} postData={profileData} />
+                )}
+              </PostCol>
+            )}
+            {tab === 1 && (
+              <PostCol>
+                <About />
+              </PostCol>
+            )}
+            {tab === 2 && (
+              <PostCol>
+                <Friends />
+              </PostCol>
+            )}
+            {tab === 3 && (
+              <PostCol>
+                <Photos />
+              </PostCol>
+            )}
+            {tab === 4 && (
+              <PostCol>
+                <Settings />
+              </PostCol>
+            )}
+          </ProfileInfoContainer>
+          {openChat && (
+            <ChatBubble active={openBubble}>
+              <Chat />
+            </ChatBubble>
+          )}
         </>
-      }
-      <ProfileDetailsContainer>
-        <ProfileDetails
-          user={userProfiles}
-          currentUser={currentUser}
-          id={id}
-          profiles={profiles}
-          request={profiles.request}
-        />
-      </ProfileDetailsContainer>
-      <ProfileInfoContainer>
-        <ProfileInfo user={userProfiles} />
-        <PostCol>
-          {userProfiles._id === currentUser.user._id && <WritePost />}
-          <Post user={userProfiles} />
-        </PostCol>
-      </ProfileInfoContainer>
+      ) : (
+        <LoadingWrapper>
+          <MoonLoader size={50} />
+        </LoadingWrapper>
+      )}
     </ProfileContainer>
   );
 }
 
 const mapStateToProps = (state) => {
   return {
-    profiles: state.profile,
+    profile: state.profile,
     currentUser: state.user,
   };
 };
@@ -66,6 +134,24 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+
+const ChatBubble = styled.div`
+  height: 55px;
+  overflow: hidden;
+  min-width: 320px;
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border: 1px solid #e4e4e4;
+  ${({ active }) =>
+    active &&
+    `
+    min-height:350px
+    `}
+`;
 
 const ProfileContainer = styled.div`
   width: 100%;
@@ -109,6 +195,7 @@ const ProfileDetailsContainer = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  /* flex-direction: column; */
 `;
 
 const ProfileInfoContainer = styled.div`
@@ -119,5 +206,13 @@ const ProfileInfoContainer = styled.div`
 `;
 
 const PostCol = styled.div`
+  margin-top: 50px;
   flex-basis: 65%;
+`;
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10%;
 `;

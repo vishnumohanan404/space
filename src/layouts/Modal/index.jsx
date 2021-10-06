@@ -39,16 +39,16 @@ const CloseButton = styled.span`
 // const InnerContainer = styled.div``;
 
 function Modal({
-  isToggled,
+  isOpen,
   children,
-  setToggle,
+  setOpen,
   closeContainer,
   parentRef,
   isClickedOutside,
 }) {
   return (
     <AnimatePresence>
-      {isToggled && (
+      {isOpen && (
         <ModalContainer
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -64,7 +64,7 @@ function Modal({
           }}
           ref={parentRef}
         >
-          <CloseButton onClick={() => setToggle(false)}>
+          <CloseButton onClick={() => setOpen(false)}>
             <IoCloseOutline />
           </CloseButton>
           <motion.div initial={{ y: 50 }} animate={{ y: 0 }} exit={{ y: 30 }}>

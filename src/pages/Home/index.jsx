@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 import Heading from "../../components/Heading";
@@ -7,19 +7,38 @@ import Post from "../../layouts/Post";
 import WritePost from "../../layouts/WritePost";
 import { DeviceSize } from "../../components/responsive";
 import Conversations from "../../layouts/Conversations";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
+// import { getUser } from "../../redux";
+import Chat from "../../layouts/Chat";
+import { setOpenChat } from "../../redux/chat/chatActions";
+import { Switch } from "@material-ui/core";
+import { setActive } from "../../redux";
+// import {
+//   socketConnect,
+//   socketDisconnect,
+// } from "../../redux/socket/SocketActions";
 
-
-
-function Home({ userData,socket }) {
+function Home({ userData }) {
   const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
-  console.log(socket,"socket")
+  const socket = useSelector((state) => state.socket);
+  const posts = useSelector((state) => state.posts);
+  const { openBubble } = useSelector((state) => state.conversations);
+  const { openChat } = useSelector((state) => state.conversations);
+  const { user } = useSelector((state) => state.user);
 
-  const handleSocket = ()=>{
-    socket.io.emit("join_room")
-  }
+  const dispatch = useDispatch();
 
-  console.log(userData, "userData");
+  useEffect(() => {
+    // dispatch(getUser());
+    return () => {
+      dispatch(setOpenChat(false));
+    };
+  }, []);
+
+  const handleActive = () => {
+    dispatch(setActive(!user.online));
+  };
+
   return (
     <HomeContainer>
       {!isMobile && (
@@ -28,22 +47,34 @@ function Home({ userData,socket }) {
         </LeftSideBar>
       )}
       <MainContent>
-        <WritePost />
-        <Post />
+        <WritePost margin={homeWriteStyle} />
+        <Post postData={posts} />
+        {openChat && (
+          <ChatBubble active={openBubble}>
+            <Chat />
+          </ChatBubble>
+        )}
       </MainContent>
       {!isMobile && (
         <RightSideBar>
-          <Heading title={"Requests"} color={"#626262"} handle={handleSocket}/>
-          <Request
-            requests={
-              userData.friendRequests[userData.friendRequests.length - 1]
-            }
-          />
+          {!!userData.friendRequests.length && (
+            <>
+              <Heading title={"Requests"} color={"#626262"} />
+              <Request userData={userData} />
+            </>
+          )}
           <Heading
             title={"Conversations"}
             color={"#626262"}
             href={"#"}
-            hrefContent={"Active"}
+            button={
+              <Switch
+                checked={user.online}
+                onChange={handleActive}
+                inputProps={{ "aria-label": "controlled" }}
+                color="primary"
+              />
+            }
           />
           <Conversations />
         </RightSideBar>
@@ -55,11 +86,45 @@ function Home({ userData,socket }) {
 const mapStateToProps = (state) => {
   return {
     userData: state.user.user,
-    socket: state.socket
   };
 };
 
 export default connect(mapStateToProps)(Home);
+const NotificationDropdown = styled.div`
+  width: 260px;
+  position: absolute;
+  color: #2336ab;
+  right: 177px;
+  top: 48px;
+  -webkit-transform: translateY(18px);
+  -moz-transform: translateY(18px);
+  -o-transform: translateY(18px);
+  transform: translateY(18px);
+  /* -webkit-transition: -webkit-transform 0.4s, opacity 0.4s; */
+  -moz-transition: -moz-transform 0.4s, opacity 0.4s;
+  -ms-transition: -ms-transform 0.4s, opacity 0.4s;
+  -o-transition: -o-transform 0.4s, opacity 0.4s;
+  transition: transform 0.4s, opacity 0.4s;
+`;
+const ChatBubble = styled.div`
+  height: 55px;
+  overflow: hidden;
+  min-width: 320px;
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+  right: 405px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border: 1px solid #e4e4e4;
+  ${({ active }) =>
+    active &&
+    `
+    min-height:350px
+    `}
+`;
+
+const homeWriteStyle = { marginTop: "1.5%" };
 
 const HomeContainer = styled.div`
   width: 100%;
@@ -101,7 +166,6 @@ const RightSideBar = styled.div`
 //   display: flex;
 //   flex-wrap: wrap;
 // `;
-
 
 // screen size
 // const isTablet = useMediaQuery({ maxWidth: DeviceSize.tablet });

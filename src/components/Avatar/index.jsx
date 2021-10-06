@@ -23,6 +23,7 @@ const AvatarContainer = styled.div`
   }
 
   img {
+    /* object-fit: cover; */
     border-radius: 50%; /* relative value for
 				   adjustable image size */
     max-width: 100%;

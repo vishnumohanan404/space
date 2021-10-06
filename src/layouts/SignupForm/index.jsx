@@ -12,7 +12,7 @@ import {
   SubmitButton,
 } from "../common";
 import { Marginer } from "../../components/Marginer";
-import { AccountContext } from "../../context/AuthContext";
+import { AccountContext } from "../../context/AccountBox";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";

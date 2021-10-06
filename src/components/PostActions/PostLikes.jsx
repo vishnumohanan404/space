@@ -4,6 +4,7 @@ import { IoThumbsUp } from "react-icons/io5";
 import styled from "styled-components";
 // import axios from "axios";
 import { api } from "../../api.config";
+import { likePost } from "../../redux";
 import { useDispatch, useSelector } from "react-redux";
 import { socketConnect } from "../../redux";
 
@@ -20,39 +21,48 @@ const PostActionButtons = styled.div`
   }
 `;
 
-const postIcons = { width: "18px", marginRight: "10px" };
+const likeIcons = { width: "18px", marginRight: "10px", color: "3DB2FF" };
+const noLikeIcons = { width: "18px", marginRight: "10px" };
 
 function PostLikes({ post }) {
-  const [like, setLike] = useState(post.likes.length);
+  const {user} = useSelector(state => state.user)
   const [isLiked, setIsLiked] = useState(false);
+  const [likeLoading, setLikeLoading] = useState(false);
+
   const { user: currentUser } = useSelector((state) => state.user);
-  const { socket } = useSelector((state) => state.socket);
+  const  socket  = useSelector((state) => state.socket);
   const dispatch = useDispatch();
+  // const { socket } = useSelector((state) => state.socket);
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     let userId = currentUser._id.toString();
     setIsLiked(post.likes.includes(userId));
-  }, []);
+  }, [post.likes]);
 
-  useEffect(() => {
-    console.log(socket)
-  }, [like, socket]);
 
-  const handleLike = () => {
-    api
-      .put(`/post/${post._id}/like`)
-      .then((response) => {
-        console.log(response);
-        setLike(isLiked ? like - 1 : like + 1);
-        setIsLiked(!isLiked);
-      })
-      .catch((err) => {});
+  const handleLike = async () => {
+    setLikeLoading(true);
+    await dispatch(likePost(post._id,socket,user));
+    setLikeLoading(false);
+    
   };
 
-  return (
+  return !likeLoading ? (
     <PostActionButtons onClick={handleLike} data-id={post._id}>
-      <IoThumbsUp style={postIcons} />
-      {like}
+      {isLiked ? (
+        <IoThumbsUp style={likeIcons} />
+      ) : (
+        <IoThumbsUp style={noLikeIcons} />
+      )}
+    </PostActionButtons>
+  ) : (
+    <PostActionButtons data-id={post._id}>
+      {isLiked ? (
+        <IoThumbsUp style={likeIcons} />
+      ) : (
+        <IoThumbsUp style={noLikeIcons} />
+      )}
     </PostActionButtons>
   );
 }
