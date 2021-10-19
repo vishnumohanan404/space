@@ -2,9 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Motivation
-
-This is my first react project which took me on a new journey of advanced concept in front end development. I was very keen on learning React for the same reason as I learned Javascript, that is to become a front end dev. I hope this will be my first step to my goal of mastering front-end development lifecycle and best practices
+### [LIVE](https://google.com)
 
 ## Motivation
 
