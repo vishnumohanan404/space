@@ -2,6 +2,7 @@ import {
   OPEN_NOTIFICATIONS_DD,
   CREATE_NOTIFICATION,
   SET_NOTIFY,
+  READ_NOTIFY,
 } from "./NotificationTypes";
 
 const initialState = {
@@ -25,6 +26,14 @@ const NotificationReducers = (state = initialState, action) => {
       return {
         ...state,
         notifications: [...action.payload, ...state.notifications],
+      };
+    case READ_NOTIFY:
+      return {
+        ...state,
+        notifications: state.notifications.map((notify) => {
+          notify.read = true;
+          return notify;
+        }),
       };
 
     default:

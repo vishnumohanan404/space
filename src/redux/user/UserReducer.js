@@ -19,6 +19,8 @@ import {
   // TAB
   TAB,
   NEW_COMMENT_SUCCESS,
+  UPDATE_PROFILE_INFO,
+  UPDATE_PROFILE_LOADING,
   // ACCEPT REQUEST
   // ACCEPT_REQUEST_START,
   // ACCEPT_REQUEST_SUCCESS,
@@ -38,6 +40,7 @@ const initialState = {
   friendRequestLoading: false,
   friendRequestError: false,
   tab: 0,
+  updateLoading: false,
 };
 
 const UserReducer = (state = initialState, action) => {
@@ -108,6 +111,29 @@ const UserReducer = (state = initialState, action) => {
         userProfile: action.payload.profile,
         request: !state.request,
       };
+    case UPDATE_PROFILE_LOADING:
+      return {
+        ...state,
+        updateLoading: action.payload,
+      };
+    case UPDATE_PROFILE_INFO:
+      return {
+        ...state,
+        userProfile: {
+          ...state.userProfile,
+          fullName: action.payload.fullName,
+          phone: action.payload.phone,
+          email: action.payload.email,
+          age: action.payload.age,
+          description: action.payload.description,
+          education: action.payload.education,
+          work: action.payload.work,
+          from: action.payload.from,
+          livesIn: action.payload.livesIn,
+          livesInCountry: action.payload.livesInCountry,
+          fromCountry: action.payload.fromCountry,
+        },
+      };
     case LIKE_POST_SUCCESS:
       return {
         ...state,
@@ -175,19 +201,14 @@ const addComment = (posts, id, comment) => {
   return newData;
 };
 
-
-
-
-
-
 // const likePost = (posts, updatedPost) => {
 //   const testFn = (obj) => {
 //     return obj._id === updatedPost._id;
 //   };
 //   let likedPost = posts.findIndex(testFn);
-  // console.log(`likedPost`, likedPost)
-  // console.log(`posts[likedPost]`, posts[likedPost])
-  // console.log(`updatedPost.likes`, updatedPost.likes)
+// console.log(`likedPost`, likedPost)
+// console.log(`posts[likedPost]`, posts[likedPost])
+// console.log(`updatedPost.likes`, updatedPost.likes)
 //   if (posts[likedPost]) posts[likedPost].likes = updatedPost.likes;
 //   return posts;
 // };

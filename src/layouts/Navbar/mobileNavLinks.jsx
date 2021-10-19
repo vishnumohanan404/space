@@ -1,8 +1,38 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 // import { Accessibility } from "./accessibility";
 import { MenuToggle } from "./menuToggle";
 
+export function MobileNavLinks(props) {
+  const [isOpen, setOpen] = useState(false);
+  const { user } = useSelector((state) => state.user);
+  return (
+    <NavLinksContainer>
+      <MenuToggle isOpen={isOpen} toggle={() => setOpen(!isOpen)} />
+      {isOpen && (
+        <LinksWrapper>
+          <LinkItem>
+            <Link to={`/profile/${user._id}`}>Profile</Link>
+          </LinkItem>
+          <LinkItem>
+            <Link to="/">Home</Link>
+          </LinkItem>
+          {/* <LinkItem>
+            <Link href="#">Explore</Link>
+          </LinkItem>
+          <LinkItem>
+            <Link href="#">Impact</Link>
+          </LinkItem> */}
+          <Marginer />
+          {/* <Accessibility /> */}
+        </LinksWrapper>
+      )}
+    </NavLinksContainer>
+  );
+}
+
+// sc
 const NavLinksContainer = styled.div`
   height: 100%;
   display: flex;
@@ -42,31 +72,3 @@ const Link = styled.a`
 const Marginer = styled.div`
   height: 2em;
 `;
-
-export function MobileNavLinks(props) {
-  const [isOpen, setOpen] = useState(false);
-
-  return (
-    <NavLinksContainer>
-      <MenuToggle isOpen={isOpen} toggle={() => setOpen(!isOpen)} />
-      {isOpen && (
-        <LinksWrapper>
-          <LinkItem>
-            <Link href="#">About us</Link>
-          </LinkItem>
-          <LinkItem>
-            <Link href="#">How it works</Link>
-          </LinkItem>
-          <LinkItem>
-            <Link href="#">Explore</Link>
-          </LinkItem>
-          <LinkItem>
-            <Link href="#">Impact</Link>
-          </LinkItem>
-          <Marginer />
-          {/* <Accessibility /> */}
-        </LinksWrapper>
-      )}
-    </NavLinksContainer>
-  );
-}

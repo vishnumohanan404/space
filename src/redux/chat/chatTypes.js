@@ -8,5 +8,6 @@ export const SET_CONVO = "SET_CONVO";
 export const SET_BUBBLE = "SET_BUBBLE";
 export const SET_ACTIVE = "SET_ACTIVE";
 export const SET_ACTIVE_CONVO = "SET_ACTIVE_CONVO";
-
-
+export const SET_ACTIVE_INITIAL = "SET_ACTIVE_INITIAL";
+export const SET_MESSAGE = "SET_MESSAGE"
+export const UPDATE_ACTIVE_CONVO = "UPDATE_ACTIVE_CONVO"

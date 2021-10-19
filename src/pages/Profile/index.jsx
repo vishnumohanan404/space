@@ -16,7 +16,9 @@ import About from "../../components/About";
 import Photos from "../../components/Photos";
 import Settings from "../../layouts/Settings";
 import Chat from "../../layouts/Chat";
-import { getUserChatFriends,setOpenChat } from "../../redux/chat/chatActions";
+import { getUserChatFriends, setOpenChat } from "../../redux/chat/chatActions";
+import CustomizedDialogs from "../../components/Dialog";
+import EditForm from "../../layouts/EditForm";
 
 function Profile({
   profile,
@@ -27,17 +29,17 @@ function Profile({
 }) {
   const { id } = useParams();
   const socket = useSelector((state) => state.socket);
-  const profileData = useSelector((state) => state.profile);
+  const profileData = useSelector((state) => (!state.profile.updateLoading && state.profile));
   const { tab } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
-  const { openChat,openBubble } = useSelector((state) => state.conversations);
+  const { openChat, openBubble } = useSelector((state) => state.conversations);
 
   if (userProfile) userProfile.posts = userProfile.userPosts;
   useEffect(() => {
     getProfileData(id, currentUser.user._id);
-    return()=>{
-      dispatch(setOpenChat(false))
-    }
+    return () => {
+      dispatch(setOpenChat(false));
+    };
   }, [id]);
   useEffect(() => {
     dispatch(getUserChatFriends());
@@ -51,19 +53,31 @@ function Profile({
   }, [socket]);
 
   // console.log(`profileData`, profileData)
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
 
   return (
     <ProfileContainer>
       {!isLoading ? (
-        <>
-          {
+        <div>
+          {/* { true ?
             <Cover>
               <CoverImg src="https://images.unsplash.com/photo-1504805572947-34fad45aed93?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"></CoverImg>
               <Overlay>
                 <IoPencil />
               </Overlay>
+            </Cover> : <Cover>
+
+              Add a Cover picture
             </Cover>
-          }
+          } */}
           <ProfileDetailsContainer>
             <ProfileDetails
               user={userProfile}
@@ -71,22 +85,27 @@ function Profile({
               // id={id}
               profiles={profile}
               request={profile.request}
+              open={open}
+              handleClickOpen={handleClickOpen}
+              handleClose={handleClose}
             />
           </ProfileDetailsContainer>
           <Tabs />
           <ProfileInfoContainer>
-            <ProfileInfo user={userProfile} />
+            <ProfileInfo user={userProfile} handleClickOpen={handleClickOpen} />
             {tab === 0 && (
               <PostCol>
+                {/* <PostContainer> */}
                 {userProfile._id === currentUser.user._id && <WritePost />}
                 {profileData.posts && (
                   <Post user={userProfile} postData={profileData} />
                 )}
+                {/* </PostContainer> */}
               </PostCol>
             )}
             {tab === 1 && (
               <PostCol>
-                <About />
+                <About handleClose={handleClose} handleClickOpen={handleClickOpen} open={open}/>
               </PostCol>
             )}
             {tab === 2 && (
@@ -110,12 +129,19 @@ function Profile({
               <Chat />
             </ChatBubble>
           )}
-        </>
+        </div>
       ) : (
         <LoadingWrapper>
           <MoonLoader size={50} />
         </LoadingWrapper>
       )}
+      <CustomizedDialogs open={open} title={"Edit"} handleClose={handleClose}>
+        <EditForm
+          handleClose={handleClose}
+          title={"Edit Title"}
+          // content={}
+        />
+      </CustomizedDialogs>
     </ProfileContainer>
   );
 }
@@ -153,6 +179,16 @@ const ChatBubble = styled.div`
     `}
 `;
 
+const PostContainer = styled.div`
+  width: 100%;
+  /* background: #fff; */
+  border-radius: 6px;
+  /* padding: 20px; */
+  /* padding-top: 10px; */
+  /* margin-top: 1.5%; */
+  color: #626262;
+`;
+
 const ProfileContainer = styled.div`
   width: 100%;
   background-color: #ddf3fa;
@@ -160,7 +196,9 @@ const ProfileContainer = styled.div`
   /* height: inherit; */
   /* height: 100%; */
   min-height: 100vh;
-  padding: 65px 15%;
+  padding: 90px 15%;
+  /* overflow-y: auto !important;  */
+  /* position: relative; */
 `;
 
 const CoverImg = styled.img`
@@ -194,6 +232,7 @@ const ProfileDetailsContainer = styled.div`
   border-radius: 4px;
   display: flex;
   align-items: flex-start;
+  /* flex-direction: column; */
   justify-content: space-between;
   /* flex-direction: column; */
 `;

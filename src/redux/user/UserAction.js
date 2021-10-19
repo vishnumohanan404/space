@@ -17,7 +17,9 @@ import {
   // UPDATE_PROFILE
   UPDATE_PROFILE,
   // TAB
-  TAB
+  TAB,
+  UPDATE_PROFILE_LOADING,
+  UPDATE_PROFILE_INFO,
 
   // get request details
   // GET_REQUEST_DETAILS_START,
@@ -83,11 +85,11 @@ export const getProfile = (id, user) => {
           let progress = Math.round(
             (progressEvent.loaded * 100) / progressEvent.total
           );
-          console.log("Progress",progress)
+          console.log("Progress", progress);
           dispatch(onProgress(progress));
         },
       });
-      console.log(`userData.data`, userData.data)
+      // console.log(`userData.data`, userData.data)
       dispatch(getProfileSuccess(userData.data, user));
     } catch (err) {
       console.log("Error: ", err);
@@ -119,7 +121,7 @@ export const friendRequest = (id, socket) => {
       const userData = await api.put(`/friend-request/${id}`);
       dispatch(friendRequestSuccess(userData.data));
       // dispatch(updateUser(userData.data))
-      console.log(`Friend request response`, userData.data)
+      console.log(`Friend request response`, userData.data);
       socket.emit("REQUEST_SENT", userData.data);
     } catch (err) {
       console.log("Error: ", err);
@@ -128,14 +130,34 @@ export const friendRequest = (id, socket) => {
   };
 };
 
-
 // UPDATE_PROFILE
-export const updateProfile = (updatedProfile)=>{
+export const updateProfileInfo = (profileDetails) => {
+  return async (dispatch) => {
+    dispatch({ type: UPDATE_PROFILE_LOADING, payload: true });
+    try {
+      const userData = await api.put(`/profile`, profileDetails);
+      dispatch(updateProfileInfoSuccess(userData.data));
+      dispatch({ type: UPDATE_PROFILE_LOADING, payload: false });
+    } catch (err) {
+      console.log("Error: ", err);
+      // dispatch(friendRequestFailure());
+    }
+  };
+};
+
+export const updateProfileInfoSuccess = (updatedProfile) => {
+  return {
+    type: UPDATE_PROFILE_INFO,
+    payload: updatedProfile,
+  };
+};
+
+export const updateProfile = (updatedProfile) => {
   return {
     type: UPDATE_PROFILE,
-    payload: {profile:updatedProfile}
-  }
-}
+    payload: { profile: updatedProfile },
+  };
+};
 
 // CLEAR_USER
 export const clearUserProfile = () => {
@@ -149,14 +171,9 @@ export const clearUserProfile = () => {
 export const setTab = (tabIndex) => {
   return {
     type: TAB,
-    payload: tabIndex
+    payload: tabIndex,
   };
 };
-
-
-
-
-
 
 // get reqiuest details
 

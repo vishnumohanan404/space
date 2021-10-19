@@ -18,6 +18,7 @@ import {
   UPDATE_COMMENT,
   LIKE_COMMENT,
   GET_SINGLE_POST,
+  DELETE_POST,
 } from "./PostTypes";
 import { api } from "../../api.config";
 import axios from "axios";
@@ -159,7 +160,10 @@ export const likePost = (id, socket, user) => {
       .then((response) => {
         // console.log(`response.data`, response.data)
         dispatch(likePostSuccess(response.data));
-        if (response.data.type === "LIKE") {
+        if (
+          response.data.userId !== user._id &&
+          response.data.type === "LIKE"
+        ) {
           const notify = {
             type: "liked your post",
             createdBy: user._id,
@@ -170,12 +174,12 @@ export const likePost = (id, socket, user) => {
           };
           dispatch(createNotify({ notify, socket }));
         }
+        socket.emit("LIKE_POST", {
+          _id: response.data._id,
+          userId: response.data.userId,
+          likes: response.data.likes,
+        });
         // console.log(`socket in action`, socket)
-        // socket.emit("LIKE_POST", {
-        //   _id: response.data._id,
-        //   userId: response.data.userId,
-        //   likes: response.data.likes,
-        // });
       })
       .catch((err) => {
         console.log(`err.message`, err.message);
@@ -202,13 +206,23 @@ export const newCommmentFailure = () => {
   };
 };
 
-export const newComment = (comment, postId) => {
+export const newComment = (comment, postId, socket) => {
   return async (dispatch) => {
     dispatch(newCommmentStart);
     try {
       const res = await api.post("/comment", { comment, postId });
       // console.log(`res.data in newCommmnet`, res.data)
       dispatch(newCommmentSuccess(res.data));
+      const notify = {
+        type: "commented on your post",
+        createdBy: res.data.authorId,
+        recipients: [res.data.postAuthor],
+        url: `post/${res.data.postId}`,
+        read: false,
+        createdAt: new Date(),
+      };
+      res.data.postAuthor !== res.data.authorId &&
+        dispatch(createNotify({ notify, socket }));
     } catch (err) {
       console.log(`err new comments:`, err);
       dispatch(newCommmentFailure(err));
@@ -235,10 +249,24 @@ export const likeComment = (commentId) => {
   };
 };
 
+// delete post
 
+export const deletePost = (postId) => {
+  return async (dispatch) => {
+    try {
+      const deletedPost = await api.delete(`/post/${postId}`);
+      console.log(`deletedPost`, deletedPost);
+      dispatch({
+        type: DELETE_POST,
+        payload: postId,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
 
 // update post
-
 export const updatePost = (newPost) => {
   return {
     type: UPDATE_POST,

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { UserNameText } from "../common";
 import Avatar from "../../components/Avatar";
-import { IoChatboxEllipsesOutline } from "react-icons/io5";
+import {
+  IoChatboxEllipsesOutline,
+} from "react-icons/io5";
 import { useMediaQuery } from "react-responsive";
 import { DeviceSize } from "../../components/responsive";
 import Request from "../Request";
-import { fetchPosts, likePostSuccess } from "../../redux";
+import { deletePost, fetchPosts, likePostSuccess } from "../../redux";
 import { connect, useDispatch, useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
 import TimeAgo from "react-timeago";
@@ -18,6 +20,7 @@ import PostLikes from "../../components/PostActions/PostLikes";
 // import PostComments from "../../components/PostActions/PostComments";
 import CommentComponent from "../../components/CommentComponent";
 import { Link } from "react-router-dom";
+import BasicMenu from "../../components/BasicMenu";
 // import Comments from "../../components/Comments";
 
 // const CommentsContainer = styled.div`
@@ -39,7 +42,8 @@ function Post({
   const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
   const socket = useSelector((state) => state.socket);
   const dispatch = useDispatch();
-  
+  const { user } = useSelector((state) => state.user);
+
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -47,7 +51,7 @@ function Post({
   useEffect(() => {
     if (socket) {
       socket.on("LIKE_TO_CLIENT", (newPost) => {
-        console.log(`newPost in like to client`, newPost);
+        // console.log(`newPost in like to client`, newPost);
         dispatch(likePostSuccess(newPost));
       });
     }
@@ -89,6 +93,14 @@ function Post({
                   </span>
                 </div>
               </UserProfileContainer>
+              {post.userId === user._id && (
+                <BasicMenu
+                  key={post._id}
+                  elevation={1}
+                  deletePost={deletePost}
+                  post={post}
+                ></BasicMenu>
+              )}
             </PostRow>
             <PostText>{post.postContent}</PostText>
             {post.medias && (
@@ -154,6 +166,18 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(null, mapDispatchToProps)(Post);
+
+const Options = styled.div`
+  padding: 1rem;
+  border-radius: 50%;
+  line-height: 50%;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  :hover {
+    background: #f2f2f2;
+  }
+`;
+
 const PostContainer = styled.div`
   width: 100%;
   background: #fff;

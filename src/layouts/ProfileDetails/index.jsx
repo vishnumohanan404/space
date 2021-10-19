@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
   IoChatbubble,
-  IoEllipsisHorizontal,
   IoPersonAddOutline,
   IoPencil,
-  IoClose,
+  IoCamera,
 } from "react-icons/io5";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -16,9 +15,14 @@ import Modal from "../Modal";
 import { useClickOutside } from "react-click-outside-hook";
 import { useRef } from "react";
 import Crop from "../../components/Cropper";
-import { getUserChatFriends, setConvo, setOpenChat } from "../../redux/chat/chatActions";
+import {
+  getUserChatFriends,
+  setConvo,
+  setOpenChat,
+} from "../../redux/chat/chatActions";
+import CustomizedDialogs from "../../components/Dialog";
 
-function ProfileDetails({ friendRequest, profiles }) {
+function ProfileDetails({ friendRequest, profiles, handleClickOpen, ...rest }) {
   const [friends, setFriends] = useState(false);
   const socket = useSelector((state) => state.socket);
   const currentUser = useSelector((state) => state.user);
@@ -30,6 +34,7 @@ function ProfileDetails({ friendRequest, profiles }) {
   const fileInput = useRef();
   const [inputImg, setInputImg] = useState("");
 
+  // friend request func
   useEffect(() => {
     if (currentUser.user.friends.includes(user._id)) {
       setFriends(true);
@@ -38,8 +43,6 @@ function ProfileDetails({ friendRequest, profiles }) {
     }
   }, [currentUser, user]);
 
-  
-
   const handleRequest = (id) => {
     friendRequest(id, socket);
   };
@@ -47,7 +50,8 @@ function ProfileDetails({ friendRequest, profiles }) {
   const handleUnfriend = (id) => {
     dispatch(unfriend(id, socket));
   };
-  // Modal
+
+  // Modal for avatar
   const openModal = (src) => {
     setModal(src);
     setToggle(true);
@@ -82,17 +86,28 @@ function ProfileDetails({ friendRequest, profiles }) {
     }
     setOpen(true);
   };
+
   const [open, setOpen] = useState(false);
+
   // chat in profile
- 
+
   const { friendsConversations } = useSelector((state) => state.conversations);
   const { openChat } = useSelector((state) => state.conversations);
   const handleChatOpen = () => {
-    const conversation= friendsConversations.filter(friend=>friend._id===user._id)
-    console.log(`conversation,user._id,friendsConversations`, conversation,user._id,friendsConversations)
+    const conversation = friendsConversations.filter(
+      (friend) => friend._id === user._id
+    );
+    console.log(
+      `conversation,user._id,friendsConversations`,
+      conversation,
+      user._id,
+      friendsConversations
+    );
     dispatch(setOpenChat(!openChat));
-    dispatch(setConvo(conversation[0]))
+    dispatch(setConvo(conversation[0]));
   };
+
+
   return (
     <>
       <input
@@ -110,23 +125,29 @@ function ProfileDetails({ friendRequest, profiles }) {
         parentRef={parentRef}
         isClickedOutside={isClickedOutside}
       >
-        <img src={modal} alt="" height="500px" />
+        <img src={modal} alt="" height="500px" width="500px" />
       </Modal>
-      {inputImg && (
-        <>
-          <Crop inputImg={inputImg} open={open} setOpen={setOpen} />
-        </>
-      )}
       <div className="pd-left">
+        {inputImg && (
+          <CropperContainer>
+            <CustomizedDialogs
+              open={open}
+              title={"Avatar"}
+              handleClose={() => setOpen(false)}
+            >
+              <Crop inputImg={inputImg} open={open} setOpen={setOpen} />
+            </CustomizedDialogs>
+          </CropperContainer>
+        )}
         <ProfileDetailsRow>
-          <EditIcon
+          {/* <EditIcon
             onClick={(e) => {
               e.stopPropagation();
               return fileInput.current.click();
             }}
           >
-            <IoPencil />
-          </EditIcon>
+            <IoCamera />
+          </EditIcon> */}
           <ProfileImage
             src={user.avatar}
             onClick={(e) => {
@@ -151,7 +172,7 @@ function ProfileDetails({ friendRequest, profiles }) {
       <ProfileDetailsRight>
         {user._id === currentUser.user._id ? (
           <>
-            <button type="submit">
+            <button type="submit" onClick={handleClickOpen}>
               <IoPencil style={buttonStyle} />
               Edit Profile
             </button>
@@ -189,9 +210,9 @@ function ProfileDetails({ friendRequest, profiles }) {
           </>
         )}
         <br />
-        <a href="#dummy">
+        {/* <a href="#dummy">
           <IoEllipsisHorizontal style={{ width: "20px" }} />
-        </a>
+        </a> */}
       </ProfileDetailsRight>
     </>
   );
@@ -206,6 +227,10 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(null, mapDispatchToProps)(ProfileDetails);
+
+const CropperContainer = styled.div`
+  position: relative;
+`;
 
 const EditIcon = styled.div`
   background-color: #8d8a8a90;
@@ -253,6 +278,7 @@ const ProfileImage = styled.img`
   object-fit: cover;
   margin-right: 20px;
   border-radius: 6px;
+  cursor: pointer;
 `;
 
 const buttonStyle = { height: "15px", marginRight: "10px" };

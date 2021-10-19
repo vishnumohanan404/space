@@ -14,7 +14,7 @@ function Request() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(`socket`, socket);
+    // console.log(`socket`, socket);
     if (socket) {
       console.log("socket exist");
       socket.on("REQUEST_SENT_TO_CLIENT", (newUser) => {

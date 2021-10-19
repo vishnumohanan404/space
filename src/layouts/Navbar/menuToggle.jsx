@@ -2,23 +2,6 @@ import { motion } from "framer-motion";
 import React from "react";
 import styled from "styled-components";
 
-const Button = styled.div`
-  z-index: 99;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-`;
-
-const Path = (props) => (
-  <motion.path
-    fill="transparent"
-    strokeLinecap="round"
-    strokeWidth="3"
-    {...props}
-  />
-);
-
-const transition = { duration: 0.33 };
 
 export function MenuToggle({ toggle, isOpen }) {
   return (
@@ -57,3 +40,25 @@ export function MenuToggle({ toggle, isOpen }) {
     </Button>
   );
 }
+
+// fm
+const Path = (props) => (
+  <motion.path
+    fill="transparent"
+    strokeLinecap="round"
+    strokeWidth="3"
+    {...props}
+  />
+);
+
+const transition = { duration: 0.33 };
+
+// sc
+const Button = styled.div`
+  z-index: 99;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+`;
+
+

@@ -1,5 +1,5 @@
 import { SOCKET, SOCKET_CLOSE } from "./SocketTypes";
-import io from "socket.io-client";
+import * as io from "socket.io-client";
 
 // connection and disconnection
 export const socketOpen = (socket) => {

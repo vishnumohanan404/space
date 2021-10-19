@@ -357,6 +357,7 @@ const AddPostLinksContainer = styled.div`
     color: #626262;
     margin-right: 30px;
     font-size: 14px;
+    cursor: pointer;
   }
 `;
 

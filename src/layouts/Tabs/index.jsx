@@ -65,7 +65,7 @@ const TabsContainer = styled.ul`
   position: absolute;
   left: 39.5%;
   width: 45.5%;
-  top: 72%;
+  top: 32%;
   height: 50px;
   display: flex;
   align-items: center;

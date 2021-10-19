@@ -2,11 +2,151 @@ import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { IoClose, IoSearch } from "react-icons/io5";
 import { AnimatePresence, motion } from "framer-motion";
-import { useClickOutside } from "react-click-outside-hook";
+// import { useClickOutside } from "react-click-outside-hook";
 import MoonLoader from "react-spinners/MoonLoader";
 import useDebounce from "../../hooks/debounceHook";
 import axios from "axios";
 import SearchResult from "../SearchResult";
+import useClickOutside from "../../hooks/clickOutsideHook";
+
+
+export default function SearchBar() {
+  const [isExpanded, setExpanded] = useState(false);
+  // const [parentRef, isClickedOutside] = useClickOutside();
+  const inputRef = useRef();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setLoading] = useState(false);
+  const [tvShows, setTvShows] = useState([]);
+  const [noTvShows, setNoTvShows] = useState(false);
+  
+  let parentRef = useClickOutside(()=>{
+    collapseContainer()
+  })
+
+  const isEmpty = !tvShows || tvShows.length === 0;
+
+  const changeHandler = (e) => {
+    e.preventDefault();
+    if (e.target.value.trim() === "") setNoTvShows(false);
+    setSearchQuery(e.target.value);
+  };
+
+  const expandContainer = () => {
+    setExpanded(true);
+  };
+
+  const collapseContainer = () => {
+    setExpanded(false);
+    setSearchQuery("");
+    setLoading(false);
+    setTvShows([]);
+    setNoTvShows(false);
+    if (inputRef.current) inputRef.current.value = "";
+  };
+
+  // useEffect(() => {
+  //   if (isClickedOutside) {
+  //     // console.log(`isClickedOutside`, isClickedOutside);
+  //     collapseContainer();
+  //   }
+  // }, [isClickedOutside]);
+
+  const prepareSearchQuery = (query) => {
+    const friendSearchUrl = `http://localhost:5000/api/search?q=${query}`;
+    return encodeURI(friendSearchUrl);
+  };
+
+  const searchFriends = async () => {
+    if (!searchQuery || searchQuery.trim() === "") return;
+    setLoading(true);
+    setNoTvShows(false);
+    const URL = prepareSearchQuery(searchQuery);
+    const response = await axios.get(URL).catch((err) => {});
+    if (response) {
+      if (response.data && response.data.length === 0) setNoTvShows(true);
+      setTvShows(response.data);
+    }
+    setLoading(false);
+  };
+
+  useDebounce(searchQuery, 500, searchFriends);
+
+  return (
+    <SearchBarContainer
+      animate={isExpanded ? "expanded" : "collapsed"}
+      variants={containerVariants}
+      transition={containerTransition}
+      ref={parentRef}
+
+    >
+      <SearchInputContainer>
+        <SearchIcon>
+          <IoSearch />
+        </SearchIcon>
+        <SearchInput
+          placeholder="Search for friends"
+          onFocus={expandContainer}
+          ref={inputRef}
+          value={searchQuery}
+          onChange={changeHandler}
+        />
+        <AnimatePresence>
+          {isExpanded && (
+            <CloseIcon
+              key="close-icon"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={collapseContainer}
+            >
+              <IoClose />
+            </CloseIcon>
+          )}
+        </AnimatePresence>
+      </SearchInputContainer>
+      {isExpanded && <LineSeparator />}
+      {isExpanded && (
+        <SearchContent>
+          {isLoading && (
+            <LoadingWrapper>
+              <MoonLoader loading color="#000" size={20} />
+            </LoadingWrapper>
+          )}
+          {!isLoading && isEmpty && !noTvShows && (
+            <LoadingWrapper>
+              <WarningMessage>Start typing to search</WarningMessage>
+            </LoadingWrapper>
+          )}
+          {!isLoading && noTvShows && (
+            <LoadingWrapper>
+              <WarningMessage>No friends found</WarningMessage>
+            </LoadingWrapper>
+          )}
+          {!isLoading && !isEmpty && (
+            <>
+              {tvShows.map((show) => {
+                console.log("Show: ", show);
+                return (
+                  <SearchResult
+                    key={show?._id}
+                    id={show?._id}
+                    thumbnailSrc={show?.avatar && show?.avatar}
+                    name={show?.fullName}
+                    rating={show?.rating && show?.rating.average}
+                    collapseContainer={collapseContainer}
+                  />
+                );
+              })}
+            </>
+          )}
+        </SearchContent>
+      )}
+    </SearchBarContainer>
+  );
+}
+
+
 
 const SearchBarContainer = styled(motion.div)`
   display: flex;
@@ -119,132 +259,3 @@ const containerTransition = {
   damping: 22,
   stiffness: 150,
 };
-
-export default function SearchBar() {
-  const [isExpanded, setExpanded] = useState(false);
-  const [parentRef, isClickedOutside] = useClickOutside();
-  const inputRef = useRef();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setLoading] = useState(false);
-  const [tvShows, setTvShows] = useState([]);
-  const [noTvShows, setNoTvShows] = useState(false);
-
-  const isEmpty = !tvShows || tvShows.length === 0;
-
-  const changeHandler = (e) => {
-    e.preventDefault();
-    if (e.target.value.trim() === "") setNoTvShows(false);
-    setSearchQuery(e.target.value);
-  };
-
-  const expandContainer = () => {
-    setExpanded(true);
-  };
-
-  const collapseContainer = () => {
-    setExpanded(false);
-    setSearchQuery("");
-    setLoading(false);
-    setTvShows([]);
-    setNoTvShows(false);
-    if (inputRef.current) inputRef.current.value = "";
-  };
-
-  useEffect(() => {
-    if (isClickedOutside) collapseContainer();
-  }, [isClickedOutside]);
-
-  const prepareSearchQuery = (query) => {
-    const friendSearchUrl = `http://localhost:5000/api/search?q=${query}`;
-    return encodeURI(friendSearchUrl);
-  };
-
-  const searchFriends = async () => {
-    if (!searchQuery || searchQuery.trim() === "") return;
-    setLoading(true);
-    setNoTvShows(false);
-    const URL = prepareSearchQuery(searchQuery);
-    const response = await axios.get(URL).catch((err) => {
-    });
-    if (response) {
-      if (response.data && response.data.length === 0) setNoTvShows(true);
-      setTvShows(response.data);
-    }
-    setLoading(false);
-  };
-
-  useDebounce(searchQuery, 500, searchFriends);
-
-  return (
-    <SearchBarContainer
-      animate={isExpanded ? "expanded" : "collapsed"}
-      variants={containerVariants}
-      transition={containerTransition}
-      ref={parentRef}
-    >
-      <SearchInputContainer>
-        <SearchIcon>
-          <IoSearch />
-        </SearchIcon>
-        <SearchInput
-          placeholder="Search for friends"
-          onFocus={expandContainer}
-          ref={inputRef}
-          value={searchQuery}
-          onChange={changeHandler}
-        />
-        <AnimatePresence>
-          {isExpanded && (
-            <CloseIcon
-              key="close-icon"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={collapseContainer}
-            >
-              <IoClose />
-            </CloseIcon>
-          )}
-        </AnimatePresence>
-      </SearchInputContainer>
-      {isExpanded && <LineSeparator />}
-      {isExpanded && (
-        <SearchContent>
-          {isLoading && (
-            <LoadingWrapper>
-              <MoonLoader loading color="#000" size={20} />
-            </LoadingWrapper>
-          )}
-          {!isLoading && isEmpty && !noTvShows && (
-            <LoadingWrapper>
-              <WarningMessage>Start typing to search</WarningMessage>
-            </LoadingWrapper>
-          )}
-          {!isLoading && noTvShows && (
-            <LoadingWrapper>
-              <WarningMessage>No friends found</WarningMessage>
-            </LoadingWrapper>
-          )}
-          {!isLoading && !isEmpty && (
-            <>
-              {tvShows.map((show) => {
-                console.log("Show: ", show);
-                return (
-                  <SearchResult
-                    key={show?._id}
-                    id={show?._id}
-                    thumbnailSrc={show?.avatar && show?.avatar}
-                    name={show?.fullName}
-                    rating={show?.rating && show?.rating.average}
-                    collapseContainer={collapseContainer}
-                  />
-                );
-              })}
-            </>
-          )}
-        </SearchContent>
-      )}
-    </SearchBarContainer>
-  );
-}

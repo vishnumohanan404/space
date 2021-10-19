@@ -18,6 +18,7 @@ import {
   UNFRIEND_SUCCESS,
   UNFRIEND_FAILURE,
   SET_ACTIVE,
+  UPDATE_PROFILE_INFO,
   // GET_USER
   // GET_USER_START,
   // GET_USER_SUCCESS,
@@ -156,6 +157,24 @@ const AuthReducer = (state = INITIAL_STATE, action) => {
         ...state,
         unfriendLoading: false,
         error: action.payload,
+      };
+    case UPDATE_PROFILE_INFO:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          fullName: action.payload.fullName,
+          phone: action.payload.phone,
+          email: action.payload.email,
+          age: action.payload.age,
+          description: action.payload.description,
+          education: action.payload.education,
+          work: action.payload.work,
+          from: action.payload.from,
+          livesIn: action.payload.livesIn,
+          livesInCountry: action.payload.livesInCountry,
+          fromCountry: action.payload.fromCountry,
+        },
       };
     default:
       return state;

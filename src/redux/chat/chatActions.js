@@ -8,7 +8,9 @@ import {
   SET_CONVO,
   SET_BUBBLE,
   SET_ACTIVE,
-  SET_ACTIVE_CONVO
+  UPDATE_ACTIVE_CONVO,
+  SET_ACTIVE_CONVO,
+  SET_MESSAGE
 } from "./chatTypes";
 import { api } from "../../api.config";
 
@@ -43,6 +45,14 @@ export const sendMessageSuccess = (message) => {
   };
 };
 
+export const setMessageSuccess = (message) => {
+  return {
+    type: SET_MESSAGE,
+    payload: message,
+  };
+};
+
+
 export const sendMessage = (text, convo, socket) => {
   return async (dispatch) => {
     try {
@@ -50,7 +60,7 @@ export const sendMessage = (text, convo, socket) => {
         text,
         recipient: convo._id,
       });
-      console.log(`messageSent`, messageSent);
+      // console.log(`messageSent`, messageSent);
       dispatch(sendMessageSuccess(messageSent.data));
       socket.emit("MESSAGE_SENT", {...messageSent.data});
     } catch (err) {
@@ -103,6 +113,12 @@ export const setActiveInConvo = (convo) => {
   };
 };
 
+export const updateActive = (convo) => {
+  return {
+    type: UPDATE_ACTIVE_CONVO,
+    payload: convo,
+  };
+};
 
 export const setOpenBubble = (openBubble) => {
   return {

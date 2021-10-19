@@ -9,6 +9,9 @@ import {
   SET_BUBBLE,
   SET_ACTIVE,
   SET_ACTIVE_CONVO,
+  SET_ACTIVE_INITIAL,
+  SET_MESSAGE,
+  UPDATE_ACTIVE_CONVO,
 } from "./chatTypes";
 
 const initialState = {
@@ -22,12 +25,12 @@ const initialState = {
 };
 
 const ChatReducer = (state = initialState, action) => {
-  console.log(`action.type outside`, action.type);
+  // console.log(`action.type outside`, action.type);
   switch (action.type) {
     case GET_USER_FRIENDS:
       return {
         ...state,
-        friendsConversations: initialConversation(action.payload),
+        friendsConversations: action.payload,
       };
     case CLEAR_CONVERSATIONS:
       return {
@@ -48,6 +51,15 @@ const ChatReducer = (state = initialState, action) => {
         ...state,
         chat: [...action.payload],
       };
+    case SET_MESSAGE:
+      return {
+        ...state,
+        chat: [action.payload, ...state.chat],
+        friendsConversations: setConversations(
+          action.payload,
+          state.friendsConversations
+        ),
+      };
     case CLEAR_CHAT:
       return {
         ...state,
@@ -66,6 +78,15 @@ const ChatReducer = (state = initialState, action) => {
           state.friendsConversations
         ),
       };
+      case UPDATE_ACTIVE_CONVO:
+        return {
+          ...state,
+          friendsConversations: updateActiveUsers(
+            action.payload,
+            state.friendsConversations
+          ),
+        };
+      
     case SET_TOGGLE:
       return {
         ...state,
@@ -83,36 +104,68 @@ const ChatReducer = (state = initialState, action) => {
 };
 
 export default ChatReducer;
-const initialConversation = (conversations) => {
-  return conversations.map((convo) => ({ ...convo, active: convo.online }));  
-};
-
-const updateConversations = (newConvo, convos) => {
-  console.log(`newConvo`, newConvo);
+const setConversations = (newMessage, convos) => {
+  console.log(`newConvo`, newMessage);
   console.log(`convos`, convos);
-  return convos.map((convo) =>
-    convo.conversation
-      ? convo.conversation._id !== newConvo.conversation
+  return convos.map((convo) => {
+    if (convo.conversation) {
+      return convo.conversation._id === newMessage.conversation
+        ? {
+            ...convo,
+            conversation: {
+              ...convo.conversation,
+              text: newMessage.text,
+              author: newMessage.sender,
+            },
+          }
+        : convo;
+    } else {
+      return convo._id !== newMessage.sender
         ? convo
         : {
             ...convo,
             conversation: {
-              ...convo.conversation,
-              text: newConvo.text,
-              author: newConvo.sender,
+              ...newMessage,
+              _id: newMessage.conversation,
+              author: newMessage.sender,
             },
-          }
-      : convo._id === newConvo.recipent
-      ? {
+          };
+    }
+  });
+};
+
+const updateConversations = (newConvo, convos) => {
+  return convos.map((convo) => {
+    if (convo.conversation) {
+      if (convo.conversation._id !== newConvo.conversation) {
+        return convo;
+      } else {
+        return {
+          ...convo,
+          conversation: {
+            ...convo.conversation,
+            text: newConvo.text,
+            author: newConvo.sender,
+          },
+        };
+      }
+    } else {
+      // console.log(`convo._id`, convo._id);
+      // console.log(`newConvo.recipent`, newConvo.recipient);
+      if (convo._id === newConvo.recipient) {
+        return {
           ...convo,
           conversation: {
             ...newConvo,
             _id: newConvo.conversation,
             author: newConvo.sender,
           },
-        }
-      : convo
-  );
+        };
+      } else {
+        return convo;
+      }
+    }
+  });
 };
 
 const updateActiveUsers = (newConvoUser, convos) => {

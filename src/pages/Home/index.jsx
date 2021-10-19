@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 import Heading from "../../components/Heading";
+import NearbyListing from "../../components/NearbyListing";
 import Request from "../../layouts/Request";
 import Post from "../../layouts/Post";
 import WritePost from "../../layouts/WritePost";
@@ -13,6 +14,15 @@ import Chat from "../../layouts/Chat";
 import { setOpenChat } from "../../redux/chat/chatActions";
 import { Switch } from "@material-ui/core";
 import { setActive } from "../../redux";
+import { Nearby } from "../../layouts/Nearby";
+import {
+  BrowserRouter as Router,
+  Switch as RouterSwitch,
+  Route,
+  Link,
+  useParams,
+  useRouteMatch
+} from "react-router-dom";
 // import {
 //   socketConnect,
 //   socketDisconnect,
@@ -20,7 +30,7 @@ import { setActive } from "../../redux";
 
 function Home({ userData }) {
   const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
-  const socket = useSelector((state) => state.socket);
+  // const socket = useSelector((state) => state.socket);
   const posts = useSelector((state) => state.posts);
   const { openBubble } = useSelector((state) => state.conversations);
   const { openChat } = useSelector((state) => state.conversations);
@@ -44,6 +54,7 @@ function Home({ userData }) {
       {!isMobile && (
         <LeftSideBar>
           <Heading title={"Nearby"} color={"#626262"} />
+          <Nearby/>
         </LeftSideBar>
       )}
       <MainContent>
@@ -139,13 +150,13 @@ const HomeContainer = styled.div`
 
 const MainContent = styled.div`
   flex-basis: 47%;
-  padding: 65px 0;
+  padding: 75px 0;
 `;
 
 const LeftSideBar = styled.div`
   flex-basis: 25%;
   position: sticky;
-  top: 75px;
+  top: 85px;
   align-self: flex-start;
   background: #fff;
   border-radius: 6px;
@@ -155,7 +166,7 @@ const LeftSideBar = styled.div`
 const RightSideBar = styled.div`
   flex-basis: 25%;
   position: sticky;
-  top: 75px;
+  top: 85px;
   align-self: flex-start;
   background: #fff;
   padding: 20px;

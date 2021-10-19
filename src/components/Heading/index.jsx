@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { HeadingStyle } from "../../layouts/common";
 import { connect } from "react-redux";
 
-function Heading({ title, color, socket,button }) {
+function Heading({ title, color,button }) {
   return (
-    <HeadingContainer style={{ color: color }} onClick={()=>socket.emit("join_room","1")}>
+    <HeadingContainer style={{ color: color }} >
       <HeadingStyle>{title}</HeadingStyle>
       
         {button}

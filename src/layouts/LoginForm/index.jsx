@@ -28,7 +28,7 @@ const validationSchema = yup.object({
 function LoginForm({
   userData,
   loginCall,
-  user = userData?.user,
+  // user = userData?.user,
   error = userData.error,
   isFetching = userData.isFetching,
 }) {
@@ -45,7 +45,7 @@ function LoginForm({
   };
 
   const formik = useFormik({
-    initialValues: { email: "", password: "" },
+    initialValues: { email: "vishnu@gmail.com", password: "qwertyuiop1" },
     validateOnBlur: true,
     onSubmit,
     validationSchema: validationSchema,
@@ -76,6 +76,7 @@ function LoginForm({
           <Input
             name="password"
             type="password"
+            autoComplete="on"
             placeholder="Password"
             value={formik.values.password}
             onChange={formik.handleChange}

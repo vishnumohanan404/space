@@ -8,22 +8,15 @@ import {
 import Avatar from "../../components/Avatar";
 import Dropdown from "../../components/Dropdown";
 import DropdownMenu from "../../components/DropdownMenu";
-// import { AuthContext } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../redux";
-import { socketDisconnect } from "../../redux/socket/SocketActions";
-import {
-  getNotify,
-  openDropdown,
-} from "../../redux/notifications/NotificationActions";
+
+import { useState } from "react";
+import Notifications from "../../components/Notifications";
 
 function Accessibility({ userData, user = userData?.user, logOut }) {
-  const dispatch = useDispatch();
   const socket = useSelector((state) => state.socket);
-  const { dropdown, notifications } = useSelector(
-    (state) => state.notification
-  );
 
   const handleLogOut = (e) => {
     socket.emit("ACTIVE", { ...user, active: false });
@@ -31,52 +24,12 @@ function Accessibility({ userData, user = userData?.user, logOut }) {
     logOut();
   };
 
-  useEffect(() => {
-    dispatch(getNotify());
-  }, []);
-
   return (
     <AccessibilityContainer>
-      <Dropdown>
+      {/* <Dropdown>
         <DropdownMenu />
-      </Dropdown>
-      <CircularContainer onClick={() => dispatch(openDropdown(!dropdown))}>
-        <IoNotifications />
-        {!!notifications.length && (
-          <NotificationCount>
-            <div>{notifications.filter((notify) => !notify.read).length}</div>
-          </NotificationCount>
-        )}
-      </CircularContainer>
-      {dropdown && (
-        <NotificationDropdown>
-          <NotifyHeader>
-            <div>Notifications</div>
-          </NotifyHeader>
-          {notifications.length > 0 ? (
-            <NotifyItems>
-              {notifications.map((notify) => (
-                <StyledLink to={notify.url}>
-                  <NotifyListItem key={notify._id}>
-                    <NotifyListItemImage>
-                      <img src={notify.user.avatar} alt="avatar" />
-                    </NotifyListItemImage>
-                    <NotifyListItemText>
-                      <b>{notify.user.fullName}</b> {notify.type}
-                    </NotifyListItemText>
-                  </NotifyListItem>
-                </StyledLink>
-              ))}
-            </NotifyItems>
-          ) : (
-            <NotifyItems>
-              <NoNotifications>
-                <b>No new notifications</b>
-              </NoNotifications>
-            </NotifyItems>
-          )}
-        </NotificationDropdown>
-      )}
+      </Dropdown> */}
+      <Notifications />
       <CircularContainer onClick={handleLogOut}>
         <IoLogOutOutline />
       </CircularContainer>

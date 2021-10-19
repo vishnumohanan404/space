@@ -6,6 +6,7 @@ import {
   IoMailOutline,
   IoMoonOutline,
   IoRemoveCircleOutline,
+  IoSettings,
   IoSettingsOutline,
 } from "react-icons/io5";
 import { useSelector } from "react-redux";
@@ -16,7 +17,12 @@ function Settings() {
   return (
     <SettingsContainer>
       <SettingsBox>
-        <IntroText>General Settings<p><IoSettingsOutline/></p></IntroText>
+        <IntroText>
+          General Settings
+          <p>
+            <IoSettings />
+          </p>
+        </IntroText>
         <ul>
           <li>
             <p>
@@ -32,28 +38,36 @@ function Settings() {
             </p>
             {user.email}
           </li>
-          {user.location&&<li>
-            <p>
-              <IoLocationOutline style={introIconStyles} />
-            </p>
-            {user.location}
-          </li>}
-          {user.home&&<li>
-            <p>
-              <IoHomeOutline style={introIconStyles} />
-            </p>
-            {user.location}
-          </li>}
+          {user.location && (
+            <li>
+              <p>
+                <IoLocationOutline style={introIconStyles} />
+              </p>
+              {user.location}
+            </li>
+          )}
+          {user.home && (
+            <li>
+              <p>
+                <IoHomeOutline style={introIconStyles} />
+              </p>
+              {user.location}
+            </li>
+          )}
         </ul>
         <hr />
-        <IntroText>Other Settings <p><IoSettingsOutline/></p></IntroText>
+        <IntroText>
+          Other Settings{" "}
+          <p>
+            <IoSettings />
+          </p>
+        </IntroText>
         <ul>
           <li>
             <p>
               <IoMoonOutline style={introIconStyles} />
               Dark mode
             </p>
-            
           </li>
           <li>
             <p>
@@ -62,18 +76,22 @@ function Settings() {
             </p>
             Toggle
           </li>
-          {user.location&&<li>
-            <p>
-              <IoLocationOutline style={introIconStyles} />
-            </p>
-            {user.location}
-          </li>}
-          {user.home&&<li>
-            <p>
-              <IoHomeOutline style={introIconStyles} />
-            </p>
-            {user.location}
-          </li>}
+          {user.location && (
+            <li>
+              <p>
+                <IoLocationOutline style={introIconStyles} />
+              </p>
+              {user.location}
+            </li>
+          )}
+          {user.home && (
+            <li>
+              <p>
+                <IoHomeOutline style={introIconStyles} />
+              </p>
+              {user.location}
+            </li>
+          )}
         </ul>
       </SettingsBox>
     </SettingsContainer>

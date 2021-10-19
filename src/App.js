@@ -5,39 +5,31 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { Navbar } from "./layouts/Navbar";
 import { useEffect } from "react";
 import Profile from "./pages/Profile";
-import { socketConnect, socketDisconnect } from "./redux/socket/SocketActions";
-import { connect, useDispatch, useSelector } from "react-redux";
-import Chat from "./layouts/Chat";
+import { socketConnect } from "./redux/socket/SocketActions";
+import { useDispatch, useSelector } from "react-redux";
 import SinglePost from "./pages/SinglePost";
-
-const LoginContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
+import AuthVerify from "./hooks/authVerify";
+import { updateActive } from "./redux/chat/chatActions";
 
 function App() {
   // const { user } = useContext(AuthContext);
   const dispatch = useDispatch();
   const socket = useSelector((state) => state.socket);
   const { user } = useSelector((state) => state.user);
+
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
 
   useEffect(() => {
-    console.log(`user app.js`, user);
     dispatch(socketConnect(user._id));
     return () => {
       if (socket) {
-        console.log(`emitt`);
         socket.emit("LOGOUT", user._id);
         socket.disconnect();
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -54,95 +46,90 @@ function App() {
         dispatch(socketConnect());
       });
     return () => socket && socket.off("resetPost");
+  }, [socket, dispatch]);
+
+  useEffect(() => {
+    if (socket && user) {
+      socket.emit("JOIN_USER", user);
+    }
   }, [socket]);
 
   useEffect(() => {
-
     if (socket && user) {
-      console.log(`joinUser`);
-      socket.emit("joinUser", user);
-    }
-  }, [socket, user?._id]);
-
-  useEffect(() => {
-    console.log(`Notification`, Notification.permission)
-    if (!("Notification" in window)) {
-      alert("This browser does not support desktop notification");
-    }
-    else if (Notification.permission === "granted") {console.log(`Notification permision already granted`)}
-    else if (Notification.permission !== "denied") {
-      Notification.requestPermission().then(function (permission) {
-        if (permission === "granted") {
-          console.log(`Notification permision granted`)
-        }else if(permission === "denied"){
-          console.log(`Notification permission denied`)
-        }
-      });
-    }
-  },[])
-
-  useEffect(() => {
-
-    if (socket && user) {
-      console.log(`active`);
+      // console.log(`active`);
       socket.emit("ACTIVE", user);
     }
   }, [socket, user]);
 
   useEffect(() => {
-    socket &&
-      socket.on("resetPost", () => {
-        console.log("reset in2nd useEff");
-        dispatch(socketConnect());
-      });
-    return () => socket && socket.off("resetPost");
-  }, [socket, dispatch]);
+    socket && socket.on("UPDATE_ACTIVE",(user=>{
+      dispatch(updateActive(user))
+    }))
+    return () => socket && socket.off("UPDATE_ACTIVE");
+  }, [socket, dispatch])
+
   return (
-    <BrowserRouter>
-      <Switch>
-        {/* login page */}
-        <Route path="/login" exact>
-          {user ? (
-            <Redirect to="/" />
-          ) : (
-            <LoginContainer>
-              <AccountBox />
-            </LoginContainer>
-          )}
-        </Route>
-        <Route exact path="/">
-          {user ? (
-            <>
-              <Navbar />
-              <Home />
-            </>
-          ) : (
-            <Redirect to="/login" />
-          )}
-        </Route>
-        <Route exact path="/profile/:id">
-          {user ? (
-            <>
-              <Navbar />
-              <Profile />
-            </>
-          ) : (
-            <Redirect to="/login" />
-          )}
-        </Route>
-        <Route exact path="/post/:id">
-          {user ? (
-            <>
-              <Navbar />
-              <SinglePost />
-            </>
-          ) : (
-            <Redirect to="/login" />
-          )}
-        </Route>
-      </Switch>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Switch>
+          {/* login page */}
+          <Route path="/login" exact>
+            {user ? <Redirect to="/" /> : <AccountBox />}
+          </Route>
+          <Route exact path="/">
+            {user ? (
+              <>
+                <Navbar />
+                <Home />
+              </>
+            ) : (
+              <Redirect to="/login" />
+            )}
+          </Route>
+          <Route exact path="/profile/:id">
+            {user ? (
+              <>
+                <Navbar />
+                <Profile />
+              </>
+            ) : (
+              <Redirect to="/login" />
+            )}
+          </Route>
+          <Route exact path="/post/:id">
+            {user ? (
+              <>
+                <Navbar />
+                <SinglePost />
+              </>
+            ) : (
+              <Redirect to="/login" />
+            )}
+          </Route>
+        </Switch>
+        <AuthVerify />
+      </BrowserRouter>
+    </>
   );
 }
 
 export default App;
+
+const LoginContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const AnnouncementBar = styled.div`
+  width: 100%;
+  height: 10px;
+  background-color: #e84c64;
+  span {
+    color: blue;
+    font-size: 13px;
+  }
+`;

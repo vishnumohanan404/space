@@ -1,0 +1,109 @@
+import * as React from "react";
+import PropTypes from "prop-types";
+import Button from "@material-ui/core/Button";
+import { styled as Style } from "@material-ui/core/styles";
+import { Dialog, makeStyles } from "@material-ui/core";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import IconButton from "@material-ui/core/IconButton";
+// import CloseIcon from '@mui/icons-material/Close';
+import Typography from "@material-ui/core/Typography";
+import { IoClose } from "react-icons/io5";
+import styled from "styled-components";
+
+// const useStyles = makeStyles({
+//   dialog: {
+//       overflowY: "scroll"
+//   },
+// });
+
+const BootstrapDialog = Style(Dialog)(({ theme }) => ({
+  "& .MuDialogContent-root": {
+    padding: theme.spacing(0),
+  },
+  "& .MuDialogActions-root": {
+    padding: theme.spacing(0),
+  },
+}));
+
+const BootstrapDialogTitle = (props) => {
+  const { children, onClose, ...other } = props;
+
+  return (
+    <IntroText sx={{ m: 0, p: 0 }} {...other}>
+      {children}
+      {onClose ? (
+        <div
+          aria-label="close"
+          onClick={onClose}
+          // sx={{
+          //   position: "absolute",
+          //   right: 1,
+          //   top: 1,
+          //   padding: 0,
+          //   color: (theme) => theme.palette.grey[500],
+          // }}
+        >
+          <IoClose />
+        </div>
+      ) : null}
+    </IntroText>
+  );
+};
+
+BootstrapDialogTitle.propTypes = {
+  children: PropTypes.node,
+  onClose: PropTypes.func.isRequired,
+};
+
+export default function CustomizedDialogs({
+  children,
+  open,
+  title,
+  handleClose,
+}) {
+  return (
+    <Header>
+      <BootstrapDialog
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+      >
+        <BootstrapDialogTitle
+          id="customized-dialog-title"
+          onClose={handleClose}
+        >
+          {title}
+        </BootstrapDialogTitle>
+        <DialogContent dividers>{children}</DialogContent>
+      </BootstrapDialog>
+    </Header>
+  );
+}
+
+const IntroText = styled.h6`
+  text-align: center;
+  margin: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  div {
+    display: flex;
+    align-items: center;
+    margin: 2px;
+    padding: 5px;
+    border-radius: 5px;
+    transition: 300ms;
+    &:hover {
+      background: #a7a6a68d;
+      cursor: pointer;
+    }
+  }
+`;
+
+const Header = styled.div`
+  /* overflow-x: scroll !important; */
+`;

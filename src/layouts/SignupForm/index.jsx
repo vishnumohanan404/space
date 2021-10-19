@@ -125,6 +125,7 @@ export function SignupForm(props) {
             value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
+            autoComplete="on"
           />
           <FieldError>
             {formik.touched.password && formik.errors.password
@@ -140,6 +141,7 @@ export function SignupForm(props) {
             value={formik.values.confirmPassword}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
+            autoComplete="on"
           />
           <FieldError>
             {formik.touched.confirmPassword && formik.errors.confirmPassword

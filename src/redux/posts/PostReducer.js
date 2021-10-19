@@ -15,6 +15,7 @@ import {
   // UPDATE_COMMENT
   // UPDATE_COMMENT,
   LIKE_COMMENT,
+  DELETE_POST,
   GET_SINGLE_POST,
   // LIKE_POST_SUCCESS,
   // LIKE_POST_FAILURE
@@ -45,7 +46,7 @@ const PostReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: false,
-        posts:[...action.payload],
+        posts: [...action.payload],
       };
     case FETCH_POSTS_ERROR:
       return {
@@ -53,7 +54,7 @@ const PostReducer = (state = initialState, action) => {
         isLoading: false,
         error: true,
       };
-      
+
     case ADD_POST_REQUEST:
       return {
         ...state,
@@ -113,6 +114,11 @@ const PostReducer = (state = initialState, action) => {
         ...state,
         posts: likeComment(state.posts, action.payload.postId, action.payload),
       };
+    case DELETE_POST:
+      return {
+        ...state,
+        posts: state.posts.filter((post) => post._id !== action.payload),
+      };
     default:
       return state;
   }
@@ -145,7 +151,6 @@ const likeComment = (posts, postId, comment) => {
   return newPost;
 };
 
-
 const addComment = (posts, id, comment) => {
   const newData = posts.map((item) =>
     item._id === id ? { ...item, comments: [...item.comments, comment] } : item
@@ -159,7 +164,6 @@ const updatePost = (posts, id, comment) => {
   );
   return newData;
 };
-
 
 // const likeComment = (posts, postId, comment) => {
 // console.log(`likeComment in post reducer`);

@@ -4,9 +4,49 @@ import styled from "styled-components";
 import Logo from "../../components/Logo";
 import { DeviceSize } from "../../components/responsive";
 import SearchBar from "../../components/SearchBar";
-import  Accessibility  from "./accessibility";
+import Accessibility from "./accessibility";
 import { MobileNavLinks } from "./mobileNavLinks";
 // import { NavLinks } from "./NavLinks";
+
+export function Navbar(props) {
+  const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
+  return (
+    <Container>
+      <AnnouncementBar>
+        <span>
+          📢 This <a href="https://github.com/KingKong26/space">project</a> is still
+          under development so, some features might be broke
+        </span>
+      </AnnouncementBar>
+      <NavBarContainer>
+        <LeftSection>
+          <Logo />
+        </LeftSection>
+        <MiddleSection>
+          {/* {!isMobile && <NavLinks />} */}
+          {!isMobile && (
+            <SearchContainer>
+              <SearchBar />
+            </SearchContainer>
+          )}
+        </MiddleSection>
+        <RightSection>
+          {!isMobile && <Accessibility />}
+          {isMobile && <MobileNavLinks />}
+        </RightSection>
+      </NavBarContainer>
+    </Container>
+  );
+}
+
+const Container = styled.div`
+  width: 100%;
+  /* display: flex; */
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  /* height: 30px; */
+`;
 
 const NavBarContainer = styled.nav`
   width: 100%;
@@ -16,7 +56,7 @@ const NavBarContainer = styled.nav`
   align-items: center;
   padding: 0 1.5em;
   position: fixed;
-  top: 0;
+  /* top: 30; */
   z-index: 100;
   background: #fff;
   justify-content: space-between;
@@ -43,24 +83,29 @@ const SearchContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
-
-export function Navbar(props) {
-  const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
-  return (
-    <NavBarContainer>
-      <LeftSection>
-        <Logo />
-      </LeftSection>
-      <MiddleSection>
-        {/* {!isMobile && <NavLinks />} */}
-        {!isMobile && <SearchContainer>
-          <SearchBar />
-        </SearchContainer>}
-      </MiddleSection>
-      <RightSection>
-        {!isMobile && <Accessibility />}
-        {isMobile && <MobileNavLinks />}
-      </RightSection>
-    </NavBarContainer>
+const AnnouncementBar = styled.div`
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 16px;
+  /* background-color: #e84c64; */
+  display: flex;
+  justify-content: center;
+  background: rgb(232, 76, 100);
+  background: linear-gradient(
+    90deg,
+    rgba(232, 76, 100, 1) 0%,
+    rgba(253, 159, 41, 1) 50%,
+    rgba(248, 29, 89, 1) 100%
   );
-}
+  span {
+    padding: 0;
+    margin: 0;
+    color: blue;
+    font-size: 12px;
+    font-weight: 600;
+    a {
+      color: #ffffff;
+    }
+  }
+`;

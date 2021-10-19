@@ -23,7 +23,7 @@ const LogoText = styled.h2`
   margin: 0;
   margin-left: 4px;
   font-weight: 800;
-  color: #222;
+  color: #E84C64;
   font-family: "Nunito", sans-serif;
   /* background: linear-gradient(
     90deg,

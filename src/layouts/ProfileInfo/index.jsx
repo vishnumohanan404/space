@@ -3,20 +3,23 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useClickOutside } from "react-click-outside-hook";
 import {
+  IoAdd,
   IoBriefcaseOutline,
   IoHomeOutline,
   IoLocationOutline,
   IoSchoolOutline,
 } from "react-icons/io5";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Modal from "../Modal";
 
-function ProfileInfo({ user }) {
+function ProfileInfo({ user, handleClickOpen }) {
   const [toggle, setToggle] = useState(false);
   const [modal, setModal] = useState();
   const [photos, setPhotos] = useState([]);
-  
+  const { userProfile } = useSelector((state) => state.profile);
+  const { user:currentUser } = useSelector((state) => state.user);
   useEffect(() => {
     let photos = [];
     user.userPosts?.forEach((post) => {
@@ -46,6 +49,9 @@ function ProfileInfo({ user }) {
     closeContainer();
   }, [isClickedOutside]);
 
+  const handleOpen = () => {
+    handleClickOpen();
+  };
   return (
     <>
       <Modal
@@ -64,25 +70,53 @@ function ProfileInfo({ user }) {
       <InfoCol>
         <ProfileIntro>
           <h3>About Me</h3>
-          <IntroText>Welcome Stalker</IntroText>
-          <hr />
-          <ul>
-            <li>
-              <IoBriefcaseOutline style={introIconStyles} /> Javascript Dev
-            </li>
-            <li>
-              <IoSchoolOutline style={introIconStyles} /> Went to Acharya,
-              Bangalore
-            </li>
-            <li>
-              <IoLocationOutline style={introIconStyles} />
-              Lives in Bangalore
-            </li>
-            <li>
-              <IoHomeOutline style={introIconStyles} />
-              From Bangalore, india
-            </li>
-          </ul>
+          {userProfile.description ||
+          userProfile.education ||
+          userProfile.work ||
+          userProfile.interests ||
+          userProfile.livesIn ||
+          userProfile.from ? (
+            <>
+              {userProfile.description && (
+                <IntroText>{userProfile.description}</IntroText>
+              )}
+              <hr />
+              <ul>
+                {userProfile.work && (
+                  <li>
+                    <IoBriefcaseOutline style={introIconStyles} />
+                    {userProfile.work}
+                  </li>
+                )}
+                {userProfile.education && (
+                  <li>
+                    <IoSchoolOutline style={introIconStyles} />{" "}
+                    {userProfile.education}
+                  </li>
+                )}
+                {userProfile.livesIn && (
+                  <li>
+                    <IoLocationOutline style={introIconStyles} />
+                    {userProfile.livesIn}
+                  </li>
+                )}
+                {userProfile.from && (
+                  <li>
+                    <IoHomeOutline style={introIconStyles} />
+                    {userProfile.from}
+                  </li>
+                )}
+              </ul>
+            </>
+          ) : userProfile._id === currentUser._id ? (
+            <SayAbout onClick={handleOpen}>
+              Tell us more about you {<IoAdd />}
+            </SayAbout>
+          ) : (
+            <NoAbout >
+              Nothing to show
+            </NoAbout>
+          )}
         </ProfileIntro>
         {photos && photos.length > 0 && (
           <ProfileIntro>
@@ -119,10 +153,14 @@ function ProfileInfo({ user }) {
             {user.friends &&
               user.friends.map((friend) => {
                 return (
-                  <Link to={`/profile/${friend._id}`} key={friend._id} style={{textDecoration:"none", color:"black"}}>
+                  <Link
+                    to={`/profile/${friend._id}`}
+                    key={friend._id}
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
                     <div>
                       <img src={friend.avatar} alt="" />
-                      <p style={{fontSize:"12px"}}>{friend.fullName}</p>
+                      <p style={{ fontSize: "12px" }}>{friend.fullName}</p>
                     </div>
                   </Link>
                 );
@@ -138,6 +176,24 @@ export default ProfileInfo;
 
 const InfoCol = styled.div`
   flex-basis: 33%;
+`;
+const NoAbout =styled.div`
+font-size: 16px;
+color: gray;
+display: flex;
+width: 100%;
+justify-content: center;
+padding-top: 10px;
+cursor: inherit ;
+`;
+const SayAbout = styled.div`
+  font-size: 16px;
+  color: gray;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  padding-top: 10px;
+  cursor: pointer;
 `;
 
 const introIconStyles = { width: "26px", marginRight: "10px" };

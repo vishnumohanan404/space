@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Avatar from "../../components/Avatar";
 // import Heading from "../../components/Heading";
 import { UserNameText } from "../common";
 import {
   IoCall,
-  IoCallOutline,
   IoChatbubble,
-  IoChatbubbleOutline,
 } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import {
   clearConversations,
   getUserChatFriends,
-  sendMessageSuccess,
   setActiveInConvo,
   setConvo,
+  setMessageSuccess,
   setOpenChat,
 } from "../../redux/chat/chatActions";
-import { setActive } from "../../redux";
 
 function Conversations() {
   const { friendsConversations } = useSelector((state) => state.conversations);
@@ -37,9 +34,9 @@ function Conversations() {
   useEffect(() => {
     if (socket) {
       socket.on("SEND_MESSAGE_TO_CLIENT", (message) => {
-        console.log(`new message to client`, message);
+        // console.log(`new message to client`, message);
         try {
-          dispatch(sendMessageSuccess(message));
+          dispatch(setMessageSuccess(message));
         } catch (error) {
           console.log(`error`, error);
         }
@@ -51,7 +48,7 @@ function Conversations() {
   useEffect(() => {
     if (socket) {
       socket.on("SET_ACTIVE_CLIENT", (user) => {
-        console.log(`new user active to client`, user);
+        // console.log(`new user active to client`, user);
         try {
           dispatch(setActiveInConvo(user));
         } catch (error) {
@@ -81,7 +78,8 @@ function Conversations() {
               <Avatar src={friend.avatar} />
               <div>
                 <UserNameText>
-                  {friend.fullName} <span>{friend.active ? "Online" : "Offline"}</span>
+                  {friend.fullName}{" "}
+                  <span>{friend.active ? "Online" : "Offline"}</span>
                 </UserNameText>
                 {friend.conversation && (
                   <LastText>
@@ -142,8 +140,8 @@ const LeftSide = styled.div`
 `;
 
 const LastMsg = styled.span`
-color: #005b80;
-`
+  color: #005b80;
+`;
 
 const RightSide = styled.div`
   display: flex;

@@ -1,6 +1,27 @@
 import React from "react";
 import styled from "styled-components";
 
+export function NavLinks(props) {
+  return (
+    <NavLinksContainer>
+      <LinksWrapper>
+        <LinkItem>
+          <Link href="#">Home</Link>
+        </LinkItem>
+        <LinkItem>
+          <Link href="#">Friends</Link>
+        </LinkItem>
+        <LinkItem>
+          <Link href="#">Profile</Link>
+        </LinkItem>
+        <LinkItem>
+          <Link href="#">About Us</Link>
+        </LinkItem>
+      </LinksWrapper>
+    </NavLinksContainer>
+  );
+}
+
 const NavLinksContainer = styled.div`
   height: 100%;
   display: flex;
@@ -37,24 +58,3 @@ const Link = styled.a`
   color: inherit;
   font-size: inherit;
 `;
-
-export function NavLinks(props) {
-  return (
-    <NavLinksContainer>
-      <LinksWrapper>
-        <LinkItem>
-          <Link href="#">Home</Link>
-        </LinkItem>
-        <LinkItem>
-          <Link href="#">Friends</Link>
-        </LinkItem>
-        <LinkItem>
-          <Link href="#">Profile</Link>
-        </LinkItem>
-        <LinkItem>
-          <Link href="#">About Us</Link>
-        </LinkItem>
-      </LinksWrapper>
-    </NavLinksContainer>
-  );
-}

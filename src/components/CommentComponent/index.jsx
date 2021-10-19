@@ -43,7 +43,7 @@ function CommentComponent({ post }) {
         showPreview={false}
         showSkinTones={false}
         onSelect={(emoji) => setComment(comment + emoji.native)}
-        style={{ position: 'absolute', top: '20px', right: '20px' }}
+        style={{ position: "absolute", top: "20px", right: "20px" }}
       />
     );
   }
@@ -81,11 +81,13 @@ function CommentComponent({ post }) {
           <MoreCommentsCount>{post.comments.length - next}</MoreCommentsCount>
         </CommentsMoreComments>
       ) : (
-        <CommentsMoreComments>
-          <MoreComments>
-            <div onClick={(e) => setNext(1)}>Hide comments</div>
-          </MoreComments>
-        </CommentsMoreComments>
+        !!comments.length && (
+          <CommentsMoreComments>
+            <MoreComments>
+              <div onClick={(e) => setNext(1)}>Hide comments</div>
+            </MoreComments>
+          </CommentsMoreComments>
+        )
       )}
     </FooterComments>
   );
@@ -95,7 +97,7 @@ export default CommentComponent;
 
 const EmojiPicker = styled.div`
   position: relative;
-  top:0;
+  top: 0;
   z-index: 1000;
 `;
 
