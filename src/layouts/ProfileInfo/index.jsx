@@ -62,7 +62,7 @@ function ProfileInfo({ user, handleClickOpen }) {
         isClickedOutside={isClickedOutside}
       >
         <img
-          src={`http://localhost:5000/api/images/${modal}`}
+          src={`${process.env.REACT_APP_API_URL}/images/${modal}`}
           alt=""
           height="500px"
         />
@@ -130,7 +130,7 @@ function ProfileInfo({ user, handleClickOpen }) {
                   return (
                     <div key={src} onClick={() => openModal(src)}>
                       <img
-                        src={`http://localhost:5000/api/images/${src}`}
+                        src={`${process.env.REACT_APP_API_URL}/images/${src}`}
                         alt=""
                       />
                     </div>

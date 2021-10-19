@@ -2,35 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 import Heading from "../../components/Heading";
-import NearbyListing from "../../components/NearbyListing";
 import Request from "../../layouts/Request";
 import Post from "../../layouts/Post";
 import WritePost from "../../layouts/WritePost";
 import { DeviceSize } from "../../components/responsive";
 import Conversations from "../../layouts/Conversations";
 import { connect, useDispatch, useSelector } from "react-redux";
-// import { getUser } from "../../redux";
 import Chat from "../../layouts/Chat";
 import { setOpenChat } from "../../redux/chat/chatActions";
 import { Switch } from "@material-ui/core";
 import { setActive } from "../../redux";
 import { Nearby } from "../../layouts/Nearby";
-import {
-  BrowserRouter as Router,
-  Switch as RouterSwitch,
-  Route,
-  Link,
-  useParams,
-  useRouteMatch
-} from "react-router-dom";
-// import {
-//   socketConnect,
-//   socketDisconnect,
-// } from "../../redux/socket/SocketActions";
 
 function Home({ userData }) {
   const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
-  // const socket = useSelector((state) => state.socket);
   const posts = useSelector((state) => state.posts);
   const { openBubble } = useSelector((state) => state.conversations);
   const { openChat } = useSelector((state) => state.conversations);
@@ -39,7 +24,6 @@ function Home({ userData }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // dispatch(getUser());
     return () => {
       dispatch(setOpenChat(false));
     };
@@ -101,22 +85,7 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(Home);
-const NotificationDropdown = styled.div`
-  width: 260px;
-  position: absolute;
-  color: #2336ab;
-  right: 177px;
-  top: 48px;
-  -webkit-transform: translateY(18px);
-  -moz-transform: translateY(18px);
-  -o-transform: translateY(18px);
-  transform: translateY(18px);
-  /* -webkit-transition: -webkit-transform 0.4s, opacity 0.4s; */
-  -moz-transition: -moz-transform 0.4s, opacity 0.4s;
-  -ms-transition: -ms-transform 0.4s, opacity 0.4s;
-  -o-transition: -o-transform 0.4s, opacity 0.4s;
-  transition: transform 0.4s, opacity 0.4s;
-`;
+
 const ChatBubble = styled.div`
   height: 55px;
   overflow: hidden;

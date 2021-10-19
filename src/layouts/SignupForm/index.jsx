@@ -51,7 +51,7 @@ export function SignupForm(props) {
   const onSubmit = async (values) => {
     const { confirmPassword, ...data } = values;
     const response = await axios
-      .post("http://localhost:5000/api/register", data)
+      .post(`${process.env.REACT_APP_API_URL}/register`, data)
       .catch((err) => {
         if (err && err.response) {
           console.log(err.response.data.message, "response");

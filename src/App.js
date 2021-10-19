@@ -12,7 +12,6 @@ import AuthVerify from "./hooks/authVerify";
 import { updateActive } from "./redux/chat/chatActions";
 
 function App() {
-  // const { user } = useContext(AuthContext);
   const dispatch = useDispatch();
   const socket = useSelector((state) => state.socket);
   const { user } = useSelector((state) => state.user);
@@ -115,21 +114,3 @@ function App() {
 
 export default App;
 
-const LoginContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const AnnouncementBar = styled.div`
-  width: 100%;
-  height: 10px;
-  background-color: #e84c64;
-  span {
-    color: blue;
-    font-size: 13px;
-  }
-`;

@@ -50,7 +50,7 @@ function Photos() {
         isClickedOutside={isClickedOutside}
       >
         <img
-          src={`http://localhost:5000/api/images/${modal}`}
+          src={`${process.env.REACT_APP_API_URL}/images/${modal}`}
           alt=""
           height="500px"
         />
@@ -64,7 +64,7 @@ function Photos() {
             photos.map((src) => {
               return (
                 <div key={src} onClick={() => openModal(src)}>
-                  <img src={`http://localhost:5000/api/images/${src}`} alt="" />
+                  <img src={`${process.env.REACT_APP_API_URL}/images/${src}`} alt="" />
                 </div>
               );
             })}

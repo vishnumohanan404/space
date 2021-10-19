@@ -25,14 +25,14 @@ function PostCarousel({
             {key.split(".").pop() === "mp4" ? (
                 <ReactPlayer
                   controls={true}
-                  url={`http://localhost:5000/api/images/${key.slice(6)}`}
+                  url={`${process.env.REACT_APP_API_URL}/images/${key.slice(6)}`}
                   width="100%"
                   height="99%"
                   key={key}
                   />
             ) : (
                 <PostImg
-                src={`http://localhost:5000/api/images/${key.slice(6)}`}
+                src={`${process.env.REACT_APP_API_URL}/images/${key.slice(6)}`}
                   alt="post"
                   key={key}
                 />

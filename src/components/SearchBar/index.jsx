@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import styled from "styled-components";
 import { IoClose, IoSearch } from "react-icons/io5";
 import { AnimatePresence, motion } from "framer-motion";
@@ -52,7 +52,7 @@ export default function SearchBar() {
   // }, [isClickedOutside]);
 
   const prepareSearchQuery = (query) => {
-    const friendSearchUrl = `http://localhost:5000/api/search?q=${query}`;
+    const friendSearchUrl = `${process.env.REACT_APP_API_URL}/search?q=${query}`;
     return encodeURI(friendSearchUrl);
   };
 

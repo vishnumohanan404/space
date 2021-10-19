@@ -17,7 +17,7 @@ export const socketClose = () => {
 
 export const socketConnect = (userId) => {
   return async (dispatch) => {
-    const socket = await io.connect(`http://localhost:5000/?userId=${userId}`);
+    const socket = await io.connect(`${process.env.REACT_APP_SOCKET_URL}?userId=${userId}`);
     dispatch(socketOpen(socket));
   };
 };

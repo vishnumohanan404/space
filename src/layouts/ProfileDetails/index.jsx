@@ -3,7 +3,6 @@ import {
   IoChatbubble,
   IoPersonAddOutline,
   IoPencil,
-  IoCamera,
 } from "react-icons/io5";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -16,7 +15,6 @@ import { useClickOutside } from "react-click-outside-hook";
 import { useRef } from "react";
 import Crop from "../../components/Cropper";
 import {
-  getUserChatFriends,
   setConvo,
   setOpenChat,
 } from "../../redux/chat/chatActions";

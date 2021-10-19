@@ -15,13 +15,12 @@ import {
   NEW_COMMENT_SUCCESS,
   NEW_COMMENT_FAILURE,
   UPDATE_POST,
-  UPDATE_COMMENT,
+  // UPDATE_COMMENT,
   LIKE_COMMENT,
-  GET_SINGLE_POST,
+  // GET_SINGLE_POST,
   DELETE_POST,
 } from "./PostTypes";
 import { api } from "../../api.config";
-import axios from "axios";
 import { createNotify } from "../notifications/NotificationActions";
 
 // fetch posts
@@ -107,8 +106,8 @@ export const onProgress = (progress) => {
 export const addPost = (data) => {
   return (dispatch) => {
     dispatch(addPostRequest());
-    axios
-      .post("http://localhost:5000/api/post", data, {
+    api
+      .post("/post", data, {
         withCredentials: true,
         headers: {
           "content-type": "multipart/form-data",
