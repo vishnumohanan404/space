@@ -25,6 +25,14 @@ This is my first react project which took me on a new journey of advanced concep
 ### Production: 
 ***yarn build***
 
+## Screenshots
+![alt text](https://github.com/KingKong26/space/blob/master/public/Screenshots/home1.png?raw=true)
+
+![alt text](https://github.com/KingKong26/space/blob/master/public/Screenshots/home2.png?raw=true)
+
+![alt text](https://github.com/KingKong26/space/blob/master/public/Screenshots/profile.png?raw=true)
+
+![alt text](https://github.com/KingKong26/space/blob/master/public/Screenshots/login.png?raw=true)
 
 ## Feel free to fork
 
