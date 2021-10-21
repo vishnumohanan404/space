@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { newComment } from "../../redux";
 import { useSelector } from "react-redux";
-// import styled from "styled-components";
-// import Avatar from "../Avatar";
 
 function CommentsInput({ post, setComment, comment }) {
-  // const [comment, setComment] = useState("");
   const socket = useSelector((state) => state.socket);
   const dispatch = useDispatch();
   const handleChange = (e) => {

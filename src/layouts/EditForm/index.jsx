@@ -1,19 +1,14 @@
 import React from "react";
-// import Header from './Components/Header';
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@material-ui/core/styles";
-import { Container, DialogActions, Grid, Typography } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import TextfieldWrapper from "../../components/FormUI/TextField";
 import Select from "../../components/FormUI/Select";
-import FormSubmit from "../../components/FormSubmit";
-// import DateTimePicker from './Components/FormsUI/DataTimePicker';
-// import Checkbox from './Components/FormsUI/Checkbox';
 import Button from "../../components/FormUI/Button";
 import countries from "./data/countries.json";
-import { useFormikContext } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { updateProfile, updateProfileInfo } from "../../redux/user/UserAction";
+import {  updateProfileInfo } from "../../redux/user/UserAction";
 import { MoonLoader } from "react-spinners";
 
 const useStyles = makeStyles((theme) => ({

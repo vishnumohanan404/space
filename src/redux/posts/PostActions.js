@@ -22,6 +22,7 @@ import {
 } from "./PostTypes";
 import { api } from "../../api.config";
 import { createNotify } from "../notifications/NotificationActions";
+import { logOut } from "..";
 
 // fetch posts
 export const fetchPostsRequest = () => {
@@ -53,17 +54,17 @@ export const fetchPosts = () => {
         dispatch(fetchPostsSuccess(res.data));
       })
       .catch((err) => {
-        console.log(err.message);
+        console.log("Error from fetch user post",err.message);
         dispatch(fetchPostsFailure(err.message));
       });
+    };
   };
-};
-
-// recheck this method
-export const fetchUserPosts = () => {
-  return (dispatch) => {
-    dispatch(fetchPostsRequest());
-    api
+  
+  // recheck this method
+  export const fetchUserPosts = () => {
+    return (dispatch) => {
+      dispatch(fetchPostsRequest());
+      api
       .get("/feeds/")
       .then((res) => {
         dispatch(fetchPostsSuccess(res.data));

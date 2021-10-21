@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { IoThumbsUp } from "react-icons/io5";
-// import { Marginer } from "../../components/Marginer";
 import styled from "styled-components";
-// import axios from "axios";
-import { api } from "../../api.config";
 import { likePost } from "../../redux";
 import { useDispatch, useSelector } from "react-redux";
-import { socketConnect } from "../../redux";
 
 const PostActionButtons = styled.div`
   display: flex;
@@ -38,6 +34,7 @@ function PostLikes({ post }) {
   useEffect(() => {
     let userId = currentUser._id.toString();
     setIsLiked(post.likes.includes(userId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post.likes]);
 
 

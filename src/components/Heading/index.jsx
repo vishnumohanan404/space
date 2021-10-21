@@ -30,11 +30,11 @@ const HeadingContainer = styled.div`
   margin-bottom: 18px;
 `;
 
-const Anchor = styled.a`
-  font-size: 12px;
-  align-items: center;
-  background: #3535fd6c;
-  color: #fff;
-  padding: 0 5px;
-  border-radius: 30px;
-`;
+// const Anchor = styled.a`
+//   font-size: 12px;
+//   align-items: center;
+//   background: #3535fd6c;
+//   color: #fff;
+//   padding: 0 5px;
+//   border-radius: 30px;
+// `;

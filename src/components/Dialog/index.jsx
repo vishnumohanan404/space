@@ -1,14 +1,8 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import Button from "@material-ui/core/Button";
 import { styled as Style } from "@material-ui/core/styles";
-import { Dialog, makeStyles } from "@material-ui/core";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import { Dialog } from "@material-ui/core";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import IconButton from "@material-ui/core/IconButton";
-// import CloseIcon from '@mui/icons-material/Close';
-import Typography from "@material-ui/core/Typography";
 import { IoClose } from "react-icons/io5";
 import styled from "styled-components";
 

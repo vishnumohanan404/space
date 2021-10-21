@@ -34,6 +34,7 @@ function Tabs() {
     return () => {
       dispatch(setTab(0));
     };
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile.userProfile]);
 
   return (

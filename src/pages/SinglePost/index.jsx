@@ -1,28 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 import Heading from "../../components/Heading";
 import Request from "../../layouts/Request";
 import Post from "../../layouts/Post";
-import WritePost from "../../layouts/WritePost";
 import { DeviceSize } from "../../components/responsive";
 import Conversations from "../../layouts/Conversations";
-import { connect, useDispatch, useSelector } from "react-redux";
-// import { getUser } from "../../redux";
+import {  useDispatch, useSelector } from "react-redux";
 import Chat from "../../layouts/Chat";
 import { setOpenChat } from "../../redux/chat/chatActions";
 import { Switch } from "@material-ui/core";
 import { setActive } from "../../redux";
 import { useParams } from "react-router";
 import { getPost } from "../../redux/singlePost/singleActions";
-// import {
-//   socketConnect,
-//   socketDisconnect,
-// } from "../../redux/socket/SocketActions";
 
 function SinglePost() {
   const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
-  //   const socket = useSelector((state) => state.socket);
   const posts = useSelector((state) => state.singlePost);
   const { openBubble } = useSelector((state) => state.conversations);
   const { openChat } = useSelector((state) => state.conversations);
@@ -36,6 +29,7 @@ function SinglePost() {
     return () => {
       dispatch(setOpenChat(false));
     };
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleActive = () => {
@@ -104,8 +98,6 @@ const ChatBubble = styled.div`
     min-height:350px
     `}
 `;
-
-const homeWriteStyle = { marginTop: "1.5%" };
 
 const HomeContainer = styled.div`
   width: 100%;

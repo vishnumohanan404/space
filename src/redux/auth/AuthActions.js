@@ -59,6 +59,18 @@ export const loginCall = (userCredentials) => {
   };
 };
 
+export const authVerify = ()=>{
+  return async(dispatch)=>{
+    try{
+      api.get('/')
+    }catch(err){
+      if(err.response.status ===401){
+        dispatch(logOut)
+      }
+    }
+  }
+}
+
 export const logOutCall = () => {
   return (dispatch) => {
     dispatch(socketClose);

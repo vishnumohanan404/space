@@ -14,7 +14,7 @@ import {
 } from "../../redux/notifications/NotificationActions";
 // import { useClickOutside } from "react-click-outside-hook";
 
-function Notifications({}) {
+function Notifications() {
   const [count, setCount] = useState(0);
   const socket = useSelector((state) => state.socket);
   // const [ref, hasClickedOutside] = useClickOutside();
@@ -50,13 +50,7 @@ function Notifications({}) {
     };
   }, [socket, dispatch]);
 
-  // useEffect(() => {
-  //   if (hasClickedOutside) {
-  //     // console.log(`hasClickedOutside`, hasClickedOutside);
-  //     dispatch(openDropdown(false));
-  //     // dispatch(readNotifications());
-  //   }
-  // }, [hasClickedOutside]);
+ 
 
   const handleDropdown = () => {
     dispatch(openDropdown(!dropdown));

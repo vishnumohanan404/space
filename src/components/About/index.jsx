@@ -1,5 +1,5 @@
 import React from "react";
-import { IoLocationOutline, IoPencil } from "react-icons/io5";
+import { IoPencil } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 // import CustomizedDialogs from "../Dialog";

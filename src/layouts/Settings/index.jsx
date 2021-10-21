@@ -7,7 +7,6 @@ import {
   IoMoonOutline,
   IoRemoveCircleOutline,
   IoSettings,
-  IoSettingsOutline,
 } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import styled from "styled-components";

@@ -95,6 +95,7 @@ function WritePost({
         // here you can add filtering conditions
         form.delete(key);
       }
+       // eslint-disable-next-line react-hooks/exhaustive-deps
       formArray = [];
       setFormData({});
       setStatus({ postContent: "" });
@@ -117,6 +118,7 @@ function WritePost({
     setFormData(newFilesState);
     setImagePreview(newState);
     var values = form.getAll("files[]");
+    // eslint-disable-next-line no-redeclare
     var index = values.indexOf(src);
     values.splice(index, 1);
     form.set("files[]", values);
@@ -130,6 +132,7 @@ function WritePost({
     setFormData(newFilesState);
     setVideoPreview(newState);
     var values = form.getAll("files[]");
+    // eslint-disable-next-line no-redeclare
     var index = values.indexOf(src);
     values.splice(index, 1);
     form.set("files[]", values);

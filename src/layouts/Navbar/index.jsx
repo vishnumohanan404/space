@@ -9,6 +9,7 @@ import { MobileNavLinks } from "./mobileNavLinks";
 // import { NavLinks } from "./NavLinks";
 
 export function Navbar(props) {
+  console.log("Initial render of navbar");
   const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
   return (
     <Container>

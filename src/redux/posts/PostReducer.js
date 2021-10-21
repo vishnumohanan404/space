@@ -16,7 +16,7 @@ import {
   // UPDATE_COMMENT,
   LIKE_COMMENT,
   DELETE_POST,
-  GET_SINGLE_POST,
+  // GET_SINGLE_POST,
   // LIKE_POST_SUCCESS,
   // LIKE_POST_FAILURE
 } from "./PostTypes";

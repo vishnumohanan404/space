@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 import Heading from "../../components/Heading";
@@ -27,6 +27,7 @@ function Home({ userData }) {
     return () => {
       dispatch(setOpenChat(false));
     };
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleActive = () => {

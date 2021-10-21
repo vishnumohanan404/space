@@ -27,7 +27,9 @@ function Profile({
 }) {
   const { id } = useParams();
   const socket = useSelector((state) => state.socket);
-  const profileData = useSelector((state) => (!state.profile.updateLoading && state.profile));
+  const profileData = useSelector(
+    (state) => !state.profile.updateLoading && state.profile
+  );
   const { tab } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const { openChat, openBubble } = useSelector((state) => state.conversations);
@@ -38,9 +40,11 @@ function Profile({
     return () => {
       dispatch(setOpenChat(false));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   useEffect(() => {
     dispatch(getUserChatFriends());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   useEffect(() => {
     if (socket)
@@ -48,6 +52,7 @@ function Profile({
         console.log(`REJECT_REQUEST_TO_CLIENT`, updatedProfile);
         dispatch(updateProfile(updatedProfile));
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   // console.log(`profileData`, profileData)
@@ -59,7 +64,6 @@ function Profile({
   const handleClose = () => {
     setOpen(false);
   };
-
 
   return (
     <ProfileContainer>
@@ -103,7 +107,11 @@ function Profile({
             )}
             {tab === 1 && (
               <PostCol>
-                <About handleClose={handleClose} handleClickOpen={handleClickOpen} open={open}/>
+                <About
+                  handleClose={handleClose}
+                  handleClickOpen={handleClickOpen}
+                  open={open}
+                />
               </PostCol>
             )}
             {tab === 2 && (
@@ -130,7 +138,7 @@ function Profile({
         </div>
       ) : (
         <LoadingWrapper>
-          <MoonLoader size={50} />
+          <MoonLoader  />
         </LoadingWrapper>
       )}
       <CustomizedDialogs open={open} title={"Edit"} handleClose={handleClose}>
@@ -177,16 +185,6 @@ const ChatBubble = styled.div`
     `}
 `;
 
-const PostContainer = styled.div`
-  width: 100%;
-  /* background: #fff; */
-  border-radius: 6px;
-  /* padding: 20px; */
-  /* padding-top: 10px; */
-  /* margin-top: 1.5%; */
-  color: #626262;
-`;
-
 const ProfileContainer = styled.div`
   width: 100%;
   background-color: #ddf3fa;
@@ -197,31 +195,6 @@ const ProfileContainer = styled.div`
   padding: 90px 15%;
   /* overflow-y: auto !important;  */
   /* position: relative; */
-`;
-
-const CoverImg = styled.img`
-  width: 100%;
-  border-radius: 6px;
-  margin-bottom: 14px;
-  height: 300px;
-  object-fit: cover;
-  transition: background 0.5s ease;
-`;
-const Cover = styled.div`
-  right: 0;
-  top: 0;
-  &:hover div {
-    display: block;
-  }
-`;
-
-const Overlay = styled.div`
-  padding-top: 7px;
-  padding-right: 7px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  display: none;
 `;
 
 const ProfileDetailsContainer = styled.div`
@@ -248,8 +221,9 @@ const PostCol = styled.div`
 `;
 
 const LoadingWrapper = styled.div`
+  width: 100%;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 10%;
 `;

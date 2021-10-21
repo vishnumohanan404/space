@@ -32,13 +32,16 @@ function Chat() {
   );
   const socket = useSelector((state) => state.socket);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (conversation.conversation)
       dispatch(getMessages(conversation.conversation._id));
     return () => {
       dispatch(clearChat());
     };
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const handleClose = (e) => {
     e.preventDefault();
     dispatch(setOpenChat(false));
@@ -58,6 +61,7 @@ function Chat() {
       setMessage("");
     }
   };
+
   const handleBubble = () => {
     dispatch(setOpenBubble(!openBubble));
   };
@@ -160,19 +164,19 @@ function Chat() {
         />
         <ChatMedia>
           <nav>
-            <a href="#">
+            <span>
               <IoImage style={IonicFooterIcons} />
-            </a>
-            <a href="#">
+            </span>
+            <span>
               <IoHappyOutline style={IonicFooterIcons} />
-            </a>
-            <a href="">
+            </span>
+            <span>
               <IoCamera style={IonicFooterIcons} />
-            </a>
+            </span>
           </nav>
-          <a href="">
+          <span>
             <IoThumbsUp style={IonicFooterIcons} />
-          </a>
+          </span>
         </ChatMedia>
       </ChatFooter>
     </div>
@@ -188,7 +192,7 @@ const ChatMedia = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 8px;
-  a {
+  span {
     text-decoration: none;
     &:not(:last-child) {
       margin-right: 8px;
@@ -353,23 +357,7 @@ const ChatComm = styled.div`
     display: none;
   `}
 `;
-const ChatBubble = styled.div`
-  height: 55px;
-  overflow: hidden;
-  min-width: 320px;
-  background-color: #fff;
-  position: fixed;
-  bottom: 0;
-  right: 405px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border: 1px solid #e4e4e4;
-  ${({ active }) =>
-    active &&
-    `
-    min-height:350px
-    `}
-`;
+
 
 const IonicStyle = {
   width: "22px",

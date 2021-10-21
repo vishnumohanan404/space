@@ -3,17 +3,16 @@ import styled from "styled-components";
 import { FcCalendar, FcNews } from "react-icons/fc";
 import { ImSpoonKnife } from "react-icons/im";
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams,
-  useRouteMatch,
+  // BrowserRouter as Router,
+  // Switch,
+  // Route,
+  // Link,
+  // useParams,
+  // useRouteMatch,
 } from "react-router-dom";
-import NearbyListing from "../../components/NearbyListing";
 
 export const Nearby = () => {
-  let { path, url } = useRouteMatch();
+  // let { path, url } = useRouteMatch();
   // const params = useParams()
     // console.log(`url,path`, url,path)
   return (

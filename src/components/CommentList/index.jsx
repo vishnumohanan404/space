@@ -7,7 +7,8 @@ import frenchStrings from "react-timeago/lib/language-strings/en";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 import { likeComment } from "../../redux";
 
-function CommentList({ comment }) {
+function CommentList({ comment }) { 
+  // eslint-disable-next-line no-unused-vars
   const[showOptions,setShowOptions]= useState(false)
   const formatter = buildFormatter(frenchStrings);
   const dispatch = useDispatch();
@@ -123,13 +124,13 @@ const Likes = styled.a`
   }
 `;
 
-const LinksReply = styled.a`
-  font-weight: 700;
-  &:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-`;
+// const LinksReply = styled.a`
+//   font-weight: 700;
+//   &:hover {
+//     text-decoration: underline;
+//     cursor: pointer;
+//   }
+// `;
 
 const LinksDate = styled.a`
   font-weight: 400;

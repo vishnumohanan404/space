@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import Slider from "@material-ui/core/Slider";
 import Cropper from "react-easy-crop";
 import styled from "styled-components";
-import { generateDownload } from "../../utils/cropImage";
-import { useRef } from "react";
+// import { generateDownload } from "../../utils/cropImage";
+// import { useRef } from "react";
 
 function Crop({ inputImg, open, setOpen }) {
-  const inputRef = useRef();
-  const triggerFileSelectPopup = () => inputRef.current.click();
+  // const inputRef = useRef();
+  // const triggerFileSelectPopup = () => inputRef.current.click();
+  // eslint-disable-next-line no-unused-vars
   const [croppedArea, setCroppedArea] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -16,13 +17,13 @@ function Crop({ inputImg, open, setOpen }) {
     setCroppedArea(croppedAreaPixels);
   };
 
-  const onDownload = () => {
-    generateDownload(inputImg, croppedArea);
-  };
+  // const onDownload = () => {
+  //   generateDownload(inputImg, croppedArea);
+  // };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
   return (
     <>
       <Container>

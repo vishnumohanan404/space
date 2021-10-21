@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { UserNameText } from "../common";
 import Avatar from "../../components/Avatar";
-import {
-  IoChatboxEllipsesOutline,
-} from "react-icons/io5";
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { useMediaQuery } from "react-responsive";
 import { DeviceSize } from "../../components/responsive";
 import Request from "../Request";
@@ -46,6 +44,7 @@ function Post({
 
   useEffect(() => {
     fetchPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -167,16 +166,16 @@ const mapDispatchToProps = (dispatch) => {
 
 export default connect(null, mapDispatchToProps)(Post);
 
-const Options = styled.div`
-  padding: 1rem;
-  border-radius: 50%;
-  line-height: 50%;
-  transition: background-color 0.2s ease;
-  cursor: pointer;
-  :hover {
-    background: #f2f2f2;
-  }
-`;
+// const Options = styled.div`
+//   padding: 1rem;
+//   border-radius: 50%;
+//   line-height: 50%;
+//   transition: background-color 0.2s ease;
+//   cursor: pointer;
+//   :hover {
+//     background: #f2f2f2;
+//   }
+// `;
 
 const PostContainer = styled.div`
   width: 100%;

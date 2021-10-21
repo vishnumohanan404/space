@@ -24,11 +24,13 @@ function Conversations() {
   const { user } = useSelector((state) => state.user);
   const socket = useSelector((state) => state.socket);
   const dispatch = useDispatch();
+  
   useEffect(() => {
     dispatch(getUserChatFriends());
     return async () => {
       await dispatch(clearConversations());
     };
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

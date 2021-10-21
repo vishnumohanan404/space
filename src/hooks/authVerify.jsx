@@ -17,7 +17,7 @@ class AuthVerify extends Component {
 
     props.history.listen(() => {
       const user = JSON.parse(localStorage.getItem("accessToken"));
-
+      console.log(`user`, user)
       if (user) {
         const decodedJwt = parseJwt(user.accessToken);
 
