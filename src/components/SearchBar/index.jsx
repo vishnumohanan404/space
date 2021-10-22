@@ -9,7 +9,6 @@ import axios from "axios";
 import SearchResult from "../SearchResult";
 import useClickOutside from "../../hooks/clickOutsideHook";
 
-
 export default function SearchBar() {
   const [isExpanded, setExpanded] = useState(false);
   // const [parentRef, isClickedOutside] = useClickOutside();
@@ -18,10 +17,10 @@ export default function SearchBar() {
   const [isLoading, setLoading] = useState(false);
   const [tvShows, setTvShows] = useState([]);
   const [noTvShows, setNoTvShows] = useState(false);
-  
-  let parentRef = useClickOutside(()=>{
-    collapseContainer()
-  })
+
+  let parentRef = useClickOutside(() => {
+    collapseContainer();
+  });
 
   const isEmpty = !tvShows || tvShows.length === 0;
 
@@ -77,7 +76,6 @@ export default function SearchBar() {
       variants={containerVariants}
       transition={containerTransition}
       ref={parentRef}
-
     >
       <SearchInputContainer>
         <SearchIcon>
@@ -146,8 +144,6 @@ export default function SearchBar() {
   );
 }
 
-
-
 const SearchBarContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
@@ -157,6 +153,15 @@ const SearchBarContainer = styled(motion.div)`
   background-color: #fff;
   border-radius: 30px;
   box-shadow: 0px 2px 12px 3px rgba(34, 34, 34, 0.103);
+  @media only screen and (min-width: 425px) {
+    width: 17em;
+  }
+  @media only screen and (min-width: 768px) {
+    width: 20em;
+  }
+  @media only screen and (min-width: 992px) {
+    width: 30em;
+  }
 `;
 
 const SearchInputContainer = styled.div`

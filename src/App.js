@@ -14,6 +14,7 @@ import FallbackUI from "./components/Fallback";
 const LazyHome = React.lazy(() => import("./pages/Home"));
 const LazyProfile = React.lazy(() => import("./pages/Profile"));
 const LazySinglePost = React.lazy(() => import("./pages/SinglePost"));
+const LazyConversations = React.lazy(() => import("./pages/Conversations"));
 const LazyNavRouter = React.lazy(() =>
   import("./components/NavRouter/NavRouter")
 );
@@ -111,6 +112,19 @@ function App() {
                   <LazyNavRouter
                     exactly
                     component={LazySinglePost}
+                    pattern="/"
+                  />
+                </>
+              ) : (
+                <Redirect to="/login" />
+              )}
+            </Route>
+            <Route exact path="/conversations/">
+              {user ? (
+                <>
+                  <LazyNavRouter
+                    exactly
+                    component={LazyConversations}
                     pattern="/"
                   />
                 </>

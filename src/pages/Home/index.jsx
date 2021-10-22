@@ -5,7 +5,7 @@ import Heading from "../../components/Heading";
 import Request from "../../layouts/Request";
 import Post from "../../layouts/Post";
 import WritePost from "../../layouts/WritePost";
-import { DeviceSize } from "../../components/responsive";
+import { DeviceSize } from "../../constants/responsive";
 import Conversations from "../../layouts/Conversations";
 import { connect, useDispatch, useSelector } from "react-redux";
 import Chat from "../../layouts/Chat";
@@ -15,7 +15,8 @@ import { setActive } from "../../redux";
 import { Nearby } from "../../layouts/Nearby";
 
 function Home({ userData }) {
-  const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
+  // const isMobile = useMediaQuery({ maxWidth: DeviceSize.smallMobile });
+  const isMobile = useMediaQuery({ maxWidth: 767 })
   const posts = useSelector((state) => state.posts);
   const { openBubble } = useSelector((state) => state.conversations);
   const { openChat } = useSelector((state) => state.conversations);

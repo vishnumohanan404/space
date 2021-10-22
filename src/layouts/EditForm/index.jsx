@@ -6,7 +6,7 @@ import { Container, Grid, Typography } from "@material-ui/core";
 import TextfieldWrapper from "../../components/FormUI/TextField";
 import Select from "../../components/FormUI/Select";
 import Button from "../../components/FormUI/Button";
-import countries from "./data/countries.json";
+import countries from "../../constants/data/countries.json";
 import { useDispatch, useSelector } from "react-redux";
 import {  updateProfileInfo } from "../../redux/user/UserAction";
 import { MoonLoader } from "react-spinners";

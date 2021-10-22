@@ -1,7 +1,9 @@
 import React from "react";
+import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../assets/logo.png";
+import { DeviceSize } from "../../constants/responsive";
 
 const LogoWrapper = styled.div`
   display: flex;
@@ -23,7 +25,7 @@ const LogoText = styled.h2`
   margin: 0;
   margin-left: 4px;
   font-weight: 800;
-  color: #E84C64;
+  color: #e84c64;
   font-family: "Nunito", sans-serif;
   /* background: linear-gradient(
     90deg,
@@ -36,13 +38,15 @@ const LogoText = styled.h2`
 `;
 
 export default function Logo(props) {
+  const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
+
   return (
     <Link to="/" style={{ textDecoration: "none" }}>
       <LogoWrapper>
         <LogoImg>
           <img src={logo} alt="space" />
         </LogoImg>
-        <LogoText>SPACE</LogoText>
+        {!isMobile && <LogoText>SPACE</LogoText>}
       </LogoWrapper>
     </Link>
   );

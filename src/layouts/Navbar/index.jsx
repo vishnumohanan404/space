@@ -2,10 +2,11 @@ import React from "react";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 import Logo from "../../components/Logo";
-import { DeviceSize } from "../../components/responsive";
+import { DeviceSize } from "../../constants/responsive";
 import SearchBar from "../../components/SearchBar";
 import Accessibility from "./accessibility";
 import { MobileNavLinks } from "./mobileNavLinks";
+import Notifications from "../../components/Notifications";
 // import { NavLinks } from "./NavLinks";
 
 export function Navbar(props) {
@@ -15,8 +16,8 @@ export function Navbar(props) {
     <Container>
       <AnnouncementBar>
         <span>
-          📢 This <a href="https://github.com/KingKong26/space">project</a> is still
-          under development so, some features might be broke
+          📢 This <a href="https://github.com/KingKong26/space">project</a> is
+          still under development so, some features might be broke
         </span>
       </AnnouncementBar>
       <NavBarContainer>
@@ -25,21 +26,24 @@ export function Navbar(props) {
         </LeftSection>
         <MiddleSection>
           {/* {!isMobile && <NavLinks />} */}
-          {!isMobile && (
-            <SearchContainer>
-              <SearchBar />
-            </SearchContainer>
-          )}
+          <SearchContainer>
+            <SearchBar />
+          </SearchContainer>
         </MiddleSection>
         <RightSection>
           {!isMobile && <Accessibility />}
-          {isMobile && <MobileNavLinks />}
+          {isMobile &&<>
+          {/* <AccessibilityContainer>
+            <Notifications />
+          </AccessibilityContainer> */}
+          <MobileNavLinks />
+          </>
+          }
         </RightSection>
       </NavBarContainer>
     </Container>
   );
 }
-
 const Container = styled.div`
   width: 100%;
   /* display: flex; */
@@ -61,6 +65,9 @@ const NavBarContainer = styled.nav`
   z-index: 100;
   background: #fff;
   justify-content: space-between;
+  @media only screen and (min-width: 768px) {
+    padding: 0;
+  }
 `;
 
 const LeftSection = styled.div`

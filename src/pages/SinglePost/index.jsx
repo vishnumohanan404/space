@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Heading from "../../components/Heading";
 import Request from "../../layouts/Request";
 import Post from "../../layouts/Post";
-import { DeviceSize } from "../../components/responsive";
+import { DeviceSize } from "../../constants/responsive";
 import Conversations from "../../layouts/Conversations";
 import {  useDispatch, useSelector } from "react-redux";
 import Chat from "../../layouts/Chat";

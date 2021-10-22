@@ -22,7 +22,6 @@ import {
 } from "./PostTypes";
 import { api } from "../../api.config";
 import { createNotify } from "../notifications/NotificationActions";
-import { logOut } from "..";
 
 // fetch posts
 export const fetchPostsRequest = () => {

@@ -4,7 +4,7 @@ import { UserNameText } from "../common";
 import Avatar from "../../components/Avatar";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { useMediaQuery } from "react-responsive";
-import { DeviceSize } from "../../components/responsive";
+import { DeviceSize } from "../../constants/responsive";
 import Request from "../Request";
 import { deletePost, fetchPosts, likePostSuccess } from "../../redux";
 import { connect, useDispatch, useSelector } from "react-redux";
@@ -142,7 +142,7 @@ function Post({
           </PostContainer>
         </>
       )}
-      {isMobile && (
+      {isMobile && user.friendRequest && (
         <PostContainer>
           <Request />
         </PostContainer>
