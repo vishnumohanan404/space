@@ -9,35 +9,17 @@ import {
   IoHappyOutline,
   IoCloseOutline,
 } from "react-icons/io5";
-import Modal from "../Modal";
 import { connect } from "react-redux";
 import { addPost } from "../../redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import _ from "lodash";
 import { motion } from "framer-motion";
 import ReactPlayer from "react-player";
-import { useClickOutside } from "react-click-outside-hook";
 import { Marginer } from "../../components/Marginer";
+import { validateFiles, fnGetExtension } from "../../utils/writePostUtils";
+import CustomizedDialogs from "../../components/Dialog";
 
 const IconStyle = { marginRight: "7", width: "30px", size: "50px" };
-
-const validateFiles = (files) => {
-  for (var i = 0; i < files?.length; i++) {
-    var ext = files[i].name.split(".").pop();
-    if (ext !== "mp4" && ext !== "m4v" && ext !== "jpg") {
-      alert("Invalid data");
-      return false;
-    }
-    return true;
-  }
-};
-
-const fnGetExtension = (file) => {
-  var fileInput = file;
-  var fileName = fileInput.name;
-  var fileExtension = fileName.split(".").pop();
-  return fileExtension;
-};
 
 function WritePost({
   postData,
@@ -46,7 +28,7 @@ function WritePost({
   user = userData.user,
   isLoading = postData?.addPostLoading,
   progress = postData?.progress,
-  margin
+  margin,
 }) {
   const [status, setStatus] = useState({ postContent: "" });
   const [imagePreview, setImagePreview] = useState([]);
@@ -55,6 +37,9 @@ function WritePost({
   const [videoPreview, setVideoPreview] = useState([]);
   const fileInput = useRef();
   const [videoPlayer, setVideoPlayer] = useState("");
+
+  console.log("Write post rendered");
+
   let form = new FormData();
   let formArray;
 
@@ -95,7 +80,7 @@ function WritePost({
         // here you can add filtering conditions
         form.delete(key);
       }
-       // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       formArray = [];
       setFormData({});
       setStatus({ postContent: "" });
@@ -148,9 +133,6 @@ function WritePost({
       formData.forEach((value, index) => {
         form.append("files", value);
       });
-    // console.log(form.entries().next().done, "populated");
-    // console.log(status.postContent.length, "postcontent");
-    // console.log(`_.isEmpty(formData)`);
     if (!_.isEmpty(formData) || status.postContent.length > 0) {
       form.append("postContent", status.postContent);
       addPost(form);
@@ -158,35 +140,28 @@ function WritePost({
     e.target.reset();
   };
 
-  const [isToggled, setToggle] = useState(false);
-
   const playVideo = (src) => {
+    console.log(`src`, src);
     setVideoPlayer(src);
-    setToggle(true);
   };
 
-  const closeContainer = () => {
-    setToggle(false);
-    // if (inputRef.current) inputRef.current.value = "";
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
   };
-
-  const [parentRef, isClickedOutside] = useClickOutside();
-  useEffect(() => {
-    closeContainer();
-  }, [isClickedOutside]);
-
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <>
-      <Modal
-        isToggled={isToggled}
-        setToggle={setToggle}
-        closeContainer={closeContainer}
-        parentRef={parentRef}
-        isClickedOutside={isClickedOutside}
+      <CustomizedDialogs
+        open={open}
+        title={"Preview"}
+        handleClose={handleClose}
       >
         <ReactPlayer url={videoPlayer} controls={true} />
-      </Modal>
-
+      </CustomizedDialogs>
       <WritePostContainer style={margin}>
         <PostForm onSubmit={handleSubmit}>
           <UserProfileContainer>
@@ -268,6 +243,7 @@ function WritePost({
                       console.log(event.currentTarget, "current event");
                       // if (event.target !== event.currentTarget) return false;
                       playVideo(src);
+                      handleClickOpen();
                     }}
                   >
                     <DeleteButton
@@ -304,6 +280,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WritePost);
+
 
 const WritePostContainer = styled.div`
   width: 100%;

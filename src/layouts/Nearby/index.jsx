@@ -2,22 +2,24 @@ import React from "react";
 import styled from "styled-components";
 import { FcCalendar, FcNews } from "react-icons/fc";
 import { ImSpoonKnife } from "react-icons/im";
-import {
-  // BrowserRouter as Router,
-  // Switch,
-  // Route,
-  // Link,
-  // useParams,
-  // useRouteMatch,
-} from "react-router-dom";
+import // BrowserRouter as Router,
+// Switch,
+// Route,
+// Link,
+// useParams,
+// useRouteMatch,
+"react-router-dom";
+import Heading from "../../components/Heading";
 
 export const Nearby = () => {
   // let { path, url } = useRouteMatch();
   // const params = useParams()
-    // console.log(`url,path`, url,path)
+  // console.log(`url,path`, url,path)
   return (
-    <Container>
-      {/* <Link
+    <>
+      <Heading title={"Nearby"} color={"#626262"} />
+      <Container>
+        {/* <Link
         to={`nearby/events`}
         style={{ textDecoration: "none", color: "#626262" }}
       > */}
@@ -25,8 +27,8 @@ export const Nearby = () => {
           <FcCalendar size={40} />
           <div>Events</div>
         </Item>
-      {/* </Link> */}
-      {/* <Link
+        {/* </Link> */}
+        {/* <Link
         to={`nearby/news`}
         style={{ textDecoration: "none", color: "#626262" }}
       > */}
@@ -34,8 +36,8 @@ export const Nearby = () => {
           <FcNews size={40} />
           <div>News</div>
         </Item>
-      {/* </Link> */}
-      {/* <Link
+        {/* </Link> */}
+        {/* <Link
         to={`nearby/restaurants`}
         style={{ textDecoration: "none", color: "#626262" }}
       > */}
@@ -43,14 +45,15 @@ export const Nearby = () => {
           <ImSpoonKnife size={40} />
           <div>Restaurants</div>
         </Item>
-      {/* </Link> */}
-      {/* <Switch>
+        {/* </Link> */}
+        {/* <Switch>
         <Route exact path={path}>
           <h3>Please select a topic.</h3>
         </Route>
         <Route path={`nearby/events`} element={<NearbyListing />}/>
       </Switch> */}
-    </Container>
+      </Container>
+    </>
   );
 };
 

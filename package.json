@@ -59,6 +59,7 @@
     ]
   },
   "devDependencies": {
+    "@welldone-software/why-did-you-render": "^6.2.1",
     "customize-cra": "^1.0.0",
     "react-app-rewired": "^2.1.8"
   }

@@ -5,7 +5,7 @@ import { logOutCall } from "../redux";
 
 const parseJwt = (token) => {
   try {
-    return JSON.parse(atob(token.split('.')[1]));
+    return JSON.parse(atob(token.split(".")[1]));
   } catch (e) {
     return null;
   }
@@ -17,7 +17,7 @@ class AuthVerify extends Component {
 
     props.history.listen(() => {
       const user = JSON.parse(localStorage.getItem("accessToken"));
-      console.log(`user`, user)
+      console.log(`user`, user);
       if (user) {
         const decodedJwt = parseJwt(user.accessToken);
 
@@ -34,9 +34,9 @@ class AuthVerify extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        logOut: () => dispatch(logOutCall()),
-    };
+  return {
+    logOut: () => dispatch(logOutCall()),
   };
+};
 
-export default connect(null,mapDispatchToProps)( withRouter(AuthVerify));
+export default connect(null, mapDispatchToProps)(withRouter(AuthVerify));

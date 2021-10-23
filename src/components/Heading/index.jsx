@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { HeadingStyle } from "../../layouts/common";
-import { connect } from "react-redux";
 
 function Heading({ title, color,button }) {
   return (
@@ -14,13 +13,9 @@ function Heading({ title, color,button }) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    socket: state.socket
-  };
-};
 
-export default connect(mapStateToProps)(Heading);
+
+export default Heading;
 
 
 const HeadingContainer = styled.div`

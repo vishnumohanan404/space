@@ -1,12 +1,9 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import Avatar from "../../components/Avatar";
-// import Heading from "../../components/Heading";
+import { Switch } from "@material-ui/core";
 import { UserNameText } from "../common";
-import {
-  IoCall,
-  IoChatbubble,
-} from "react-icons/io5";
+import { IoCall, IoChatbubble } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import {
@@ -17,20 +14,24 @@ import {
   setMessageSuccess,
   setOpenChat,
 } from "../../redux/chat/chatActions";
+import Heading from "../../components/Heading";
+import { setActive } from "../../redux";
+import Chat from "../Chat";
 
 function Conversations() {
   const { friendsConversations } = useSelector((state) => state.conversations);
   const { openChat } = useSelector((state) => state.conversations);
   const { user } = useSelector((state) => state.user);
   const socket = useSelector((state) => state.socket);
+  // const { openChat } = useSelector((state) => state.conversations);
   const dispatch = useDispatch();
-  
+  console.log("conversations rendered");
   useEffect(() => {
     dispatch(getUserChatFriends());
     return async () => {
       await dispatch(clearConversations());
     };
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -66,59 +67,81 @@ function Conversations() {
     dispatch(setConvo(conversation));
   };
 
-  return (
-    <Container>
-      {friendsConversations.map((friend, index) => (
-        <React.Fragment key={index}>
-          <UserProfileContainer
-            onClick={(e) => {
-              e.stopPropagation();
-              return handleConversation(friend);
-            }}
-          >
-            <LeftSide>
-              <Avatar src={friend.avatar} />
-              <div>
-                <UserNameText>
-                  {friend.fullName}{" "}
-                  <span>{friend.active ? "Online" : "Offline"}</span>
-                </UserNameText>
-                {friend.conversation && (
-                  <LastText>
-                    <LastMsg>
-                      {friend.conversation.author === user._id
-                        ? "Me"
-                        : friend.fullName}
-                      {"  "}:{"  "}
-                      {friend.conversation.text}
-                    </LastMsg>
-                  </LastText>
-                )}
-              </div>
-            </LeftSide>
-            <RightSide>
-              <IonicContainer onClick={(e) => e.stopPropagation()}>
-                <IoCall style={IonicStyle} size={20} />
-              </IonicContainer>
+  const handleActive = () => {
+    dispatch(setActive(!user.online));
+  };
 
-              <IonicContainer
-                onClick={(e) => {
-                  e.stopPropagation();
-                  return handleConversation(friend);
-                }}
-              >
-                <IoChatbubble style={IonicStyle} size={20} />
-              </IonicContainer>
-            </RightSide>
-          </UserProfileContainer>
-          <Hr />
-        </React.Fragment>
-      ))}
-    </Container>
+  return (
+    <>
+      <Heading
+        title={"Conversations"}
+        color={"#626262"}
+        href={"#"}
+        button={
+          <Switch
+            checked={user.online}
+            onChange={handleActive}
+            inputProps={{ "aria-label": "controlled" }}
+            color="primary"
+          />
+        }
+      />
+      <Container>
+        {friendsConversations.map((friend, index) => (
+          <React.Fragment key={index}>
+            <UserProfileContainer
+              onClick={(e) => {
+                e.stopPropagation();
+                return handleConversation(friend);
+              }}
+            >
+              <LeftSide>
+                <Avatar src={friend.avatar} />
+                <div>
+                  <UserNameText>
+                    {friend.fullName}{" "}
+                    <span>{friend.active ? "Online" : "Offline"}</span>
+                  </UserNameText>
+                  {friend.conversation && (
+                    <LastText>
+                      <LastMsg>
+                        {friend.conversation.author === user._id
+                          ? "Me"
+                          : friend.fullName}
+                        {"  "}:{"  "}
+                        {friend.conversation.text}
+                      </LastMsg>
+                    </LastText>
+                  )}
+                </div>
+              </LeftSide>
+              <RightSide>
+                <IonicContainer onClick={(e) => e.stopPropagation()}>
+                  <IoCall style={IonicStyle} size={20} />
+                </IonicContainer>
+
+                <IonicContainer
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    return handleConversation(friend);
+                  }}
+                >
+                  <IoChatbubble style={IonicStyle} size={20} />
+                </IonicContainer>
+              </RightSide>
+            </UserProfileContainer>
+            <Hr />
+          </React.Fragment>
+        ))}
+      </Container>
+      {openChat && <Chat />}
+    </>
   );
 }
 
 export default Conversations;
+
+
 
 const LastText = styled.div`
   display: inline;

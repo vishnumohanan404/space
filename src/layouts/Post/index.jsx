@@ -29,18 +29,19 @@ import BasicMenu from "../../components/BasicMenu";
 
 const postIcons = { width: "18px", marginRight: "10px" };
 
-function Post({
-  postData,
-  fetchPosts,
-  isLoading = postData?.isLoading,
-  progress,
-}) {
+function Post({ fetchPosts, progress, postData }) {
   const [toggleComment, setToggleComment] = useState([]);
   const formatter = buildFormatter(frenchStrings);
   const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
   const socket = useSelector((state) => state.socket);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
+  const post = useSelector((state) => state.posts);
+  if (!postData) {
+    postData = post;
+  }
+  const isLoading = postData?.isLoading;
+  console.log("Post rendered");
 
   useEffect(() => {
     fetchPosts();

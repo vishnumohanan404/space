@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { acceptRequest, rejectRequest, updateUser } from "../../redux/";
 // import { NoValueHeader } from "../common";
 import { Link } from "react-router-dom";
+import Heading from "../../components/Heading";
 
 function Request() {
   const { user } = useSelector((state) => state.user);
@@ -16,7 +17,6 @@ function Request() {
   useEffect(() => {
     // console.log(`socket`, socket);
     if (socket) {
-      console.log("socket exist");
       socket.on("REQUEST_SENT_TO_CLIENT", (newUser) => {
         console.log(`REQUEST_SENT_TO_CLIENT`, newUser);
         dispatch(updateUser(newUser));
@@ -34,37 +34,59 @@ function Request() {
   };
 
   return (
-    <RequestContainer>
-      <Link to={`profile/${user.requestDetails[0]?._id}`} style={{textDecoration:'none',color:'black'}}>
-        <UserCard>
-          <img
-            src="https://avatars.dicebear.com/api/human/vidshnu.svg"
-            alt="thumbnail"
-          ></img>
-          <h4>{user.requestDetails[0]?.fullName}</h4>
-          {/* <p>No mutual friends</p> */}
-        </UserCard>
-      </Link>
-      <RightSide>
-        <CircularContainer
-          style={{ backgroundColor: "#a3e97484" }}
-          onClick={() => handleAccept(user.requestDetails[0]._id)}
-        >
-          <IoCheckmarkOutline />
-        </CircularContainer>
-        <CircularContainer
-          style={{ backgroundColor: "#e9747484" }}
-          onClick={() => handleReject(user.requestDetails[0]._id)}
-        >
-          <IoCloseOutline />
-        </CircularContainer>
-      </RightSide>
-    </RequestContainer>
+    <>
+      <Heading title={"Requests"} color={"#626262"} />
+      {!!user.friendRequests.length ? (
+        <RequestContainer>
+          <Link
+            to={`profile/${user.requestDetails[0]?._id}`}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <UserCard>
+              <img
+                src="https://avatars.dicebear.com/api/human/vidshnu.svg"
+                alt="thumbnail"
+              ></img>
+              <h4>{user.requestDetails[0]?.fullName}</h4>
+              {/* <p>No mutual friends</p> */}
+            </UserCard>
+          </Link>
+          <RightSide>
+            <CircularContainer
+              style={{ backgroundColor: "#a3e97484" }}
+              onClick={() => handleAccept(user.requestDetails[0]._id)}
+            >
+              <IoCheckmarkOutline />
+            </CircularContainer>
+            <CircularContainer
+              style={{ backgroundColor: "#e9747484" }}
+              onClick={() => handleReject(user.requestDetails[0]._id)}
+            >
+              <IoCloseOutline />
+            </CircularContainer>
+          </RightSide>
+        </RequestContainer>
+      ) : (
+        <NoRequestContainer>
+          <h4>No Friend Requests</h4>
+        </NoRequestContainer>
+      )}
+    </>
   );
 }
 
 export default Request;
 
+const NoRequestContainer = styled.div`
+  display: flex;
+  margin: 10px 0;
+  border-radius: 10px;
+  min-height: 30px;
+  justify-content: center;
+  h4 {
+    margin: 8px 0;
+  }
+`;
 const RequestContainer = styled.div`
   display: flex;
   font-size: 14px;

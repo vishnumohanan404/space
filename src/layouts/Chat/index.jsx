@@ -39,7 +39,7 @@ function Chat() {
     return () => {
       dispatch(clearChat());
     };
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleClose = (e) => {
@@ -66,126 +66,148 @@ function Chat() {
     dispatch(setOpenBubble(!openBubble));
   };
   return (
-    <div>
-      <ChatHeader>
-        <UserAvatar onClick={handleBubble}>
-          <Link to={`/profile/${conversation._id}`}>
-            <ImageContainer active={conversation.active}>
-              <img src={conversation.avatar} height="35" width="35" alt="" />
-            </ImageContainer>
-          </Link>
-          <UserStatusInfo>
+    <ChatBubble active={openBubble}>
+      <div>
+        <ChatHeader>
+          <UserAvatar onClick={handleBubble}>
             <Link to={`/profile/${conversation._id}`}>
-              <button>{conversation.fullName}</button>
+              <ImageContainer active={conversation.active}>
+                <img src={conversation.avatar} height="35" width="35" alt="" />
+              </ImageContainer>
             </Link>
-          {conversation.active &&  <p>Active now</p> }
-          </UserStatusInfo>
-        </UserAvatar>
-        <ChatComm active={openBubble}>
-          <nav>
-            <button>
-              <IoVideocam
-                onMouseOver={({ target }) => (target.style.color = "#069")}
-                onMouseOut={({ target }) => (target.style.color = "#BEC2C9")}
-                style={IonicStyle}
-                size={20}
-              />
-            </button>
-            <button>
-              <IoCall
-                onMouseOver={({ target }) => (target.style.color = "#069")}
-                onMouseOut={({ target }) => (target.style.color = "#BEC2C9")}
-                style={IonicStyle}
-                size={20}
-              />
-            </button>
-            <button onClick={handleBubble}>
-              <IoRemoveOutline
-                onMouseOver={({ target }) => (target.style.color = "#069")}
-                onMouseOut={({ target }) => (target.style.color = "#BEC2C9")}
-                style={IonicStyle}
-                size={20}
-              />
-            </button>
-            <button onClick={handleClose}>
-              <IoClose
-                onMouseOver={({ target }) => (target.style.color = "#cc16169e")}
-                onMouseOut={({ target }) => (target.style.color = "#BEC2C9")}
-                style={IonicStyle}
-                size={20}
-              />
-            </button>
-          </nav>
-        </ChatComm>
-      </ChatHeader>
-      <ChatBody>
-        {chat &&
-          chat.map((message) => (
-            <React.Fragment key={message._id}>
-              {message.recipient === user._id ? (
-                <div>
-                  <SenderOther>
-                    <OtherMessage>{message.text}</OtherMessage>
-                  </SenderOther>
-                  <SeenAt>
-                    {new Date(message.createdAt).toLocaleDateString("en-US", {
-                      hour: "numeric",
-                      minute: "numeric",
-                    })}
-                  </SeenAt>
-                </div>
-              ) : (
-                <SenderMe>
-                  <MyMessage>{message.text}</MyMessage>
-                  {message.read ? (
-                    <IoCheckmarkDone style={IonicCheckmarkRead} />
-                  ) : (
-                    <IoCheckmarkDone style={IonicCheckmark} />
-                  )}
-                  <SeenAt>
-                    {message.read && "Seen "}
-                    {new Date(message.createdAt).toLocaleDateString("en-US", {
-                      hour: "numeric",
-                      minute: "numeric",
-                    })}
-                  </SeenAt>
-                </SenderMe>
-              )}
-            </React.Fragment>
-          ))}
-      </ChatBody>
-      <ChatFooter>
-        <input
-          type="textarea"
-          value={message}
-          placeholder="Type a message..."
-          onChange={handleText}
-          onKeyPress={handleSubmit}
-        />
-        <ChatMedia>
-          <nav>
+            <UserStatusInfo>
+              <Link to={`/profile/${conversation._id}`}>
+                <button>{conversation.fullName}</button>
+              </Link>
+              {conversation.active && <p>Active now</p>}
+            </UserStatusInfo>
+          </UserAvatar>
+          <ChatComm active={openBubble}>
+            <nav>
+              <button>
+                <IoVideocam
+                  onMouseOver={({ target }) => (target.style.color = "#069")}
+                  onMouseOut={({ target }) => (target.style.color = "#BEC2C9")}
+                  style={IonicStyle}
+                  size={20}
+                />
+              </button>
+              <button>
+                <IoCall
+                  onMouseOver={({ target }) => (target.style.color = "#069")}
+                  onMouseOut={({ target }) => (target.style.color = "#BEC2C9")}
+                  style={IonicStyle}
+                  size={20}
+                />
+              </button>
+              <button onClick={handleBubble}>
+                <IoRemoveOutline
+                  onMouseOver={({ target }) => (target.style.color = "#069")}
+                  onMouseOut={({ target }) => (target.style.color = "#BEC2C9")}
+                  style={IonicStyle}
+                  size={20}
+                />
+              </button>
+              <button onClick={handleClose}>
+                <IoClose
+                  onMouseOver={({ target }) =>
+                    (target.style.color = "#cc16169e")
+                  }
+                  onMouseOut={({ target }) => (target.style.color = "#BEC2C9")}
+                  style={IonicStyle}
+                  size={20}
+                />
+              </button>
+            </nav>
+          </ChatComm>
+        </ChatHeader>
+        <ChatBody>
+          {chat &&
+            chat.map((message) => (
+              <React.Fragment key={message._id}>
+                {message.recipient === user._id ? (
+                  <div>
+                    <SenderOther>
+                      <OtherMessage>{message.text}</OtherMessage>
+                    </SenderOther>
+                    <SeenAt>
+                      {new Date(message.createdAt).toLocaleDateString("en-US", {
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}
+                    </SeenAt>
+                  </div>
+                ) : (
+                  <SenderMe>
+                    <MyMessage>{message.text}</MyMessage>
+                    {message.read ? (
+                      <IoCheckmarkDone style={IonicCheckmarkRead} />
+                    ) : (
+                      <IoCheckmarkDone style={IonicCheckmark} />
+                    )}
+                    <SeenAt>
+                      {message.read && "Seen "}
+                      {new Date(message.createdAt).toLocaleDateString("en-US", {
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}
+                    </SeenAt>
+                  </SenderMe>
+                )}
+              </React.Fragment>
+            ))}
+        </ChatBody>
+        <ChatFooter>
+          <input
+            type="textarea"
+            value={message}
+            placeholder="Type a message..."
+            onChange={handleText}
+            onKeyPress={handleSubmit}
+          />
+          <ChatMedia>
+            <nav>
+              <span>
+                <IoImage style={IonicFooterIcons} />
+              </span>
+              <span>
+                <IoHappyOutline style={IonicFooterIcons} />
+              </span>
+              <span>
+                <IoCamera style={IonicFooterIcons} />
+              </span>
+            </nav>
             <span>
-              <IoImage style={IonicFooterIcons} />
+              <IoThumbsUp style={IonicFooterIcons} />
             </span>
-            <span>
-              <IoHappyOutline style={IonicFooterIcons} />
-            </span>
-            <span>
-              <IoCamera style={IonicFooterIcons} />
-            </span>
-          </nav>
-          <span>
-            <IoThumbsUp style={IonicFooterIcons} />
-          </span>
-        </ChatMedia>
-      </ChatFooter>
-    </div>
+          </ChatMedia>
+        </ChatFooter>
+      </div>
+    </ChatBubble>
   );
 }
 
 export default Chat;
 
 const IonicFooterIcons = { width: "18px", color: "#bec2c9" };
+
+const ChatBubble = styled.div`
+  height: 55px;
+  overflow: hidden;
+  min-width: 320px;
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+  right: 405px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border: 1px solid #e4e4e4;
+  ${({ active }) =>
+    active &&
+    `
+    min-height:350px
+    `}
+`;
 
 const ChatMedia = styled.div`
   display: flex;
@@ -300,9 +322,12 @@ const ImageContainer = styled.div`
     content: "";
     width: 10px;
     height: 10px;
-    ${({ active }) => active ? `
+    ${({ active }) =>
+      active
+        ? `
     background-color: #1ba71b;
-  ` :`
+  `
+        : `
   background-color: #a8a4a4c9;
   
   `}
@@ -357,7 +382,6 @@ const ChatComm = styled.div`
     display: none;
   `}
 `;
-
 
 const IonicStyle = {
   width: "22px",

@@ -6,12 +6,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import { IoClose } from "react-icons/io5";
 import styled from "styled-components";
 
-// const useStyles = makeStyles({
-//   dialog: {
-//       overflowY: "scroll"
-//   },
-// });
-
 const BootstrapDialog = Style(Dialog)(({ theme }) => ({
   "& .MuDialogContent-root": {
     padding: theme.spacing(0),
@@ -28,17 +22,7 @@ const BootstrapDialogTitle = (props) => {
     <IntroText sx={{ m: 0, p: 0 }} {...other}>
       {children}
       {onClose ? (
-        <div
-          aria-label="close"
-          onClick={onClose}
-          // sx={{
-          //   position: "absolute",
-          //   right: 1,
-          //   top: 1,
-          //   padding: 0,
-          //   color: (theme) => theme.palette.grey[500],
-          // }}
-        >
+        <div aria-label="close" onClick={onClose}>
           <IoClose />
         </div>
       ) : null}
@@ -63,6 +47,8 @@ export default function CustomizedDialogs({
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
+        maxWidth={false}
+        // classes={{ paper: classes.root }}
       >
         <BootstrapDialogTitle
           id="customized-dialog-title"
