@@ -6,7 +6,6 @@ import { DeviceSize } from "../../constants/responsive";
 import SearchBar from "../../components/SearchBar";
 import Accessibility from "./accessibility";
 import { MobileNavLinks } from "./mobileNavLinks";
-import Notifications from "../../components/Notifications";
 // import { NavLinks } from "./NavLinks";
 
 export function Navbar(props) {
@@ -21,9 +20,9 @@ export function Navbar(props) {
         </span>
       </AnnouncementBar>
       <NavBarContainer>
-        <LeftSection>
+        {!isMobile && <LeftSection>
           <Logo />
-        </LeftSection>
+        </LeftSection>}
         <MiddleSection>
           {/* {!isMobile && <NavLinks />} */}
           <SearchContainer>
