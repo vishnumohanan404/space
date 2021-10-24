@@ -3,12 +3,7 @@ import styled from "styled-components";
 import Avatar from "../../components/Avatar";
 import ProgressBar from "../../components/ProgressBar";
 import { LoadingWrapper, UserNameText } from "../common";
-import {
-  IoCameraOutline,
-  IoImageOutline,
-  IoHappyOutline,
-  IoCloseOutline,
-} from "react-icons/io5";
+import { IoHappy, IoCloseOutline } from "react-icons/io5";
 import { connect } from "react-redux";
 import { addPost } from "../../redux";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -18,18 +13,13 @@ import ReactPlayer from "react-player";
 import { Marginer } from "../../components/Marginer";
 import { validateFiles, fnGetExtension } from "../../utils/writePostUtils";
 import CustomizedDialogs from "../../components/Dialog";
+import { FcAddImage, FcCompactCamera } from "react-icons/fc";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const IconStyle = { marginRight: "7", width: "30px", size: "50px" };
 
-function WritePost({
-  postData,
-  addPost,
-  userData,
-  user = userData.user,
-  isLoading = postData?.addPostLoading,
-  progress = postData?.progress,
-  margin,
-}) {
+function WritePost({ margin }) {
   const [status, setStatus] = useState({ postContent: "" });
   const [imagePreview, setImagePreview] = useState([]);
   const [formData, setFormData] = useState({});
@@ -37,7 +27,14 @@ function WritePost({
   const [videoPreview, setVideoPreview] = useState([]);
   const fileInput = useRef();
   const [videoPlayer, setVideoPlayer] = useState("");
-
+  // redux states
+  const postData = useSelector((state) => state.posts);
+  const { user } = useSelector((state) => state.user);
+  const isLoading = postData?.addPostLoading;
+  const progress = postData?.progress;
+  // redux dispatch
+  const dispatch = useDispatch();
+  // render
   console.log("Write post rendered");
 
   let form = new FormData();
@@ -135,7 +132,7 @@ function WritePost({
       });
     if (!_.isEmpty(formData) || status.postContent.length > 0) {
       form.append("postContent", status.postContent);
-      addPost(form);
+      dispatch(addPost(form));
     }
     e.target.reset();
   };
@@ -185,15 +182,18 @@ function WritePost({
                 style={{ display: "none" }}
               />
               <label onClick={() => fileInput.current.click()}>
-                <IoImageOutline style={IconStyle} />
+                <FcAddImage style={IconStyle} size={40} />
                 Add Medias
               </label>
               <label href="#2">
-                <IoCameraOutline style={IconStyle} />
-                Capture Images
+                <FcCompactCamera style={IconStyle} size={40} />
+                Capture
               </label>
               <label href="#1">
-                <IoHappyOutline style={IconStyle} />
+                <IoHappy
+                  style={{ ...IconStyle, color: " RGB(255,222,52)" }}
+                  size={40}
+                />
                 Feelings
               </label>
               <Button>
@@ -202,7 +202,7 @@ function WritePost({
                     <ClipLoader loading color="#fff" size={20} />
                   </LoadingWrapper>
                 ) : (
-                  "Post"
+                  "POST"
                 )}
               </Button>
             </AddPostLinksContainer>
@@ -255,7 +255,9 @@ function WritePost({
                     >
                       <IoCloseOutline />
                     </DeleteButton>
-                    <VideoPreview src={src} alt="videoPreviews" key={src} />
+                    <VideoPreview src={src} alt="videoPreviews" key={src}>
+                      <source src={src} type="audio/ogg" />
+                    </VideoPreview>
                   </VideoContainer>
                 ))}
             </PreviewRow>
@@ -280,7 +282,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WritePost);
-
 
 const WritePostContainer = styled.div`
   width: 100%;
@@ -342,27 +343,37 @@ const AddPostLinksContainer = styled.div`
 `;
 
 const PreviewRow = styled.div`
-  width: 100%;
+  /* width: 100%; */
   display: flex;
   flex-direction: row;
 `;
 
 const Button = styled.button`
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 800;
   font-family: "Poppins", sans-serif;
-  height: 30px;
-  width: 70px;
+  height: 40px;
+  width: 80px;
   border-radius: 30px;
   border: none;
   box-shadow: 1px 1px 0px 2px rgba (0, 0, 0, 0.3);
-  background: rgb(141, 217, 252);
+  background: #6262625c;
   cursor: pointer;
-  color: #626262;
+  color: #4e4e4ec3;
+  transition: 0.8s;
+  transition-property: background, color, transform;
+  :hover {
+    background: rgb(141, 217, 252);
+    color: #626262;
+    transform: scale(1.03);
+  }
 `;
 
 const Preview = styled.img`
+  display: block;
   margin: 15px 15px 15px 0;
   height: 7rem;
+  min-width: 7rem;
   object-fit: cover;
   flex: 0 0 100px;
   border-radius: 4px;

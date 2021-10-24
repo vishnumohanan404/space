@@ -17,9 +17,6 @@ const LazyHome = React.lazy(() => import("./pages/Home"));
 const LazyProfile = React.lazy(() => import("./pages/Profile"));
 const LazySinglePost = React.lazy(() => import("./pages/SinglePost"));
 const LazyConversations = React.lazy(() => import("./pages/Conversations"));
-// const LazyNavRouter = React.lazy(() =>
-//   import("./components/NavRouter/NavRouter")
-// );
 
 function App() {
   const dispatch = useDispatch();

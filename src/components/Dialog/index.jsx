@@ -42,7 +42,6 @@ export default function CustomizedDialogs({
   handleClose,
 }) {
   return (
-    <Header>
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
@@ -58,7 +57,6 @@ export default function CustomizedDialogs({
         </BootstrapDialogTitle>
         <DialogContent dividers>{children}</DialogContent>
       </BootstrapDialog>
-    </Header>
   );
 }
 
@@ -82,8 +80,4 @@ const IntroText = styled.h6`
       cursor: pointer;
     }
   }
-`;
-
-const Header = styled.div`
-  /* overflow-x: scroll !important; */
 `;

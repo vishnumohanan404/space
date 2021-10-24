@@ -1,23 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-  IoChatbubble,
-  IoPersonAddOutline,
-  IoPencil,
-} from "react-icons/io5";
+import { IoChatbubble, IoPersonAddOutline, IoPencil } from "react-icons/io5";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { friendRequest } from "../../redux/user/UserAction";
 import { unfriend } from "../../redux";
 import ClipLoader from "react-spinners/ClipLoader";
-import Modal from "../Modal";
-import { useClickOutside } from "react-click-outside-hook";
 import { useRef } from "react";
 import Crop from "../../components/Cropper";
-import {
-  setConvo,
-  setOpenChat,
-} from "../../redux/chat/chatActions";
+import { setConvo, setOpenChat } from "../../redux/chat/chatActions";
 import CustomizedDialogs from "../../components/Dialog";
 
 function ProfileDetails({ friendRequest, profiles, handleClickOpen, ...rest }) {
@@ -27,6 +18,7 @@ function ProfileDetails({ friendRequest, profiles, handleClickOpen, ...rest }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.userProfile);
   const { request } = useSelector((state) => state.profile);
+  // eslint-disable-next-line no-unused-vars
   const [toggle, setToggle] = useState(false);
   const [modal, setModal] = useState();
   const fileInput = useRef();
@@ -49,21 +41,6 @@ function ProfileDetails({ friendRequest, profiles, handleClickOpen, ...rest }) {
     dispatch(unfriend(id, socket));
   };
 
-  // Modal for avatar
-  const openModal = (src) => {
-    setModal(src);
-    setToggle(true);
-  };
-
-  const closeContainer = () => {
-    setToggle(false);
-  };
-
-  const [parentRef, isClickedOutside] = useClickOutside();
-  // const [modalRef, isClickedOutsideModal] = useClickOutside();
-  useEffect(() => {
-    closeContainer();
-  }, [isClickedOutside]);
 
   // cropper
   const onInputChange = (e) => {
@@ -84,8 +61,17 @@ function ProfileDetails({ friendRequest, profiles, handleClickOpen, ...rest }) {
     }
     setOpen(true);
   };
-
+  // Dialog
   const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClickOpenAvatar = (src) => {
+    setModal(src);
+    setOpen(true);
+  };
 
   // chat in profile
 
@@ -105,7 +91,6 @@ function ProfileDetails({ friendRequest, profiles, handleClickOpen, ...rest }) {
     dispatch(setConvo(conversation[0]));
   };
 
-
   return (
     <>
       <input
@@ -116,16 +101,14 @@ function ProfileDetails({ friendRequest, profiles, handleClickOpen, ...rest }) {
         onChange={onInputChange}
         accept="image/*"
       />
-      <Modal
-        isOpen={toggle}
-        setOpen={setToggle}
-        closeContainer={closeContainer}
-        parentRef={parentRef}
-        isClickedOutside={isClickedOutside}
-      >
-        <img src={modal} alt="" height="500px" width="500px" />
-      </Modal>
       <div className="pd-left">
+        <CustomizedDialogs
+          open={open}
+          title={"Avatar"}
+          handleClose={handleClose}
+        >
+          <img src={modal} alt="" height="500px" width="500px" />
+        </CustomizedDialogs>
         {inputImg && (
           <CropperContainer>
             <CustomizedDialogs
@@ -150,7 +133,8 @@ function ProfileDetails({ friendRequest, profiles, handleClickOpen, ...rest }) {
             src={user.avatar}
             onClick={(e) => {
               e.stopPropagation();
-              return openModal(user.avatar);
+              // openModal(user.avatar);
+              handleClickOpenAvatar(user.avatar);
             }}
           ></ProfileImage>
           <div>
