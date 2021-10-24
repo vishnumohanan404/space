@@ -2,7 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-### [LIVE](https://google.com)
+### [LIVE](https://elated-northcutt-8d3f74.netlify.app/)
 
 ## Motivation
 

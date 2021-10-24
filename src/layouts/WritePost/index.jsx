@@ -4,7 +4,6 @@ import Avatar from "../../components/Avatar";
 import ProgressBar from "../../components/ProgressBar";
 import { LoadingWrapper, UserNameText } from "../common";
 import { IoHappy, IoCloseOutline } from "react-icons/io5";
-import { connect } from "react-redux";
 import { addPost } from "../../redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import _ from "lodash";
@@ -268,20 +267,7 @@ function WritePost({ margin }) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    postData: state.posts,
-    userData: state.user,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addPost: (data) => dispatch(addPost(data)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(WritePost);
+export default WritePost;
 
 const WritePostContainer = styled.div`
   width: 100%;
