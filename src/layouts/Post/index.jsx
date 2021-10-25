@@ -7,7 +7,7 @@ import { useMediaQuery } from "react-responsive";
 import { DeviceSize } from "../../constants/responsive";
 import Request from "../Request";
 import { deletePost, fetchPosts, likePostSuccess } from "../../redux";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
 import TimeAgo from "react-timeago";
 import frenchStrings from "react-timeago/lib/language-strings/en";
@@ -15,38 +15,35 @@ import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 import PostCarousel from "../../components/PostCarousel";
 import { Marginer } from "../../components/Marginer";
 import PostLikes from "../../components/PostActions/PostLikes";
-// import PostComments from "../../components/PostActions/PostComments";
 import CommentComponent from "../../components/CommentComponent";
 import { Link } from "react-router-dom";
 import BasicMenu from "../../components/BasicMenu";
-// import Comments from "../../components/Comments";
-
-// const CommentsContainer = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   width: 100%;
-// `;
 
 const postIcons = { width: "18px", marginRight: "10px" };
 
-function Post({ fetchPosts, progress, postData }) {
+function Post({ postData }) {
+  // ui
   const [toggleComment, setToggleComment] = useState([]);
   const formatter = buildFormatter(frenchStrings);
   const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
-  const socket = useSelector((state) => state.socket);
+
+  // redux
   const dispatch = useDispatch();
+  const socket = useSelector((state) => state.socket);
   const { user } = useSelector((state) => state.user);
   const post = useSelector((state) => state.posts);
+  const isLoading = postData?.isLoading;
+
   if (!postData) {
     postData = post;
   }
-  const isLoading = postData?.isLoading;
+
+
   console.log("Post rendered");
 
   useEffect(() => {
-    fetchPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    dispatch(fetchPosts())
+  }, [dispatch]);
 
   useEffect(() => {
     if (socket) {
@@ -152,20 +149,8 @@ function Post({ fetchPosts, progress, postData }) {
   );
 }
 
-// const mapStateToProps = (state) => {
-//   return {
-//     postData: state.posts,
-//   };
-// };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchPosts: () => dispatch(fetchPosts()),
-    // fetchProfile: ()=>dispatch()
-  };
-};
-
-export default connect(null, mapDispatchToProps)(Post);
+export default Post;
 
 // const Options = styled.div`
 //   padding: 1rem;

@@ -25,7 +25,7 @@ function Conversations() {
   const socket = useSelector((state) => state.socket);
   // const { openChat } = useSelector((state) => state.conversations);
   const dispatch = useDispatch();
-  console.log("conversations rendered");
+  // console.log("Conversations rendered");
   useEffect(() => {
     dispatch(getUserChatFriends());
     return async () => {

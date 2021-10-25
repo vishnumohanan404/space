@@ -7,6 +7,7 @@ import SocketReducer from "./socket/SocketReducer";
 import ChatReducer from "./chat/chatReducer";
 import NotificationReducer from "./notifications/NotificationReducer";
 import SinglePost from "./singlePost/singleReducer";
+import { WritePostReducer } from "./UIReducers/WritePost";
 
 const rootReducer = combineReducers({
   posts: PostReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   conversations: ChatReducer,
   notification: NotificationReducer,
   singlePost: SinglePost,
+  writePostUI: WritePostReducer
 });
 
 export default rootReducer;

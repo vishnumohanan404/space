@@ -1,19 +1,11 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import { styled as Style } from "@material-ui/core/styles";
 import { Dialog } from "@material-ui/core";
 import DialogContent from "@material-ui/core/DialogContent";
 import { IoClose } from "react-icons/io5";
 import styled from "styled-components";
 
-const BootstrapDialog = Style(Dialog)(({ theme }) => ({
-  "& .MuDialogContent-root": {
-    padding: theme.spacing(0),
-  },
-  "& .MuDialogActions-root": {
-    padding: theme.spacing(0),
-  },
-}));
+
 
 const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;
@@ -35,16 +27,15 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function CustomizedDialogs({
+export default React.memo(function CustomizedDialogs({
   children,
   open,
   title,
   handleClose,
 }) {
   return (
-      <BootstrapDialog
+      <Dialog
         onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
         open={open}
         maxWidth={false}
         // classes={{ paper: classes.root }}
@@ -56,9 +47,9 @@ export default function CustomizedDialogs({
           {title}
         </BootstrapDialogTitle>
         <DialogContent dividers>{children}</DialogContent>
-      </BootstrapDialog>
+      </Dialog>
   );
-}
+})
 
 const IntroText = styled.h6`
   text-align: center;

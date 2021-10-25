@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Avatar from "../../components/Avatar";
 import ProgressBar from "../../components/ProgressBar";
@@ -27,23 +27,25 @@ function WritePost({ margin }) {
   const fileInput = useRef();
   const [videoPlayer, setVideoPlayer] = useState("");
   // redux states
-  const postData = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.user);
-  const isLoading = postData?.addPostLoading;
-  const progress = postData?.progress;
+  const {addPostLoading, progress} = useSelector(state => state.writePostUI)
+  const isLoading = addPostLoading
   // redux dispatch
   const dispatch = useDispatch();
   // render
   console.log("Write post rendered");
-
+  
   let form = new FormData();
   let formArray;
 
   useEffect(() => {
+    console.log("Wrtiepost-useeffect-1");
     let files = newFormData;
     if (files.length > 2) {
+      console.log("useEffec-1 if-case");
       alert("You can select only 2 files");
     } else if (validateFiles(files)) {
+      console.log("useEffec-1 else-case");
       _.forEach(files, (file) => {
         const fileType = fnGetExtension(file);
         switch (fileType) {
@@ -67,6 +69,7 @@ function WritePost({ margin }) {
   }, [newFormData]);
 
   useEffect(() => {
+    console.log("Wrtiepost-useeffect-2");
     if (progress === 100) {
       setFormData({});
       setNewFormData({});
@@ -81,7 +84,7 @@ function WritePost({ margin }) {
       setFormData({});
       setStatus({ postContent: "" });
     }
-  }, [postData]);
+  }, [addPostLoading]);
 
   const handleFileChange = (event) => {
     let { files } = event.target;
@@ -146,18 +149,17 @@ function WritePost({ margin }) {
   const handleClickOpen = () => {
     setOpen(true);
   };
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpen(false);
-  };
+  },[]);
   return (
     <>
       <CustomizedDialogs
         open={open}
         title={"Preview"}
         handleClose={handleClose}
-      >
-        <ReactPlayer url={videoPlayer} controls={true} />
-      </CustomizedDialogs>
+        children={<ReactPlayer url={videoPlayer} controls={true} />}
+      />
       <WritePostContainer style={margin}>
         <PostForm onSubmit={handleSubmit}>
           <UserProfileContainer>
