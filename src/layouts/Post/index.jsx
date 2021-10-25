@@ -32,11 +32,10 @@ function Post({ postData }) {
   const socket = useSelector((state) => state.socket);
   const { user } = useSelector((state) => state.user);
   const post = useSelector((state) => state.posts);
-  const isLoading = postData?.isLoading;
-
   if (!postData) {
     postData = post;
   }
+  const isLoading = postData?.isLoading;
 
 
   console.log("Post rendered");
