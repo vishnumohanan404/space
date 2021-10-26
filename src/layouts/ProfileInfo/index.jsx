@@ -19,7 +19,7 @@ function ProfileInfo({ user, handleClickOpen }) {
   const [modal, setModal] = useState();
   const [photos, setPhotos] = useState([]);
   const { userProfile } = useSelector((state) => state.profile);
-  const { user:currentUser } = useSelector((state) => state.user);
+  const { user: currentUser } = useSelector((state) => state.user);
   useEffect(() => {
     let photos = [];
     user.userPosts?.forEach((post) => {
@@ -113,9 +113,7 @@ function ProfileInfo({ user, handleClickOpen }) {
               Tell us more about you {<IoAdd />}
             </SayAbout>
           ) : (
-            <NoAbout >
-              Nothing to show
-            </NoAbout>
+            <NoAbout>Nothing to show</NoAbout>
           )}
         </ProfileIntro>
         {photos && photos.length > 0 && (
@@ -176,15 +174,16 @@ export default ProfileInfo;
 
 const InfoCol = styled.div`
   flex-basis: 33%;
+  
 `;
-const NoAbout =styled.div`
-font-size: 16px;
-color: gray;
-display: flex;
-width: 100%;
-justify-content: center;
-padding-top: 10px;
-cursor: inherit ;
+const NoAbout = styled.div`
+  font-size: 16px;
+  color: gray;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  padding-top: 10px;
+  cursor: inherit;
 `;
 const SayAbout = styled.div`
   font-size: 16px;

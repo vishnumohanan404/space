@@ -10,27 +10,42 @@ import { MenuToggle } from "./menuToggle";
 export function MobileNavLinks(props) {
   const [isOpen, setOpen] = useState(false);
   const { user } = useSelector((state) => state.user);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   return (
     <NavLinksContainer>
-      <Notifications/>
+      <Notifications />
       <MenuToggle isOpen={isOpen} toggle={() => setOpen(!isOpen)} />
       {isOpen && (
         <LinksWrapper>
-          <LinkItem>
-            <Link style={LinkStyle} to={`/profile/${user._id}`}>Profile</Link>
+          <LinkItem
+            onClick={() => {
+              console.log("volo");
+              setOpen(false);
+            }}
+          >
+            <Link style={LinkStyle} to={`/profile/${user._id}`}>
+              Profile
+            </Link>
           </LinkItem>
-          <LinkItem>
-            <Link style={LinkStyle} to="/">Home</Link>
+          <LinkItem onClick={() => setOpen(false)}>
+            <Link style={LinkStyle} to="/">
+              Home
+            </Link>
           </LinkItem>
-          <LinkItem>
-            <Link style={LinkStyle} to={'conversations'}>Chat</Link>
+          <LinkItem onClick={() => setOpen(false)}>
+            <Link style={LinkStyle} to={"conversations"}>
+              Chat
+            </Link>
           </LinkItem>
-          <LinkItem>
-            <Link style={LinkStyle}  to={"/"}>Settings</Link>
+          <LinkItem onClick={() => setOpen(false)}>
+            <Link style={LinkStyle} to={"/"}>
+              Settings
+            </Link>
           </LinkItem>
-          <LinkItem>
-            <span style={LinkStyle} onClick={()=>dispatch(logOut())}>Logout</span>
+          <LinkItem onClick={() => setOpen(false)}>
+            <span style={LinkStyle} onClick={() => dispatch(logOut())}>
+              Logout
+            </span>
           </LinkItem>
           <Marginer />
           {/* <Accessibility /> */}
@@ -73,17 +88,17 @@ const LinkItem = styled.li`
   display: flex;
   margin-bottom: 10px;
   justify-content: center;
-  &:focus{
+  &:focus {
     background-color: #ddf3fa;
-    opacity:0;
-    z-index:30;
-    position:fixed;
-    margin-left:249px; 
-    margin-top:-5px; 
-    border:1px solid #000; 
-    width:230px; 
-    height:299px;
-        -webkit-transition: opacity 0.5s ease-in-out;
+    opacity: 0;
+    z-index: 30;
+    position: fixed;
+    margin-left: 249px;
+    margin-top: -5px;
+    border: 1px solid #000;
+    width: 230px;
+    height: 299px;
+    -webkit-transition: opacity 0.5s ease-in-out;
     -moz-transition: opacity 0.5s ease-in-out;
     -ms-transition: opacity 0.5s ease-in-out;
     -o-transition: opacity 0.5s ease-in-out;
@@ -91,9 +106,11 @@ const LinkItem = styled.li`
   }
 `;
 
-const LinkStyle = {textDecoration: "none",
+const LinkStyle = {
+  textDecoration: "none",
   color: "inherit",
-  fontSize: "26px"}
+  fontSize: "26px",
+};
 
 const Marginer = styled.div`
   height: 2em;

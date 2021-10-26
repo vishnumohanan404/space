@@ -34,13 +34,15 @@ function Tabs() {
     return () => {
       dispatch(setTab(0));
     };
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile.userProfile]);
 
   return (
     <TabsContainer>
       {tab === 0 && <Slider tab={tab}></Slider>}
-      <Tab onClick={(e) => handleTab(e.target.innerHTML)}>Posts</Tab>
+      <Tab tab={tab} onClick={(e) => handleTab(e.target.innerHTML)}>
+        Posts
+      </Tab>
       {tab === 1 && <Slider tab={tab}></Slider>}
       <Tab onClick={(e) => handleTab(e.target.innerHTML)}>About</Tab>
       {tab === 2 && <Slider tab={tab}></Slider>}
@@ -73,6 +75,27 @@ const TabsContainer = styled.ul`
   margin-top: 0;
   list-style: none;
   padding: 0;
+  @media only screen and (min-width: 400px) {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    font-size: 13px;
+  }
+  @media only screen and (min-width: 768px) {
+    position: absolute;
+    left: 39.5%;
+    width: 45.5%;
+    top: 32%;
+    font-size: 16px;
+  }
+  @media only screen and (min-width: 992px) {
+    position: absolute;
+    left: 39.5%;
+    width: 45.5%;
+    top: 32%;
+    font-size: 16px;
+  }
 `;
 
 const Tab = styled.li`
@@ -81,6 +104,20 @@ const Tab = styled.li`
   font-family: inherit;
   font-weight: 500;
   cursor: pointer;
+  &:focus-within {
+    border-top: 2px solid #000;
+  }
+  @media only screen and (min-width: 400px) {
+  padding: 0 15px 5px;
+    
+  }
+  @media only screen and (min-width: 768px) {
+    padding: 0 20px 5px;
+
+  }
+  @media only screen and (min-width: 992px) {
+    padding: 0 20px 5px;
+  }
 `;
 
 const Slider = styled.div`
@@ -98,5 +135,30 @@ const Slider = styled.div`
     (props.tab === 1 && "13%") ||
     (props.tab === 2 && "26%") ||
     (props.tab === 3 && "40%") ||
-    (props.tab === 4 && "54%")};
+    (props.tab === 4 && "52%")};
+  @media only screen and (min-width: 400px) {
+    width: 70px;
+    left: ${(props) =>
+      (props.tab === 0 && " 0%") ||
+      (props.tab === 1 && "16%") ||
+      (props.tab === 2 && "36%") ||
+      (props.tab === 3 && "54%") ||
+      (props.tab === 4 && "75%")};
+  }
+  @media only screen and (min-width: 768px) {
+    left: ${(props) =>
+      (props.tab === 0 && " 0%") ||
+      (props.tab === 1 && "13%") ||
+      (props.tab === 2 && "27%") ||
+      (props.tab === 3 && "40%") ||
+      (props.tab === 4 && "54%")};
+  }
+  @media only screen and (min-width: 992px) {
+    left: ${(props) =>
+      (props.tab === 0 && " 0%") ||
+      (props.tab === 1 && "13%") ||
+      (props.tab === 2 && "27%") ||
+      (props.tab === 3 && "40%") ||
+      (props.tab === 4 && "54%")};
+  }
 `;

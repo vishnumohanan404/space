@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import styled from "styled-components";
 import { IoClose, IoSearch } from "react-icons/io5";
 import { AnimatePresence, motion } from "framer-motion";
-// import { useClickOutside } from "react-click-outside-hook";
 import MoonLoader from "react-spinners/MoonLoader";
 import useDebounce from "../../hooks/debounceHook";
 import axios from "axios";
@@ -11,7 +10,6 @@ import useClickOutside from "../../hooks/clickOutsideHook";
 
 export default function SearchBar() {
   const [isExpanded, setExpanded] = useState(false);
-  // const [parentRef, isClickedOutside] = useClickOutside();
   const inputRef = useRef();
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setLoading] = useState(false);
@@ -42,13 +40,6 @@ export default function SearchBar() {
     setNoTvShows(false);
     if (inputRef.current) inputRef.current.value = "";
   };
-
-  // useEffect(() => {
-  //   if (isClickedOutside) {
-  //     // console.log(`isClickedOutside`, isClickedOutside);
-  //     collapseContainer();
-  //   }
-  // }, [isClickedOutside]);
 
   const prepareSearchQuery = (query) => {
     const friendSearchUrl = `${process.env.REACT_APP_API_URL}/search?q=${query}`;

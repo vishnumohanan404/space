@@ -15,10 +15,15 @@ import CustomizedDialogs from "../../components/Dialog";
 import { FcAddImage, FcCompactCamera } from "react-icons/fc";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { useMediaQuery } from "react-responsive";
+import { DeviceSize } from "../../constants/responsive";
 
 const IconStyle = { marginRight: "7", width: "30px", size: "50px" };
 
 function WritePost({ margin }) {
+  // viewport
+  const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
+  // states-ui
   const [status, setStatus] = useState({ postContent: "" });
   const [imagePreview, setImagePreview] = useState([]);
   const [formData, setFormData] = useState({});
@@ -184,18 +189,22 @@ function WritePost({ margin }) {
               />
               <label onClick={() => fileInput.current.click()}>
                 <FcAddImage style={IconStyle} size={40} />
-                Add Medias
+                {!isMobile && "Add Medias"}
               </label>
               <label href="#2">
                 <FcCompactCamera style={IconStyle} size={40} />
-                Capture
+                {!isMobile && "Capture"}
+
+                
               </label>
               <label href="#1">
                 <IoHappy
                   style={{ ...IconStyle, color: " RGB(255,222,52)" }}
                   size={40}
                 />
-                Feelings
+                {!isMobile && "Feelings"}
+
+                
               </label>
               <Button>
                 {isLoading ? (
@@ -280,6 +289,7 @@ const WritePostContainer = styled.div`
   /* margin-top: 1.5%; */
   color: #626262;
   box-shadow: 0px 2px 12px 3px rgba(34, 34, 34, 0.103);
+  overflow-x: hidden;
 `;
 
 const PostForm = styled.form``;
@@ -300,6 +310,9 @@ const UserProfileContainer = styled.div`
 
 const PostInputContainer = styled.div`
   padding-left: 47px;
+  @media only screen and (min-width: 400px) {
+    padding-left: 0;
+  }
   /* padding-top: 10px; */
 `;
 

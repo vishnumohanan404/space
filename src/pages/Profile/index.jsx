@@ -7,7 +7,6 @@ import ProfileDetails from "../../layouts/ProfileDetails";
 import { useParams } from "react-router-dom";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { getProfile, updateProfile } from "../../redux/user/UserAction";
-import { MoonLoader } from "react-spinners";
 import Tabs from "../../layouts/Tabs";
 import Friends from "../../components/Friends";
 import About from "../../components/About";
@@ -17,6 +16,9 @@ import Chat from "../../layouts/Chat";
 import { getUserChatFriends, setOpenChat } from "../../redux/chat/chatActions";
 import CustomizedDialogs from "../../components/Dialog";
 import EditForm from "../../layouts/EditForm";
+import { useMediaQuery } from "react-responsive";
+import { DeviceSize } from "../../constants/responsive";
+import Skeleton from "react-loading-skeleton";
 
 function Profile({
   profile,
@@ -25,6 +27,8 @@ function Profile({
   getProfileData,
   currentUser,
 }) {
+  const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
+
   const { id } = useParams();
   const socket = useSelector((state) => state.socket);
   const profileData = useSelector(
@@ -67,9 +71,8 @@ function Profile({
 
   return (
     <ProfileContainer>
-      {!isLoading ? (
-        <div>
-          {/* { true ?
+      <div>
+        {/* { true ?
             <Cover>
               <CoverImg src="https://images.unsplash.com/photo-1504805572947-34fad45aed93?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"></CoverImg>
               <Overlay>
@@ -80,6 +83,7 @@ function Profile({
               Add a Cover picture
             </Cover>
           } */}
+        {!isLoading ? (
           <ProfileDetailsContainer>
             <ProfileDetails
               user={userProfile}
@@ -92,10 +96,37 @@ function Profile({
               handleClose={handleClose}
             />
           </ProfileDetailsContainer>
+        ) : (
+          <ProfileDetailsContainerLoading>
+            <Skeleton count={4} />
+          </ProfileDetailsContainerLoading>
+        )}
+        {!isLoading ? (
           <Tabs />
-          <ProfileInfoContainer>
-            <ProfileInfo user={userProfile} handleClickOpen={handleClickOpen} />
-            {tab === 0 && (
+        ) : (
+          <TabsContainer>
+            <Skeleton count={1} />
+          </TabsContainer>
+        )}
+        <ProfileInfoContainer>
+          {!isMobile &&
+            (!isLoading ? (
+              <ProfileInfo
+                user={userProfile}
+                handleClickOpen={handleClickOpen}
+              />
+            ) : (
+              <InfoCol>
+                <ProfileIntro>
+                  <Skeleton count={10} />
+                </ProfileIntro>
+                <ProfileIntro>
+                  <Skeleton count={10} />
+                </ProfileIntro>
+              </InfoCol>
+            ))}
+          {tab === 0 &&
+            (!isLoading ? (
               <PostCol>
                 {/* <PostContainer> */}
                 {userProfile._id === currentUser.user._id && <WritePost />}
@@ -104,43 +135,50 @@ function Profile({
                 )}
                 {/* </PostContainer> */}
               </PostCol>
-            )}
-            {tab === 1 && (
-              <PostCol>
-                <About
-                  handleClose={handleClose}
-                  handleClickOpen={handleClickOpen}
-                  open={open}
-                />
-              </PostCol>
-            )}
-            {tab === 2 && (
-              <PostCol>
-                <Friends />
-              </PostCol>
-            )}
-            {tab === 3 && (
-              <PostCol>
-                <Photos />
-              </PostCol>
-            )}
-            {tab === 4 && (
-              <PostCol>
-                <Settings />
-              </PostCol>
-            )}
-          </ProfileInfoContainer>
-          {openChat && (
-            <ChatBubble active={openBubble}>
-              <Chat />
-            </ChatBubble>
+            ) : (
+              <PostColLoading>
+                <PostContainer>
+                  <Skeleton count={8} />
+                </PostContainer>
+                <PostContainer>
+                  <Skeleton count={8} />
+                </PostContainer>
+                <PostContainer>
+                  <Skeleton count={8} />
+                </PostContainer>
+              </PostColLoading>
+            ))}
+          {tab === 1 && (
+            <PostCol>
+              <About
+                handleClose={handleClose}
+                handleClickOpen={handleClickOpen}
+                open={open}
+              />
+            </PostCol>
           )}
-        </div>
-      ) : (
-        <LoadingWrapper>
-          <MoonLoader  />
-        </LoadingWrapper>
-      )}
+          {tab === 2 && (
+            <PostCol>
+              <Friends />
+            </PostCol>
+          )}
+          {tab === 3 && (
+            <PostCol>
+              <Photos />
+            </PostCol>
+          )}
+          {tab === 4 && (
+            <PostCol>
+              <Settings />
+            </PostCol>
+          )}
+        </ProfileInfoContainer>
+        {openChat && (
+          <ChatBubble active={openBubble}>
+            <Chat />
+          </ChatBubble>
+        )}
+      </div>
       <CustomizedDialogs open={open} title={"Edit"} handleClose={handleClose}>
         <EditForm
           handleClose={handleClose}
@@ -166,6 +204,93 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+
+const TabsContainer = styled.div`
+  background-color: #fff;
+  /* padding: 15px 5px; */
+  border-radius: 0 0 6px 6px;
+  position: absolute;
+  left: 39.5%;
+  width: 45.5%;
+  top: 32%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  margin-top: 0;
+  list-style: none;
+  padding: 0;
+  @media only screen and (min-width: 400px) {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    font-size: 13px;
+  }
+  @media only screen and (min-width: 768px) {
+    position: absolute;
+    left: 39.5%;
+    width: 45.5%;
+    top: 32%;
+    font-size: 16px;
+  }
+  @media only screen and (min-width: 992px) {
+    position: absolute;
+    left: 39.5%;
+    width: 45.5%;
+    top: 32%;
+    font-size: 16px;
+  }
+`;
+const InfoCol = styled.div`
+  flex-basis: 33%;
+`;
+
+const ProfileIntro = styled.div`
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  h3 {
+    font-weight: 600;
+    margin: 0;
+  }
+  hr {
+    border: 0;
+    height: 1px;
+    background: #ccc;
+    margin: 24px 0;
+  }
+  ul li {
+    list-style: none;
+    font-size: 15px;
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+  }
+  ul {
+    padding: 0;
+  }
+`;
+
+const ProfileDetailsContainerLoading = styled.div`
+  min-height: 140px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  /* flex-direction: column; */
+`;
+
+const PostContainer = styled.div`
+  margin-top: 60px;
+  width: 100%;
+  background: #fff;
+  border-radius: 6px;
+  padding: 20px;
+  padding-top: 10px;
+  color: #626262;
+  margin: 20px 0;
+  object-fit: contain;
+`;
 
 const ChatBubble = styled.div`
   height: 55px;
@@ -195,6 +320,17 @@ const ProfileContainer = styled.div`
   padding: 90px 15%;
   /* overflow-y: auto !important;  */
   /* position: relative; */
+  @media only screen and (min-width: 400px) {
+    /* flex-basis: 98%; */
+    overflow: hidden;
+    padding: 90px 10px;
+  }
+  @media only screen and (min-width: 768px) {
+    padding: 90px 15%;
+  }
+  @media only screen and (min-width: 992px) {
+    padding: 90px 15%;
+  }
 `;
 
 const ProfileDetailsContainer = styled.div`
@@ -213,17 +349,46 @@ const ProfileInfoContainer = styled.div`
   align-self: flex-start;
   justify-content: space-between;
   margin-top: 20px;
+  @media only screen and (min-width: 400px) {
+    margin: 0;
+  }
+  @media only screen and (min-width: 768px) {
+    margin-top: 20px;
+  }
+  @media only screen and (min-width: 992px) {
+    margin-top: 20px;
+  }
 `;
 
 const PostCol = styled.div`
   margin-top: 50px;
   flex-basis: 65%;
+  @media only screen and (min-width: 400px) {
+    margin-top: 20px;
+    flex-basis: 100%;
+  }
+  @media only screen and (min-width: 768px) {
+    margin-top: 50px;
+    flex-basis: 65%;
+  }
+  @media only screen and (min-width: 992px) {
+    margin-top: 50px;
+    flex-basis: 65%;
+  }
 `;
-
-const LoadingWrapper = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const PostColLoading = styled.div`
+  margin-top: 40px;
+  flex-basis: 65%;
+  @media only screen and (min-width: 400px) {
+    flex-basis: 100%;
+    margin-top: 20px;
+  }
+  @media only screen and (min-width: 768px) {
+    flex-basis: 65%;
+    margin-top: 40px;
+  }
+  @media only screen and (min-width: 992px) {
+    flex-basis: 65%;
+    margin-top: 40px;
+  }
 `;

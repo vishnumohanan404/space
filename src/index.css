@@ -37,19 +37,16 @@ code {
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
   background-color: #ebebeb;
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
   opacity: 80%;
 }
 
 ::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
+  
   background: #c0b9b9;
   opacity: 70%;
 }

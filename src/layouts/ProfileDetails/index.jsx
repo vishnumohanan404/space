@@ -10,8 +10,12 @@ import { useRef } from "react";
 import Crop from "../../components/Cropper";
 import { setConvo, setOpenChat } from "../../redux/chat/chatActions";
 import CustomizedDialogs from "../../components/Dialog";
+import { DeviceSize } from "../../constants/responsive";
+import { useMediaQuery } from "react-responsive";
 
 function ProfileDetails({ friendRequest, profiles, handleClickOpen, ...rest }) {
+  const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
+
   const [friends, setFriends] = useState(false);
   const socket = useSelector((state) => state.socket);
   const currentUser = useSelector((state) => state.user);
@@ -156,7 +160,7 @@ function ProfileDetails({ friendRequest, profiles, handleClickOpen, ...rest }) {
           <>
             <button type="submit" onClick={handleClickOpen}>
               <IoPencil style={buttonStyle} />
-              Edit Profile
+             {!isMobile && "Edit Profile"}
             </button>
           </>
         ) : (

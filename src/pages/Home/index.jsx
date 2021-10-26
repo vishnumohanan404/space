@@ -63,6 +63,17 @@ const HomeContainer = styled.div`
 const MainContent = styled.div`
   flex-basis: 47%;
   padding: 75px 0;
+  @media only screen and (min-width: 400px) {
+    flex-basis: 98%;
+    overflow: hidden;
+  }
+  @media only screen and (min-width: 768px) {
+    flex-basis: 47%;
+
+  }
+  @media only screen and (min-width: 992px) {
+    flex-basis: 47%;
+  }
 `;
 
 const LeftSideBar = styled.div`
