@@ -33,7 +33,7 @@ export function MobileNavLinks(props) {
             </Link>
           </LinkItem>
           <LinkItem onClick={() => setOpen(false)}>
-            <Link style={LinkStyle} to={"conversations"}>
+            <Link style={LinkStyle} to={"/conversations"}>
               Chat
             </Link>
           </LinkItem>
