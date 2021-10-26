@@ -36,3 +36,6 @@ This is my first react project which took me on a new journey of advanced concep
 
 - Make sure to use separate branches for new features if you are working on any
 - Bug fixes and refactors are to be push into master franch for PR
+
+### Issues
+- Responsiveness is only done for mobile screens with minimum 400px width, make responsiveness for tabs and different screens

@@ -143,10 +143,11 @@ const SearchBarContainer = styled(motion.div)`
   margin: 0.5em;
   background-color: #fff;
   border-radius: 30px;
-  box-shadow: 0px 2px 12px 3px rgba(34, 34, 34, 0.103);
+  box-shadow: 0px 2px 12px 3px rgba(121, 121, 121, 0.103);
   @media only screen and (min-width: 400px) {
     width: 16em;
     margin-left: 0;
+    margin-right: 0;
   }
   @media only screen and (min-width: 768px) {
     width: 20em;

@@ -20,9 +20,13 @@ export function Navbar(props) {
         </span>
       </AnnouncementBar>
       <NavBarContainer>
-        {!isMobile && <LeftSection>
+        {!isMobile ? (
+          <LeftSection>
+            <Logo />
+          </LeftSection>
+        ) : (
           <Logo />
-        </LeftSection>}
+        )}
         <MiddleSection>
           {/* {!isMobile && <NavLinks />} */}
           <SearchContainer>
@@ -31,13 +35,14 @@ export function Navbar(props) {
         </MiddleSection>
         <RightSection>
           {!isMobile && <Accessibility />}
-          {isMobile &&<>
-          {/* <AccessibilityContainer>
+          {isMobile && (
+            <>
+              {/* <AccessibilityContainer>
             <Notifications />
           </AccessibilityContainer> */}
-          <MobileNavLinks />
-          </>
-          }
+              <MobileNavLinks />
+            </>
+          )}
         </RightSection>
       </NavBarContainer>
     </Container>
@@ -64,8 +69,15 @@ const NavBarContainer = styled.nav`
   z-index: 100;
   background: #fff;
   justify-content: space-between;
+  @media only screen and (min-width: 400px) {
+    padding: 0 0.5em;
+  }
   @media only screen and (min-width: 768px) {
-    padding: 0;
+    padding: 0 1.5em;
+  }
+  @media only screen and (min-width: 992px) {
+    padding: 0 1.5em;
+
   }
 `;
 
