@@ -60,13 +60,13 @@ export const loginCall = (userCredentials) => {
 };
 
 export const authVerify = ()=>{
+  console.log(`auth Verify`)
   return async(dispatch)=>{
     try{
-      api.get('/')
+      await api.get('/')
     }catch(err){
-      
       if(err.response.status === 401){
-        dispatch(logOut)
+        dispatch(logOut())
       }
     }
   }

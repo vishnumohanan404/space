@@ -30,6 +30,7 @@ const Container = styled.div`
   background: #fff;
   padding: 6rem 3rem ;
   border-radius: 6px;
+  
 `;
 
 const ChatBubble = styled.div`
