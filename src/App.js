@@ -1,10 +1,11 @@
 import { AccountBox } from "./pages/Auth";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import FallbackUI from "./components/Fallback";
 import Socket from "./components/Socket";
 import { Navbar } from "./layouts/Navbar";
+import {authVerify} from "./redux"
 
 // lazy loading 
 const LazyHome = React.lazy(() => import("./pages/Home"));
@@ -14,13 +15,19 @@ const LazyConversations = React.lazy(() => import("./pages/Conversations"));
 
 function App() {
   const { user } = useSelector((state) => state.user);
+const dispatch = useDispatch()
+  console.log("Initial render of App.js");
 
   useEffect(() => {
     console.log("useeffect 1");
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
-  
-  console.log("Initial render of App.js");
+
+  useEffect(() => {
+    console.log("useeffect 2 in home");
+    dispatch(authVerify());
+  }, [user, dispatch]);
+
 
   return (
     <>

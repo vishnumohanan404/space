@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+// import React, { useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 import Logo from "../../components/Logo";
@@ -6,18 +6,18 @@ import { DeviceSize } from "../../constants/responsive";
 import SearchBar from "../../components/SearchBar";
 import Accessibility from "./accessibility";
 import { MobileNavLinks } from "./mobileNavLinks";
-import { useDispatch } from "react-redux";
-import { authVerify } from "../../redux";
+// import { useDispatch } from "react-redux";
+// import { authVerify } from "../../redux";
 // import { NavLinks } from "./NavLinks";
 
 export function Navbar(props) {
   console.log("Initial render of navbar");
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   
-  useEffect(() => {
-    console.log("useeffect 2 in home");
-    dispatch(authVerify());
-  }, [ dispatch]);
+  // useEffect(() => {
+  //   console.log("useeffect 2 in home");
+  //   dispatch(authVerify());
+  // }, [ dispatch]);
 
   const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
   return (
