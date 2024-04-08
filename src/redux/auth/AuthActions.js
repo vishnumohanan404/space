@@ -65,7 +65,8 @@ export const authVerify = ()=>{
     try{
       await api.get('/')
     }catch(err){
-      if(err.response.status === 401){
+      console.log('err', err)
+      if(err.response?.status === 401){
         dispatch(logOut())
       }
     }

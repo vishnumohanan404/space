@@ -1,13 +1,16 @@
 import { AccountBox } from "./pages/Auth";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import React, { useEffect } from "react";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import FallbackUI from "./components/Fallback";
 import Socket from "./components/Socket";
 import { Navbar } from "./layouts/Navbar";
-import {authVerify} from "./redux"
+import { authVerify } from "./redux";
+import { Toaster } from "react-hot-toast";
+import "@radix-ui/themes/styles.css";
+import { Theme } from "@radix-ui/themes";
 
-// lazy loading 
+// lazy loading
 const LazyHome = React.lazy(() => import("./pages/Home"));
 const LazyProfile = React.lazy(() => import("./pages/Profile"));
 const LazySinglePost = React.lazy(() => import("./pages/SinglePost"));
@@ -15,7 +18,7 @@ const LazyConversations = React.lazy(() => import("./pages/Conversations"));
 
 function App() {
   const { user } = useSelector((state) => state.user);
-const dispatch = useDispatch()
+  const dispatch = useDispatch();
   console.log("Initial render of App.js");
 
   useEffect(() => {
@@ -28,9 +31,8 @@ const dispatch = useDispatch()
     dispatch(authVerify());
   }, [user, dispatch]);
 
-
   return (
-    <>
+    <Theme accentColor="blue" grayColor="sand" radius="large" scaling="95%">
       <BrowserRouter>
         <Socket />
         {user && <Navbar />}
@@ -90,7 +92,8 @@ const dispatch = useDispatch()
           </React.Suspense>
         </Switch>
       </BrowserRouter>
-    </>
+      <Toaster />
+    </Theme>
   );
 }
 

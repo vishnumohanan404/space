@@ -1,23 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
   BoldLink,
   BoxContainer,
   FieldContainer,
   FieldError,
   FormContainer,
-  FormError,
-  FormSuccess,
   Input,
   MutedLink,
-  SubmitButton,
 } from "../common";
 import { Marginer } from "../../components/Marginer";
 import { AccountContext } from "../../context/AccountBox";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-
-const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+import toast from "react-hot-toast";
+import { Container, Button, TextField } from "@radix-ui/themes";
 
 const validationSchema = yup.object({
   fullName: yup
@@ -28,15 +25,12 @@ const validationSchema = yup.object({
     .string()
     .email("Please enter a valid email")
     .required("This feild is required!"),
-  password: yup
-    .string()
-    .matches(PASSWORD_REGEX, "Please enter a strong password")
-    .required("This feild is required!"),
+  password: yup.string().min(8).required("This feild is required!"),
   confirmPassword: yup
     .string()
     .required("Please confirm your password")
     .when("password", {
-      is: (val) => (val && val.length > 0 ? true : false),
+      is: (val) => val?.length > 0,
       then: yup
         .string()
         .oneOf([yup.ref("password")], "Password does not match"),
@@ -45,8 +39,6 @@ const validationSchema = yup.object({
 
 export function SignupForm(props) {
   const { switchToSignin } = useContext(AccountContext);
-  const [success, setSuccess] = useState(null);
-  const [error, setError] = useState(null);
 
   const onSubmit = async (values) => {
     const { confirmPassword, ...data } = values;
@@ -54,17 +46,14 @@ export function SignupForm(props) {
       .post(`${process.env.REACT_APP_API_URL}/register`, data)
       .catch((err) => {
         if (err && err.response) {
-          console.log(err.response.data.message, "response");
-          setError(err.response.data.message);
-          console.log("Error:", err);
-          setSuccess(null);
+          toast.error(err.response.data.message);
         }
       });
 
     if (response && response.data) {
-      setError(null);
-      setSuccess(response.data.message);
+      toast.success(response.data.message);
       formik.resetForm();
+      switchToSignin();
     }
   };
 
@@ -80,15 +69,13 @@ export function SignupForm(props) {
     validationSchema: validationSchema,
   });
 
-  console.log("Error", formik.errors);
+  console.log("Error", formik.errors.password);
 
   return (
-    <BoxContainer>
-      {!error && <FormSuccess>{success ? success : ""}</FormSuccess>}
-      {!success && <FormError>{error ? error : ""}</FormError>}
+    <Container width={"400px"} height={"340px"}>
       <FormContainer onSubmit={formik.handleSubmit}>
         <FieldContainer>
-          <Input
+          <TextField.Root
             name="fullName"
             type="text"
             placeholder="Fullname"
@@ -103,7 +90,7 @@ export function SignupForm(props) {
           </FieldError>
         </FieldContainer>
         <FieldContainer>
-          <Input
+          <TextField.Root
             name="email"
             type="email"
             placeholder="Email"
@@ -118,7 +105,7 @@ export function SignupForm(props) {
           </FieldError>
         </FieldContainer>
         <FieldContainer>
-          <Input
+          <TextField.Root
             name="password"
             type="password"
             placeholder="Password"
@@ -134,7 +121,7 @@ export function SignupForm(props) {
           </FieldError>
         </FieldContainer>
         <FieldContainer>
-          <Input
+          <TextField.Root
             name="confirmPassword"
             type="password"
             placeholder="Confirm Password"
@@ -149,10 +136,10 @@ export function SignupForm(props) {
               : ""}
           </FieldError>
         </FieldContainer>
-        {/* <Marginer direction="vertical" margin="1em" /> */}
-        <SubmitButton type="submit" disabled={!formik.isValid}>
+        <Marginer direction="vertical" margin="0.2em" />
+        <Button type="submit" disabled={!formik.isValid}>
           Signup
-        </SubmitButton>
+        </Button>
       </FormContainer>
       <Marginer direction="vertical" margin={5} />
       <MutedLink href="#">
@@ -161,6 +148,6 @@ export function SignupForm(props) {
           Signin
         </BoldLink>{" "}
       </MutedLink>
-    </BoxContainer>
+    </Container>
   );
 }

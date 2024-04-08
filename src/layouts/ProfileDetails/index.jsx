@@ -30,7 +30,7 @@ function ProfileDetails({ friendRequest, profiles, handleClickOpen, ...rest }) {
 
   // friend request func
   useEffect(() => {
-    if (currentUser.user.friends.includes(user._id)) {
+    if (currentUser.user.friends?.includes(user._id)) {
       setFriends(true);
     } else {
       setFriends(false);

@@ -11,23 +11,9 @@ import { MobileNavLinks } from "./mobileNavLinks";
 // import { NavLinks } from "./NavLinks";
 
 export function Navbar(props) {
-  console.log("Initial render of navbar");
-  // const dispatch = useDispatch()
-  
-  // useEffect(() => {
-  //   console.log("useeffect 2 in home");
-  //   dispatch(authVerify());
-  // }, [ dispatch]);
-
   const isMobile = useMediaQuery({ maxWidth: DeviceSize.mobile });
   return (
     <Container>
-      <AnnouncementBar>
-        <span>
-          📢 This <a href="https://github.com/KingKong26/space">project</a> is
-          still under development so, some features might be broke
-        </span>
-      </AnnouncementBar>
       <NavBarContainer>
         {!isMobile ? (
           <LeftSection>
@@ -36,12 +22,6 @@ export function Navbar(props) {
         ) : (
           <Logo />
         )}
-        <MiddleSection>
-          {/* {!isMobile && <NavLinks />} */}
-          <SearchContainer>
-            <SearchBar />
-          </SearchContainer>
-        </MiddleSection>
         <RightSection>
           {!isMobile && <Accessibility />}
           {isMobile && (
@@ -76,7 +56,7 @@ const NavBarContainer = styled.nav`
   position: fixed;
   /* top: 30; */
   z-index: 100;
-  background: #fff;
+  /* background: #fff; */
   justify-content: space-between;
   @media only screen and (min-width: 400px) {
     padding: 0 0.5em;
@@ -86,7 +66,6 @@ const NavBarContainer = styled.nav`
   }
   @media only screen and (min-width: 992px) {
     padding: 0 1.5em;
-
   }
 `;
 
@@ -110,30 +89,4 @@ const SearchContainer = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
-`;
-const AnnouncementBar = styled.div`
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  height: 16px;
-  /* background-color: #e84c64; */
-  display: flex;
-  justify-content: center;
-  background: rgb(232, 76, 100);
-  background: linear-gradient(
-    90deg,
-    rgba(232, 76, 100, 1) 0%,
-    rgba(253, 159, 41, 1) 50%,
-    rgba(248, 29, 89, 1) 100%
-  );
-  span {
-    padding: 0;
-    margin: 0;
-    color: blue;
-    font-size: 12px;
-    font-weight: 600;
-    a {
-      color: #ffffff;
-    }
-  }
 `;

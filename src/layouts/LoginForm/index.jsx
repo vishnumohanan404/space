@@ -17,8 +17,10 @@ import { AccountContext } from "../../context/AccountBox";
 import { useFormik } from "formik";
 import * as yup from "yup";
 // import { loginCall } from "../../services/authService";
-import  {loginCall}  from "../../redux";
+import { loginCall } from "../../redux";
 import { connect } from "react-redux";
+import { Container, Button } from "@radix-ui/themes";
+import { TextField } from "../../../node_modules/@radix-ui/themes/dist/esm/components/index";
 
 const validationSchema = yup.object({
   email: yup.string().email().required(),
@@ -45,18 +47,18 @@ function LoginForm({
   };
 
   const formik = useFormik({
-    initialValues: { email: "vishnu@gmail.com", password: "qwertyuiop1" },
+    initialValues: { email: "", password: "" },
     validateOnBlur: true,
     onSubmit,
     validationSchema: validationSchema,
   });
 
   return (
-    <BoxContainer>
+    <Container width={"400px"} height={"340px"}>
       <FormError>{error ? "Unauthorized" : ""}</FormError>
       <FormContainer onSubmit={formik.handleSubmit}>
         <FieldContainer>
-          <Input
+          <TextField.Root
             name="email"
             type="email"
             placeholder="Email"
@@ -73,7 +75,7 @@ function LoginForm({
           }
         </FieldContainer>
         <FieldContainer>
-          <Input
+          <TextField.Root
             name="password"
             type="password"
             autoComplete="on"
@@ -90,9 +92,8 @@ function LoginForm({
             </FieldError>
           }
         </FieldContainer>
-        <MutedLink href="#">Forgot your password</MutedLink>
-        <Marginer direction="vertical" margin="1.6em" />
-        <SubmitButton type="submit" disabled={!formik.isValid}>
+        <Marginer direction="vertical" margin="0.2em" />
+        <Button type="submit" disabled={!formik.isValid}>
           {isFetching ? (
             <LoadingWrapper>
               <ClipLoader loading color="#fff" size={20} />
@@ -100,7 +101,8 @@ function LoginForm({
           ) : (
             "Login"
           )}
-        </SubmitButton>
+        </Button>
+        <MutedLink href="#">Forgot your password</MutedLink>
       </FormContainer>
       <Marginer direction="vertical" margin={10} />
       <MutedLink href="#">
@@ -109,7 +111,7 @@ function LoginForm({
           Signup
         </BoldLink>
       </MutedLink>
-    </BoxContainer>
+    </Container>
   );
 }
 

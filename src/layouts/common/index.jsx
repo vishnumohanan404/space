@@ -12,6 +12,7 @@ export const FormContainer = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 6px;
   /* box-shadow: 0px 0px 2.5px rgba(15, 15, 15, 0.19); */
 `;
 
@@ -21,6 +22,7 @@ export const MutedLink = styled.span`
   font-weight: 500;
   text-decoration: none;
   text-align: center;
+  cursor: pointer;
 `;
 
 export const BoldLink = styled.a`
@@ -41,7 +43,7 @@ export const Input = styled.input`
   border-bottom: 1.4px solid transparent;
   transition: all 200ms ease-in-out;
   font-size: 12px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
 
   &::placeholder {
     color: rgba(200, 200, 200, 1);
@@ -63,12 +65,11 @@ export const SubmitButton = styled.button`
   color: #fff;
   font-size: 15px;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
   border: none;
   border-radius: 100px 100px 100px 100px;
   cursor: pointer;
   transition: all, 240ms ease-in-out;
-  background: rgb(4, 177, 225);
   background: linear-gradient(
     90deg,
     rgba(4, 177, 225, 1) 0%,
@@ -96,6 +97,7 @@ export const FieldContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 4px;
 `;
 
 export const FieldError = styled.span`
@@ -160,4 +162,4 @@ export const NoValueHeader = styled.h4`
   margin: 0;
   color: #a1a1a1;
   justify-content: center;
-`
+`;

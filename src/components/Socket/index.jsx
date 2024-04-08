@@ -67,7 +67,7 @@ const Socket = () => {
       });
     return () => socket && socket.off("UPDATE_ACTIVE");
   }, [socket, dispatch]);
-  return <div></div>;
+  return <></>;
 };
 
 export default Socket;

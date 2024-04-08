@@ -352,7 +352,7 @@ const PreviewRow = styled.div`
 const Button = styled.button`
   font-size: 16px;
   font-weight: 800;
-  font-family: "Poppins", sans-serif;
+  font-family: "Roboto", sans-serif;
   height: 40px;
   width: 80px;
   border-radius: 30px;

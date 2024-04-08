@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const ButtonClass = styled.button`
   font-size: 14px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Roboto", sans-serif;
   height: 30px;
   width: 70px;
   border-radius: 30px;
